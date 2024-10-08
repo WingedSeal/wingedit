@@ -16,7 +16,7 @@
 	/>
 	<div
 		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation"
-		style="width: {size_x}vw; height: {size_y}vh"
+		style="width: {size_x}vw; height: {size_y}vh;"
 	>
 		<div class="bg-slate-800 w-full h-[10%] rounded-xl text-primary p-1 flex">
 			<h1 class="my-auto ml-6 text-xl">{title}</h1>
