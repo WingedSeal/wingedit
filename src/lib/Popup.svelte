@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '@fortawesome/fontawesome-free/css/all.min.css';
+	import './Popup.css';
 	export let title: string;
 	export let size_x: number = 50;
 	export let size_y: number = 50;
@@ -7,9 +8,14 @@
 </script>
 
 {#if !is_hidden}
-	<div class="fixed w-screen h-screen bg-slate-950 top-0 left-0 opacity-80 z-20"></div>
+	<button
+		class="fixed w-screen h-screen bg-slate-950 top-0 left-0 opacity-80 z-20 appear-animation-80"
+		on:click={() => {
+			is_hidden = true;
+		}}
+	/>
 	<div
-		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30"
+		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation"
 		style="width: {size_x}vw; height: {size_y}vh"
 	>
 		<div class="bg-slate-800 w-full h-[10%] rounded-xl text-primary p-1 flex">
