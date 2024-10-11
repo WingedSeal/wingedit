@@ -24,8 +24,8 @@ export const load = ({ params }) => {
 
 	return {
 		valorant: {
-			map: params.valorant_map,
-			agent: params.valorant_agent
+			map: params.valorant_map.charAt(0).toUpperCase() + params.valorant_map.slice(1),
+			agent: params.valorant_agent.charAt(0).toUpperCase() + params.valorant_agent.slice(1)
 		},
 		lineups: lineups
 	};

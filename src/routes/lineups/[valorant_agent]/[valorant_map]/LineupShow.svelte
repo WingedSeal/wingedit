@@ -1,5 +1,9 @@
 <script lang="ts">
 	import ElementFit from '$lib/ElementFit.svelte';
+	import { type LineupInfo } from './Lineup';
+	export let lineup_info: LineupInfo;
+	export let map: string;
+	export let agent: string;
 </script>
 
 <ElementFit>
@@ -7,9 +11,10 @@
 		<div class="col-span-2 row-span-2 relative">
 			<canvas class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute" />
 			<h2
-				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full"
+				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase"
 			>
-				MAP AGENT
+				{map}
+				{agent}
 			</h2>
 		</div>
 		<div>
@@ -26,8 +31,8 @@
 				<!-- <div class="flex"><h2 class="my-auto">normal throw</h2></div>
                 <div class="flex"><h2 class="my-auto">grade: S</h2></div>
                 <div class="flex"><h2 class="my-auto">description</h2></div> -->
-				<h2>normal throw</h2>
-				<h2>grade: S</h2>
+				<h2>{lineup_info.throw_type}</h2>
+				<h2>grade: {lineup_info.grade}</h2>
 				<h2>description</h2>
 			</div>
 		</div>

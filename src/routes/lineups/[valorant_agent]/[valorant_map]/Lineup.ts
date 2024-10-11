@@ -15,9 +15,9 @@ export enum ImageType {
 }
 
 export enum ThrowType {
-	Throw = 'throw',
-	JumpThrow = 'jumpthrow',
-	RunThrow = 'runthrow'
+	Throw = 'normal throw',
+	JumpThrow = 'jump-throw',
+	RunThrow = 'run-throw'
 }
 
 export type UUID = string;
