@@ -12,18 +12,8 @@
 	$: contentHeight = Math.min(clientHeight, clientWidth * (heightRatio / widthRatio));
 </script>
 
-<div class="container" bind:clientWidth bind:clientHeight>
+<div class="flex justify-center items-center w-full h-full" bind:clientWidth bind:clientHeight>
 	<div style="width: {contentWidth}px; height: {contentHeight}px">
 		<slot />
 	</div>
 </div>
-
-<style>
-	.container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		height: 100%;
-	}
-</style>
