@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '@fortawesome/fontawesome-free/css/all.min.css';
-	import './Popup.css';
 	export let title: string;
 	export let size_x: number = 80;
 	export let size_y: number = 80;
@@ -32,3 +31,35 @@
 		<div class="w-full h-[93%] p-2"><slot /></div>
 	</div>
 {/if}
+
+<style>
+	@keyframes appear {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	.appear-animation {
+		animation: appear 200ms;
+		animation-timing-function: ease-out;
+		animation-iteration-count: 1;
+	}
+
+	@keyframes appear-80 {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 0.8;
+		}
+	}
+
+	.appear-animation-80 {
+		animation: appear-80 200ms;
+		animation-timing-function: ease-out;
+		animation-iteration-count: 1;
+	}
+</style>
