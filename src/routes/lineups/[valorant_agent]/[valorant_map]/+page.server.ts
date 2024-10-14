@@ -1,11 +1,15 @@
-import { getAgents } from '$lib/server/db';
+import { getAgents, getMaps } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 import { Grade, type LineupInfo, ThrowType } from './Lineup';
+import type { PageServerLoad } from './$types';
 
-export const load = ({ params }) => {
+export const load: PageServerLoad = ({ params }) => {
 	params.valorant_agent = params.valorant_agent.toLowerCase();
 	if (!getAgents().some((agent) => agent.Name.toLowerCase() == params.valorant_agent)) {
 		error(404, `Agent ${params.valorant_agent} not found`);
+	}
+	if (!getMaps().some((map) => map.Name.toLowerCase() == params.valorant_map)) {
+		error(404, `Map ${params.valorant_map} not found`);
 	}
 
 	let lineups: LineupInfo[] = [];
