@@ -4,10 +4,7 @@ import type { Agent } from './types';
 export const db = new Database(DB_PATH, { verbose: console.log });
 
 export const getAgents = () => {
-	const sql = `
-	SELECT * FROM "Agents";
-	`;
-	const rows = db.prepare(sql).all();
+	const rows = db.prepare(`SELECT * FROM "Agents";`).all();
 	console.log(rows);
 	return rows as Agent[];
 };
