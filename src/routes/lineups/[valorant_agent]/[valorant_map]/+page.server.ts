@@ -1,7 +1,14 @@
+import { getAgents } from '$lib/server/db';
+import { error } from '@sveltejs/kit';
 import { Grade, type LineupInfo, ThrowType } from './Lineup';
-export const load = ({ params }) => {
-	let lineups: LineupInfo[] = [];
 
+export const load = ({ params }) => {
+	params.valorant_agent = params.valorant_agent.toLowerCase();
+	if (!getAgents().some((agent) => agent.Name.toLowerCase() == params.valorant_agent)) {
+		error(404, `Agent ${params.valorant_agent} not found`);
+	}
+
+	let lineups: LineupInfo[] = [];
 	// temporary place holder
 	lineups.push({
 		id: 'abcd-1234',
