@@ -34,3 +34,18 @@ VALUES
     (2, "Duelist"),
     (3, "Initiator"),
     (4, "Sentinel");
+
+INSERT INTO
+    "Maps" ("ID", "Name")
+VALUES
+    (1, "Bind"),
+    (2, "Haven"),
+    (3, "Split"),
+    (4, "Ascent"),
+    (5, "Icebox"),
+    (6, "Breeze"),
+    (7, "Fracture"),
+    (8, "Pearl"),
+    (9, "Lotus"),
+    (10, "Sunset"),
+    (11, "Abyss");
