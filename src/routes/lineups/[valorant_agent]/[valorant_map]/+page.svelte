@@ -1,8 +1,9 @@
 <script lang="ts">
-	import Popup from '$lib/Popup.svelte';
+	import Popup from '$lib/components/Popup.svelte';
+	import type { PageData } from './$types';
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
-	export let data;
+	export let data: PageData;
 	let is_popup_hidden: boolean;
 	let lineup = data.lineups[0];
 </script>

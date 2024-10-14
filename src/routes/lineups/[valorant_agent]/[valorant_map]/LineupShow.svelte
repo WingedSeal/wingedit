@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ElementFit from '$lib/ElementFit.svelte';
+	import ElementFit from '$lib/components/ElementFit.svelte';
 	import { type LineupInfo } from './Lineup';
 	export let lineup_info: LineupInfo;
 	export let map: string;
