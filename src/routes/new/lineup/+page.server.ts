@@ -14,9 +14,12 @@ export const actions = {
 		const file = data.get('file-upload') as File;
 		if (!file.name) return fail(500, { error: true, message: 'No files were given.' });
 		if (file.type == 'image/jpeg') {
-			fs.writeFileSync(
+			fs.writeFile(
 				path.join(IMAGES_PATH, 'test.jpg'),
-				new Uint8Array(await file.arrayBuffer())
+				new Uint8Array(await file.arrayBuffer()),
+				() => {
+					return { success: true };
+				}
 			);
 		} else if (file.type == 'image/png') {
 			const image = await Jimp.read(await file.arrayBuffer());
@@ -24,6 +27,6 @@ export const actions = {
 		} else {
 			return fail(500, { error: true, message: 'Given file was not an image.' });
 		}
-		return { success: file.type };
+		return { success: true };
 	}
 };
