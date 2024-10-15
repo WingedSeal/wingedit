@@ -4,7 +4,7 @@ CREATE TABLE
         "Name" VARCHAR(16) NOT NULL UNIQUE,
         "RoleID" TINYINT NOT NULL,
         PRIMARY KEY ("ID"),
-        CONSTRAINT "fk_agentroles_roleid" FOREIGN KEY ("RoleID") REFERENCES "AgentRoles" ("RoleID") ON DELETE CASCADE ON UPDATE RESTRICT
+        CONSTRAINT "FK_AgentRoles_RoleID" FOREIGN KEY ("RoleID") REFERENCES "AgentRoles" ("RoleID") ON DELETE CASCADE ON UPDATE RESTRICT
     );
 
 CREATE TABLE
@@ -17,6 +17,47 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS "AgentRoles" (
         "RoleID" TINYINT NOT NULL,
-        "Name" VARCHAR(10) NOT NULL UNIQUE,
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
         PRIMARY KEY ("RoleID")
     );
+
+CREATE TABLE
+    IF NOT EXISTS "Lineups" (
+        "UUID" VARCHAR(36) NOT NULL,
+        "AbilityID" SMALLINT NOT NULL,
+        "MapID" TINYINT NOT NULL,
+        "AgentID" TINYINT NOT NULL,
+        PRIMARY KEY ("UUID"),
+        CONSTRAINT "FK_Abilities_AbilityID" FOREIGN KEY ("AbilityID") REFERENCES "Abilities" ("AbilityID") ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE CASCADE ON UPDATE RESTRICT
+    );
+
+CREATE TABLE
+    IF NOT EXISTS "Abilities" (
+        "AbilityID" SMALLINT NOT NULL,
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
+        "NameID" VARCHAR(16) NOT NULL UNIQUE,
+        PRIMARY KEY ("AbilityID")
+    );
+
+CREATE TABLE
+    IF NOT EXISTS "ExtraImages" (
+        "ID" INTEGER NOT NULL,
+        "LineupUUID" VARCHAR(36) NOT NULL,
+        "Index" TINYINT NOT NULL,
+        "RelativePath" TEXT NOT NULL UNIQUE,
+        PRIMARY KEY ("ID"),
+        CONSTRAINT "FK_Lineups_LineupUUID" FOREIGN KEY ("LineupUUID") REFERENCES "Lineups" ("UUID") ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT "UQ_LineupUUID_Index" UNIQUE ("LineupUUID", "Index")
+    );
+
+CREATE TABLE
+    IF NOT EXISTS "MapPositions" (
+        "ID" SMALLINT NOT NULL,
+        "Callout" VARCHAR(32) NOT NULL,
+        "MapID" TINYINT NOT NULL,
+        PRIMARY KEY ("ID"),
+        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT "UQ_Callout_MapID" UNIQUE ("Callout", "MapID")
+    )
