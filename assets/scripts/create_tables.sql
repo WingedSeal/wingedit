@@ -27,6 +27,7 @@ CREATE TABLE
         "AbilityID" SMALLINT NOT NULL,
         "MapID" TINYINT NOT NULL,
         "AgentID" TINYINT NOT NULL,
+        "ExtraImageCount" TINYINT NOT NULL DEFAULT 0,
         PRIMARY KEY ("UUID"),
         CONSTRAINT "FK_Abilities_AbilityID" FOREIGN KEY ("AbilityID") REFERENCES "Abilities" ("AbilityID") ON DELETE CASCADE ON UPDATE RESTRICT,
         CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE CASCADE ON UPDATE RESTRICT,
@@ -41,16 +42,6 @@ CREATE TABLE
         PRIMARY KEY ("AbilityID")
     );
 
-CREATE TABLE
-    IF NOT EXISTS "ExtraImages" (
-        "ID" INTEGER NOT NULL,
-        "LineupUUID" VARCHAR(36) NOT NULL,
-        "Index" TINYINT NOT NULL,
-        "RelativePath" TEXT NOT NULL UNIQUE,
-        PRIMARY KEY ("ID"),
-        CONSTRAINT "FK_Lineups_LineupUUID" FOREIGN KEY ("LineupUUID") REFERENCES "Lineups" ("UUID") ON DELETE CASCADE ON UPDATE RESTRICT,
-        CONSTRAINT "UQ_LineupUUID_Index" UNIQUE ("LineupUUID", "Index")
-    );
 
 CREATE TABLE
     IF NOT EXISTS "MapPositions" (
