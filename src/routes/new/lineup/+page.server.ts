@@ -14,13 +14,11 @@ export const actions = {
 		const file = data.get('file-upload') as File;
 		if (!file.name) return fail(500, { error: true, message: 'No files were given.' });
 		if (file.type == 'image/jpeg') {
-			fs.writeFile(
+			fs.writeFileSync(
 				path.join(IMAGES_PATH, 'test.jpg'),
-				new Uint8Array(await file.arrayBuffer()),
-				() => {
-					return { success: true };
-				}
+				new Uint8Array(await file.arrayBuffer())
 			);
+			return { success: true };
 		} else if (file.type == 'image/png') {
 			const image = await Jimp.read(await file.arrayBuffer());
 			image.write(`${path.join(IMAGES_PATH, 'test')}.jpg`);
