@@ -22,7 +22,8 @@ const write_file = (
 	file: File,
 	image_name: string
 ): ActionFailure<{ error: boolean; message: string }> | null => {
-	if (!file.name) return fail(500, { error: true, message: 'No files were given.' });
+	if (!file.name || file.size == 0)
+		return fail(500, { error: true, message: 'No files were given.' });
 	if (file.type == 'image/jpeg') {
 		file.arrayBuffer().then((buffer) => {
 			fs.writeFile(path.join(IMAGES_PATH, `${image_name}.jpg`), new Uint8Array(buffer), () => {});
@@ -36,5 +37,20 @@ const write_file = (
 	} else {
 		return fail(500, { error: true, message: 'Given file was not an image.' });
 	}
+	return null;
+};
+
+const write_file_gif = (
+	file: File,
+	gif_name: string
+): ActionFailure<{ error: boolean; message: string }> | null => {
+	if (!file.name || file.size == 0)
+		return fail(500, { error: true, message: 'No files were given.' });
+	if (file.type != 'image/gif') {
+		return fail(500, { error: true, message: 'Given file was not a gif.' });
+	}
+	file.arrayBuffer().then((buffer) => {
+		fs.writeFile(path.join(IMAGES_PATH, `${gif_name}.gif`), new Uint8Array(buffer), () => {});
+	});
 	return null;
 };
