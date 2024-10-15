@@ -2,11 +2,13 @@
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import { Grade, ThrowType } from './../../lineups/[valorant_agent]/[valorant_map]/types';
 	export let data;
-	const { form, errors, enhance, message, constraints } = superForm(data.form);
+	const { form, errors, enhance, message } = superForm(data.form, {
+		taintedMessage: 'Changes you made may not be saved.',
+		validationMethod: 'submit-only'
+	});
 	const throw_types = Object(ThrowType);
+	let description: HTMLTextAreaElement;
 </script>
-
-<SuperDebug data={form} />
 
 {#if $message}
 	{$message}
@@ -26,7 +28,7 @@
 		{/each}
 	</select>
 	{#if $errors.agent}
-		<small>{$errors.agent}</small>
+		<small>{$errors.agent[0]}</small>
 	{/if}
 
 	<label for="map">Map</label>
@@ -37,7 +39,7 @@
 		{/each}
 	</select>
 	{#if $errors.map}
-		<small>{$errors.map}</small>
+		<small>{$errors.map[0]}</small>
 	{/if}
 
 	<label for="ability">Ability</label>
@@ -47,30 +49,26 @@
 	</select>
 
 	{#if $errors.ability}
-		<small>{$errors.ability}</small>
+		<small>{$errors.ability[0]} </small>
 	{/if}
 
 	<label for="throwLineup">Throw Lineup</label>
-	<input
-		type="file"
-		name="throwLineup"
-		bind:value={$form.throwLineup}
-		accept="image/png, image/jpeg"
-	/>
+	<input type="file" name="throwLineup" bind:value={$form.throwLineup} accept="image/jpeg" />
 	{#if $errors.throwLineup}
-		<small>{$errors.throwLineup}</small>
+		<small>{$errors.throwLineup[0]}</small>
 	{/if}
 
 	<label for="throwGif">Throw Gif</label>
+
 	<input type="file" name="throwGif" bind:value={$form.throwGif} accept="image/gif" />
 	{#if $errors.throwGif}
-		<small>{$errors.throwGif}</small>
+		<small>{$errors.throwGif[0]}</small>
 	{/if}
 
 	<label for="landSpot">Land Spot</label>
-	<input type="file" name="landSpot" bind:value={$form.landSpot} accept="image/png, image/jpeg" />
+	<input type="file" name="landSpot" bind:value={$form.landSpot} accept="image/jpeg" />
 	{#if $errors.landSpot}
-		<small>{$errors.landSpot}</small>
+		<small>{$errors.landSpot[0]}</small>
 	{/if}
 
 	<label for="throwSpotFirstPerson">Throw Spot First Person</label>
@@ -78,10 +76,10 @@
 		type="file"
 		name="throwSpotFirstPerson"
 		bind:value={$form.throwSpotFirstPerson}
-		accept="image/png, image/jpeg"
+		accept="image/jpeg"
 	/>
 	{#if $errors.throwSpotFirstPerson}
-		<small>{$errors.throwSpotFirstPerson}</small>
+		<small>{$errors.throwSpotFirstPerson[0]}</small>
 	{/if}
 
 	<label for="throwSpotThirdPerson">Throw Spot Third Person</label>
@@ -89,10 +87,10 @@
 		type="file"
 		name="throwSpotThirdPerson"
 		bind:value={$form.throwSpotThirdPerson}
-		accept="image/png, image/jpeg"
+		accept="image/jpeg"
 	/>
 	{#if $errors.throwSpotThirdPerson}
-		<small>{$errors.throwSpotThirdPerson}</small>
+		<small>{$errors.throwSpotThirdPerson[0]}</small>
 	{/if}
 
 	<label for="grade">Grade</label>
@@ -103,7 +101,7 @@
 		{/each}
 	</select>
 	{#if $errors.grade}
-		<small>{$errors.grade}</small>
+		<small>{$errors.grade[0]}</small>
 	{/if}
 
 	<label for="throwType">Throw Type</label>
@@ -114,8 +112,42 @@
 		{/each}
 	</select>
 	{#if $errors.throwType}
-		<small>{$errors.throwType}</small>
+		<small>{$errors.throwType[0]}</small>
+	{/if}
+
+	<label for="timeToLand">Time to land (s)</label>
+	<input type="text" name="timeToLand" bind:value={$form.timeToLand} placeholder="0" />
+
+	{#if $errors.timeToLand}
+		<small>{$errors.timeToLand[0]}</small>
+	{/if}
+
+	<label for="description">Description</label>
+	<textarea
+		name="description"
+		id=""
+		on:paste={() => {
+			setTimeout(() => {
+				description.value = description.value.replaceAll('\n', ' ');
+			});
+		}}
+		on:keydown={(event) => {
+			if (event.key == 'Enter') {
+				event.preventDefault();
+			}
+		}}
+		bind:this={description}
+		bind:value={$form.description}
+	/>
+	{#if $errors.description}
+		<small>{$errors.description[0]}</small>
 	{/if}
 
 	<button type="submit" class="bg-red-300">button</button>
 </form>
+
+<style lang="css">
+	small {
+		@apply text-red-500;
+	}
+</style>

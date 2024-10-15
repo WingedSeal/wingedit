@@ -7,6 +7,7 @@ import type { PageServerLoad } from './$types';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+import sizeOf from 'image-size';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -18,7 +19,12 @@ export const load: PageServerLoad = async () => {
 
 const _image_schema = z
 	.instanceof(File, { message: 'Please upload a file.' })
-	.refine((f) => f.size < 10_000_000, 'Max 10 MB upload size.');
+	.refine((f) => f.size < 10_000_000, 'Max 10 MB upload size.')
+	.refine((f) => f.type == 'image/jpeg', 'Please upload a jpeg image.')
+	.refine(async (f) => {
+		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
+		return size.width == 1080 && size.height == 1980;
+	}, 'Please upload 1980x1080 image.');
 
 const schema = z.object({
 	agent: z.number().min(1, 'Please select an agent.'),
@@ -27,12 +33,22 @@ const schema = z.object({
 	throwLineup: _image_schema,
 	throwGif: z
 		.instanceof(File, { message: 'Please upload a file.' })
-		.refine((f) => f.size < 20_00_000, 'Max 20 MB upload size.'),
+		.refine((f) => f.size < 20_00_000, 'Max 20 MB upload size.')
+		.refine((f) => f.type == 'image/gif', 'Please upload a GIF.')
+		.refine(async (f) => {
+			const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
+			return size.width == 1080 && size.height == 1980;
+		}, 'Please upload 1980x1080 gif.'),
 	landSpot: _image_schema,
 	throwSpotFirstPerson: _image_schema,
 	throwSpotThirdPerson: _image_schema,
-	grade: z.string().length(1, 'Please select a grade'),
-	throwType: z.string().min(1)
+	grade: z.string().length(1, 'Please select a grade.'),
+	throwType: z.string().min(1, 'Please select a throw type.'),
+	timeToLand: z
+		.number({ message: 'Expected a number.' })
+		.positive()
+		.default('' as unknown as number),
+	description: z.string()
 });
 
 type Schema = z.infer<typeof schema>;
