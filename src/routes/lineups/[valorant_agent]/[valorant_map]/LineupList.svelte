@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type LineupInfo } from './Lineup';
+	import { type LineupInfo } from './types';
 	export let lineups: LineupInfo[];
 </script>
 

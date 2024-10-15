@@ -1,17 +1,22 @@
 import { IMAGES_PATH } from '$env/static/private';
+import { getAgents, getMaps } from '$lib/server/db/index.js';
 import { fail, type ActionFailure } from '@sveltejs/kit';
 import fs from 'fs';
 import { Jimp } from 'jimp';
 import path from 'path';
+import type { PageServerLoad } from './$types';
 
-// image/jpeg
-// image/png
-// image/gif
+export const load: PageServerLoad = ({ params }) => {
+	return {
+		agents: getAgents(),
+		maps: getMaps()
+	};
+};
 
 export const actions = {
 	upload: async ({ request }) => {
 		const data = await request.formData();
-		const file = data.get('file-upload') as File;
+		const file = data.get('throw-lineup') as File;
 		const error = write_file(file, 'test');
 		if (error) return error;
 		return { success: true };

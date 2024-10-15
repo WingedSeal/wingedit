@@ -1,6 +1,6 @@
 import { getAgents, getMaps } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
-import { Grade, type LineupInfo, ThrowType } from './Lineup';
+import { Grade, type LineupInfo, ThrowType } from './types';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ params }) => {

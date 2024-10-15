@@ -7,17 +7,17 @@ export enum Grade {
 }
 
 export enum ImageType {
-	ThrowFirstPerson = 'throw1',
-	ThrowThirdPerson = 'throw2',
-	Land = 'land',
-	ThrowGif = 'throwgif',
-	SpotLineup = 'spot'
+	ThrowLineup = 'throw-lineup',
+	ThrowGif = 'throw-gif',
+	LandSpot = 'land-spot',
+	ThrowSpotFirstPerson = 'throw-spot-first-person',
+	ThrowSpotThirdPerson = 'throw-spot-third-person'
 }
 
 export enum ThrowType {
-	Throw = 'normal throw',
-	JumpThrow = 'jump-throw',
-	RunThrow = 'run-throw'
+	Throw = 'Normal Throw',
+	JumpThrow = 'Jump Throw',
+	RunThrow = 'Run Throw'
 }
 
 export type UUID = string;
