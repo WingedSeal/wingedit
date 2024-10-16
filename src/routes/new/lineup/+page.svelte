@@ -12,7 +12,6 @@
 	let agent_abilities: Ability[];
 </script>
 
-<SuperDebug data={form} />
 {#if $message}
 	{$message}
 {/if}
