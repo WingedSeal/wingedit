@@ -1,15 +1,18 @@
 <script lang="ts">
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import { Grade, ThrowType } from './../../lineups/[valorant_agent]/[valorant_map]/types';
+	import type { Ability } from '$lib/server/db/types';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
 		taintedMessage: 'Changes you made may not be saved.',
 		validationMethod: 'submit-only'
 	});
 	const throw_types = Object(ThrowType);
-	let description: HTMLTextAreaElement;
+	let description_text_area: HTMLTextAreaElement;
+	let agent_abilities: Ability[];
 </script>
 
+<SuperDebug data={form} />
 {#if $message}
 	{$message}
 {/if}
@@ -21,7 +24,14 @@
 	enctype="multipart/form-data"
 >
 	<label for="agent">Agent</label>
-	<select name="agent" bind:value={$form.agent}>
+	<select
+		name="agent"
+		bind:value={$form.agent}
+		on:change={() => {
+			agent_abilities = data.abilities[$form.agent];
+			$form.ability = 0;
+		}}
+	>
 		<option hidden selected />
 		{#each data.agents as agent}
 			<option value={agent.ID}>{agent.Name}</option>
@@ -45,7 +55,11 @@
 	<label for="ability">Ability</label>
 	<select name="ability" bind:value={$form.ability}>
 		<option hidden selected />
-		<option value={1}>PLACEHOLDER</option>
+		{#if agent_abilities}
+			{#each agent_abilities as ability}
+				<option value={ability.AbilityID}>{ability.Name}</option>
+			{/each}
+		{/if}
 	</select>
 
 	{#if $errors.ability}
@@ -128,7 +142,7 @@
 		id=""
 		on:paste={() => {
 			setTimeout(() => {
-				description.value = description.value.replaceAll('\n', ' ');
+				description_text_area.value = description_text_area.value.replaceAll('\n', ' ');
 			});
 		}}
 		on:keydown={(event) => {
@@ -136,7 +150,7 @@
 				event.preventDefault();
 			}
 		}}
-		bind:this={description}
+		bind:this={description_text_area}
 		bind:value={$form.description}
 	/>
 	{#if $errors.description}

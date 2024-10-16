@@ -1,5 +1,5 @@
 import { IMAGES_PATH } from '$env/static/private';
-import { getAgents, getMaps } from '$lib/server/db/index.js';
+import { getAbilities, getAgents, getMaps } from '$lib/server/db/index.js';
 import { type ActionFailure } from '@sveltejs/kit';
 import fs from 'fs';
 import path from 'path';
@@ -13,7 +13,8 @@ export const load: PageServerLoad = async () => {
 	return {
 		form: await superValidate(zod(schema)),
 		agents: getAgents(),
-		maps: getMaps()
+		maps: getMaps(),
+		abilities: getAbilities()
 	};
 };
 

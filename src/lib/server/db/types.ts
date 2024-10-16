@@ -13,3 +13,10 @@ export type ValorantMap = {
 	ID: number;
 	Name: string;
 };
+
+export type Ability = {
+	AgentID: number;
+	AbilityID: number;
+	Name: string;
+	NameID: string;
+};
