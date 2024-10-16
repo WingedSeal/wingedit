@@ -1,52 +1,49 @@
-import { getAgents, getMaps } from '$lib/server/db';
+import { getAgents, getGameInfo, getMaps } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
-import { Grade, type LineupInfo, ThrowType } from './types';
-import type { PageServerLoad } from './$types';
+import { type Agent, type Lineup, type ValorantMap } from '$lib/server/db/types';
+import { v4 as uuidv4 } from 'uuid';
 
-export const load: PageServerLoad = ({ params }) => {
+export const load = ({ params }) => {
 	params.valorant_agent = params.valorant_agent.toLowerCase();
-	if (!getAgents().some((agent) => agent.Name.toLowerCase() == params.valorant_agent)) {
+	let agent: Agent | undefined;
+	let map: ValorantMap | undefined;
+	Object.values(getAgents()).forEach((_agent) => {
+		if (_agent.Name.toLowerCase() == params.valorant_agent) {
+			agent = _agent;
+		}
+	});
+	Object.values(getMaps()).forEach((_map) => {
+		if (_map.Name.toLowerCase() == params.valorant_map) {
+			map = _map;
+		}
+	});
+	if (!agent) {
 		error(404, `Agent ${params.valorant_agent} not found`);
 	}
-	if (!getMaps().some((map) => map.Name.toLowerCase() == params.valorant_map)) {
+	if (!map) {
 		error(404, `Map ${params.valorant_map} not found`);
 	}
 
-	let lineups: LineupInfo[] = [];
+	let lineups: Lineup[] = [];
 	// temporary place holder
 	lineups.push({
-		id: 'abcd-1234',
-		grade: Grade.A,
-		throw_location: 'none',
-		land_location: 'none',
-		throw_type: ThrowType.Throw,
-		has_spot_lineup: false,
-		draw_over: { main_pixel: [0, 0] }
-	});
-	lineups.push({
-		id: 'abcd-efgh',
-		grade: Grade.C,
-		throw_location: 'A MAIN',
-		land_location: 'UWU',
-		throw_type: ThrowType.Throw,
-		has_spot_lineup: false,
-		draw_over: { main_pixel: [0, 0] }
+		AbilityID: 1,
+		AgentID: 1,
+		ExtraImageCount: 0,
+		GradeID: 1,
+		MapID: 2,
+		ThrowTypeID: 2,
+		TimeToLand: 1,
+		UUID: uuidv4()
 	});
 
+	const game_info = getGameInfo();
 	return {
 		valorant: {
-			map: params.valorant_map.charAt(0).toUpperCase() + params.valorant_map.slice(1),
-			agent: params.valorant_agent.charAt(0).toUpperCase() + params.valorant_agent.slice(1)
+			map,
+			agent
 		},
-		lineups: lineups
+		lineups,
+		game_info
 	};
 };
-// const get_image_url = (throw_type: ImageType) => {
-// 	return `/api/img/lineup/${params.valorant_map}/${params.valorant_agent}/${throw_type}/${lineup_info.id}`;
-// };
-// image_url: {
-// 	throw_first_person: get_image_url(ImageType.ThrowFirstPerson),
-// 	throw_third_person: get_image_url(ImageType.ThrowThirdPerson),
-// 	land: get_image_url(ImageType.Land),
-// 	spot_lineup: lineup_info.has_spot_lineup ? get_image_url(ImageType.SpotLineup) : null
-// }

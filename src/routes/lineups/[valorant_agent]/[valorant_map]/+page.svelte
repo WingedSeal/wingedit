@@ -8,9 +8,9 @@
 	let lineup = data.lineups[0];
 </script>
 
-Agent Name: {data.valorant.agent}
+Agent Name: {data.valorant.agent.Name}
 <br />
-Map: {data.valorant.map}
+Map: {data.valorant.map.Name}
 <br />
 Lineups:
 <LineupList lineups={data.lineups} />
@@ -22,6 +22,6 @@ Lineups:
 ></button>
 
 <div class="h-[100vh] bg-red-300"></div>
-<Popup title={`${lineup.throw_location} - ${lineup.land_location}`} bind:is_hidden={is_popup_hidden}
-	><LineupShow lineup_info={lineup} map={data.valorant.map} agent={data.valorant.agent} /></Popup
+<Popup title={`TITLE`} bind:is_hidden={is_popup_hidden}
+	><LineupShow {lineup} gameInfo={data.game_info} /></Popup
 >

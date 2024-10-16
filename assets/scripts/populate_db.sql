@@ -36,6 +36,21 @@ VALUES
     (4, 'Sentinel');
 
 INSERT INTO
+    "Grades" ("ID", "Name", "Description")
+VALUES
+    (1, 'S', 'DESC-S'),
+    (2, 'A', 'DESC-A'),
+    (3, 'B', 'DESC-B'),
+    (4, 'C', 'DESC-C');
+
+INSERT INTO
+    "ThrowTypes" ("ID", "Name", "Description")
+VALUES
+    (1, 'Throw', 'DESC-THROW'),
+    (2, 'Run Throw', 'DESC-RUNTHROW'),
+    (3, 'Jump Throw', 'DESC-JUMPTHROW');
+
+INSERT INTO
     "Maps" ("ID", "Name")
 VALUES
     (1, 'Bind'),

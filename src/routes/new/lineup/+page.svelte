@@ -1,13 +1,11 @@
 <script lang="ts">
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
-	import { Grade, ThrowType } from './../../lineups/[valorant_agent]/[valorant_map]/types';
 	import type { Ability } from '$lib/server/db/types';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
 		taintedMessage: 'Changes you made may not be saved.',
 		validationMethod: 'submit-only'
 	});
-	const throw_types = Object(ThrowType);
 	let description_text_area: HTMLTextAreaElement;
 	let agent_abilities: Ability[];
 </script>
@@ -27,12 +25,12 @@
 		name="agent"
 		bind:value={$form.agent}
 		on:change={() => {
-			agent_abilities = data.abilities[$form.agent];
+			agent_abilities = data.agent_abilities[$form.agent];
 			$form.ability = 0;
 		}}
 	>
 		<option hidden selected />
-		{#each data.agents as agent}
+		{#each Object.values(data.game_info.agents) as agent}
 			<option value={agent.ID}>{agent.Name}</option>
 		{/each}
 	</select>
@@ -43,7 +41,7 @@
 	<label for="map">Map</label>
 	<select name="map" bind:value={$form.map}>
 		<option hidden selected />
-		{#each data.maps as map}
+		{#each Object.values(data.game_info.maps) as map}
 			<option value={map.ID}>{map.Name}</option>
 		{/each}
 	</select>
@@ -111,8 +109,8 @@
 	<label for="grade">Grade</label>
 	<select name="grade" bind:value={$form.grade}>
 		<option hidden selected />
-		{#each Object.values(Grade) as grade}
-			<option value={grade}>{grade}</option>
+		{#each Object.values(data.game_info.grades) as grade}
+			<option value={grade.ID}>{grade.Name}</option>
 		{/each}
 	</select>
 	{#if $errors.grade}
@@ -122,8 +120,8 @@
 	<label for="throwType">Throw Type</label>
 	<select name="throwType" bind:value={$form.throwType}>
 		<option hidden selected />
-		{#each Object.keys(ThrowType) as throw_type}
-			<option value={throw_type}>{throw_types[throw_type]}</option>
+		{#each Object.values(data.game_info.throw_types) as throw_type}
+			<option value={throw_type.ID}>{throw_type.Name}</option>
 		{/each}
 	</select>
 	{#if $errors.throwType}

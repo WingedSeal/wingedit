@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { type LineupInfo } from './types';
-	export let lineups: LineupInfo[];
+	import type { Lineup } from '$lib/server/db/types';
+
+	export let lineups: Lineup[];
 </script>
 
 {#each lineups as lineup_info, i}
 	<li>
 		{i + 1}.{')'}
-		UUID: {lineup_info.id}, grade: {lineup_info.grade}, from {lineup_info.throw_location}, to {lineup_info.land_location}
+		UUID: {lineup_info.UUID}, grade: {lineup_info.GradeID}
 	</li>
 {/each}

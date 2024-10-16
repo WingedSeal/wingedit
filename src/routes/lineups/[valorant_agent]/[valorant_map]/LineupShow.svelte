@@ -1,9 +1,8 @@
 <script lang="ts">
 	import ElementFit from '$lib/components/ElementFit.svelte';
-	import { type LineupInfo } from './types';
-	export let lineup_info: LineupInfo;
-	export let map: string;
-	export let agent: string;
+	import type { GameInfo, Lineup } from '$lib/server/db/types';
+	export let lineup: Lineup;
+	export let gameInfo: GameInfo;
 </script>
 
 <ElementFit>
@@ -13,8 +12,8 @@
 			<h2
 				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase"
 			>
-				{map}
-				{agent}
+				{gameInfo.maps[lineup.MapID].Name}
+				{gameInfo.agents[lineup.AgentID].Name}
 			</h2>
 		</div>
 		<div>
@@ -31,8 +30,8 @@
 				<!-- <div class="flex"><h2 class="my-auto">normal throw</h2></div>
                 <div class="flex"><h2 class="my-auto">grade: S</h2></div>
                 <div class="flex"><h2 class="my-auto">description</h2></div> -->
-				<h2>{lineup_info.throw_type}</h2>
-				<h2>grade: {lineup_info.grade}</h2>
+				<h2>{gameInfo.throw_types[lineup.ThrowTypeID].Name}</h2>
+				<h2>grade: {gameInfo.grades[lineup.GradeID].Name}</h2>
 				<h2>description</h2>
 			</div>
 		</div>

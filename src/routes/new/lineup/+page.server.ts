@@ -1,11 +1,5 @@
 import { IMAGES_PATH } from '$env/static/private';
-import {
-	addLineup,
-	getAbilities,
-	getAgents,
-	getMaps,
-	getThrowTypes
-} from '$lib/server/db/index.js';
+import { addLineup, getAgentAbilities, getGameInfo, getThrowTypes } from '$lib/server/db/index.js';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
@@ -13,14 +7,13 @@ import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import sizeOf from 'image-size';
-import type { Lineup } from '$lib/server/db/types';
+import type { GameInfo, Lineup } from '$lib/server/db/types';
 
 export const load: PageServerLoad = async () => {
 	return {
 		form: await superValidate(zod(schema)),
-		agents: getAgents(),
-		maps: getMaps(),
-		abilities: getAbilities()
+		game_info: getGameInfo(),
+		agent_abilities: getAgentAbilities()
 	};
 };
 
@@ -51,8 +44,8 @@ const schema = z.object({
 	landSpot: _image_schema,
 	throwSpotFirstPerson: _image_schema,
 	throwSpotThirdPerson: _image_schema,
-	grade: z.string().length(1, 'Please select a grade.'),
-	throwType: z.string().min(1, 'Please select a throw type.'),
+	grade: z.number().min(1, 'Please select a grade.'),
+	throwType: z.number().min(1, 'Please select a throw type.'),
 	timeToLand: z
 		.number({ message: 'Expected a number.' })
 		.positive()
@@ -73,10 +66,12 @@ export const actions = {
 		}
 		const lineup: Lineup = {
 			AbilityID: form.data.ability,
+			AgentID: form.data.agent,
 			MapID: form.data.map,
 			ExtraImageCount: -1, // TODO
 			ThrowTypeID: getThrowTypes()[form.data.throwType].ID,
-			TimeToLand: form.data.timeToLand
+			TimeToLand: form.data.timeToLand,
+			GradeID: form.data.grade
 		};
 
 		const uuid = addLineup(lineup);

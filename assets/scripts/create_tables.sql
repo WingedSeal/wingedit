@@ -25,14 +25,18 @@ CREATE TABLE
     IF NOT EXISTS "Lineups" (
         "UUID" VARCHAR(36) NOT NULL,
         "AbilityID" SMALLINT NOT NULL,
+        "AgentID" SMALLINT NOT NULL,
         "MapID" TINYINT NOT NULL,
         "ExtraImageCount" TINYINT NOT NULL DEFAULT 0,
         "ThrowTypeID" TINYINT NOT NULL,
         "TimeToLand" DECIMAL(5, 2) NOT NULL,
+        "GradeID" TINYINT NOT NULL,
         PRIMARY KEY ("UUID"),
         CONSTRAINT "FK_Abilities_AbilityID" FOREIGN KEY ("AbilityID") REFERENCES "Abilities" ("AbilityID") ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("AgentID") ON DELETE RESTRICT ON UPDATE RESTRICT,
         CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT "FK_ThrowTypes_ThrowTypeID" FOREIGN KEY ("ThrowTypeID") REFERENCES "ThrowTypes" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT
+        CONSTRAINT "FK_ThrowTypes_ThrowTypeID" FOREIGN KEY ("ThrowTypeID") REFERENCES "ThrowTypes" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT "FK_Grades_GradeID" FOREIGN KEY ("GradeID") REFERENCES "Grades" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT
     );
 
 CREATE TABLE
@@ -59,6 +63,14 @@ CREATE TABLE
     IF NOT EXISTS "ThrowTypes" (
         "ID" TINYINT NOT NULL,
         "Name" VARCHAR(32) NOT NULL UNIQUE,
+        "Description" TEXT NOT NULL,
+        PRIMARY KEY ("ID")
+    );
+
+CREATE TABLE
+    IF NOT EXISTS "Grades" (
+        "ID" TINYINT NOT NULL,
+        "Name" VARCHAR(1) NOT NULL UNIQUE,
         "Description" TEXT NOT NULL,
         PRIMARY KEY ("ID")
     );

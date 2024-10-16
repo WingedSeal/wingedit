@@ -4,6 +4,12 @@ export type Agent = {
 	RoleID: number;
 };
 
+export type Grade = {
+	ID: number;
+	Name: string;
+	Description: number;
+};
+
 export type AgentRole = {
 	RoleID: number;
 	Name: string;
@@ -24,14 +30,32 @@ export type Ability = {
 export type Lineup = {
 	UUID?: string;
 	AbilityID: number;
+	AgentID: number;
 	MapID: number;
 	ExtraImageCount: number;
 	ThrowTypeID: number;
 	TimeToLand: number;
+	GradeID: number;
 };
 
 export type ThrowType = {
 	ID: number;
 	Name: string;
 	Description: string;
+};
+
+export type GameInfo = {
+	agents: {
+		[agentID: number]: Agent;
+	};
+	maps: {
+		[mapID: number]: ValorantMap;
+	};
+	abilities: Map<[agentID: number, abilityID: number], Ability>;
+	throw_types: {
+		[throwTypeID: number]: ThrowType;
+	};
+	grades: {
+		[gradeID: number]: Grade;
+	};
 };
