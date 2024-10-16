@@ -34,9 +34,9 @@ export const getGrades = () => {
 
 export const getAbilities = () => {
 	const rows = db.prepare(`SELECT * FROM "Abilities";`).all() as Ability[];
-	let abilities = new Map<[agentID: number, abilityID: number], Ability>();
+	let abilities = new Map<string, Ability>();
 	rows.forEach((ability) => {
-		abilities.set([ability.AgentID, ability.AbilityID], ability);
+		abilities.set([ability.AgentID, ability.AbilityID].toString(), ability);
 	});
 	return abilities;
 };
@@ -87,6 +87,7 @@ export const getLineups = (agentID: number, mapID: number): Lineup[] => {
 	`
 		)
 		.all({ agentID, mapID }) as Lineup[];
+	console.log(rows);
 	return rows;
 };
 
@@ -96,9 +97,9 @@ export const addLineup = (lineup: Lineup): string => {
 	db.prepare(
 		`
 	INSERT INTO 
-		"Lineups" (UUID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand)
+		"Lineups" (UUID, AgentID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand, GradeID)
 	VALUES
-		(@UUID, @AbilityID, @MapID, @ExtraImageCount, @ThrowTypeID, @TimeToLand);
+		(@UUID, @AgentID, @AbilityID, @MapID, @ExtraImageCount, @ThrowTypeID, @TimeToLand, @GradeID);
 	`
 	).run(lineup);
 	return lineup.UUID;

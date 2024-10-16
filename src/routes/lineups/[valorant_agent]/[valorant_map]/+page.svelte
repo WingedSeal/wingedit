@@ -4,8 +4,8 @@
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
 	export let data: PageData;
-	let isPopupHidden: boolean;
-	let lineup = data.lineups[0];
+	let isPopupHidden: boolean = true;
+	let lineupIndex = 0;
 </script>
 
 Agent Name: {data.valorant.agent.Name}
@@ -13,15 +13,11 @@ Agent Name: {data.valorant.agent.Name}
 Map: {data.valorant.map.Name}
 <br />
 Lineups:
-<LineupList lineups={data.lineups} />
-<button
-	class="w-10 h-10 bg-violet-800"
-	on:click={() => {
-		isPopupHidden = !isPopupHidden;
-	}}
-></button>
+<LineupList lineups={data.lineups} gameInfo={data.gameInfo} bind:isPopupHidden bind:lineupIndex />
 
 <div class="h-[100vh] bg-red-300"></div>
-<Popup title={`TITLE`} bind:is_hidden={isPopupHidden}
-	><LineupShow {lineup} gameInfo={data.gameInfo} /></Popup
->
+{#if data.lineups.length > 0}
+	<Popup title={`TITLE`} bind:is_hidden={isPopupHidden}
+		><LineupShow lineup={data.lineups[lineupIndex]} gameInfo={data.gameInfo} /></Popup
+	>
+{/if}

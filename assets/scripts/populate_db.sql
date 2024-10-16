@@ -88,3 +88,46 @@ VALUES
     (5, 2, 'Cyber Cage', 'cyber_cage'),
     (5, 3, 'Spycam', 'spycam'),
     (5, 4, 'Neural Theft', 'neural_theft');
+
+INSERT INTO
+    "Lineups" (
+        'UUID',
+        'AgentID',
+        'MapID',
+        'AbilityID',
+        'ExtraImageCount',
+        'ThrowTypeID',
+        'TimeToLand',
+        'GradeID'
+    )
+VALUES
+    (
+        '096183a5-e386-4813-9d0a-40b1591879f1',
+        1,
+        1,
+        1,
+        0,
+        1,
+        1.5,
+        1
+    ),
+    (
+        '37a15edb-20e5-4b71-b2fa-00b4170256f1',
+        1,
+        1,
+        2,
+        0,
+        1,
+        2.5,
+        1
+    ),
+    (
+        'ae29fe30-8f15-4137-8f0d-1ede97be6518',
+        1,
+        1,
+        2,
+        0,
+        1,
+        3.5,
+        1
+    );

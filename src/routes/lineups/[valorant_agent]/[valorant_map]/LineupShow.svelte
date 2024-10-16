@@ -32,7 +32,7 @@
                 <div class="flex"><h2 class="my-auto">description</h2></div> -->
 				<h2>{gameInfo.throw_types[lineup.ThrowTypeID].Name}</h2>
 				<h2>grade: {gameInfo.grades[lineup.GradeID].Name}</h2>
-				<h2>description</h2>
+				<h2>time: {lineup.TimeToLand}s</h2>
 			</div>
 		</div>
 		<div>

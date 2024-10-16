@@ -1,4 +1,4 @@
-import { getAgents, getGameInfo, getMaps } from '$lib/server/db';
+import { getAgents, getGameInfo, getLineups, getMaps } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 import { type Agent, type Lineup, type ValorantMap } from '$lib/server/db/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -23,27 +23,12 @@ export const load = ({ params }) => {
 	if (!map) {
 		error(404, `Map ${params.valorant_map} not found`);
 	}
-
-	let lineups: Lineup[] = [];
-	// temporary place holder
-	lineups.push({
-		AbilityID: 1,
-		AgentID: 1,
-		ExtraImageCount: 0,
-		GradeID: 1,
-		MapID: 2,
-		ThrowTypeID: 2,
-		TimeToLand: 1,
-		UUID: uuidv4()
-	});
-
-	const gameInfo = getGameInfo();
 	return {
 		valorant: {
 			map,
 			agent
 		},
-		lineups,
-		gameInfo
+		lineups: getLineups(agent.ID, map.ID),
+		gameInfo: getGameInfo()
 	};
 };
