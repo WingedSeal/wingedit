@@ -29,3 +29,9 @@ export type Lineup = {
 	ThrowTypeID: number;
 	TimeToLand: number;
 };
+
+export type ThrowType = {
+	ID: number;
+	Name: string;
+	Description: string;
+};
