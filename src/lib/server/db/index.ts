@@ -73,6 +73,23 @@ export const getGameInfo = (): GameInfo => {
 	};
 };
 
+export const getLineups = (agentID: number, mapID: number): Lineup[] => {
+	const rows = db
+		.prepare(
+			`
+	SELECT
+		*
+	FROM
+		"Lineups"
+	WHERE
+		"AgentID" = @agentID
+		AND "MapID" = @mapID;
+	`
+		)
+		.all({ agentID, mapID }) as Lineup[];
+	return rows;
+};
+
 export const addLineup = (lineup: Lineup): string => {
 	if (lineup.UUID) throw Error('Expected lineup without UUID');
 	lineup.UUID = uuidv4();
