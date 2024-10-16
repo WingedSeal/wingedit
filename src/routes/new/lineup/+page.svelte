@@ -53,11 +53,13 @@
 
 	<label for="ability">Ability</label>
 	<select name="ability" bind:value={$form.ability}>
-		<option hidden selected />
 		{#if agent_abilities}
+			<option hidden selected />
 			{#each agent_abilities as ability}
 				<option value={ability.AbilityID}>{ability.Name}</option>
 			{/each}
+		{:else}
+			<option selected />
 		{/if}
 	</select>
 
