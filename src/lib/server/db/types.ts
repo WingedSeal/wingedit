@@ -20,3 +20,12 @@ export type Ability = {
 	Name: string;
 	NameID: string;
 };
+
+export type Lineup = {
+	UUID?: string;
+	AbilityID: number;
+	MapID: number;
+	ExtraImageCount: number;
+	ThrowTypeID: number;
+	TimeToLand: number;
+};

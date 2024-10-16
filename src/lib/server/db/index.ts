@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { DB_PATH } from '$env/static/private';
-import type { Ability, Agent, ValorantMap } from './types';
-import type { number } from 'zod';
+import type { Ability, Agent, Lineup, ValorantMap } from './types';
+import { uuid } from 'uuidv4';
 export const db = new Database(DB_PATH);
 // export const db = new Database(DB_PATH, { verbose: console.log });
 
@@ -26,4 +26,17 @@ export const getAbilities = () => {
 		}
 	});
 	return abilities;
+};
+
+export const addLineup = (lineup: Lineup) => {
+	if (lineup.UUID) throw Error('Expected lineup without UUID');
+	lineup.UUID = uuid();
+	db.prepare(
+		`
+	INSERT INTO 
+		"Lineups" (UUID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand)
+	VALUES
+		(@UUID, @AbilityID, @MapID, @ExtraImageCount, @ThrowTypeID, @TimeToLand);
+	`
+	).run(lineup);
 };
