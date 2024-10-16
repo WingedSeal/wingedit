@@ -48,6 +48,7 @@ const schema = z.object({
 	timeToLand: z
 		.number({ message: 'Expected a number.' })
 		.positive()
+		.max(300)
 		.refine(
 			(x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON,
 			'Expected up to 2 decimal points.'
