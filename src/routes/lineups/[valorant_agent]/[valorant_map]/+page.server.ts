@@ -37,13 +37,13 @@ export const load = ({ params }) => {
 		UUID: uuidv4()
 	});
 
-	const game_info = getGameInfo();
+	const gameInfo = getGameInfo();
 	return {
 		valorant: {
 			map,
 			agent
 		},
 		lineups,
-		game_info
+		gameInfo
 	};
 };

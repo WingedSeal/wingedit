@@ -6,8 +6,8 @@
 		taintedMessage: 'Changes you made may not be saved.',
 		validationMethod: 'submit-only'
 	});
-	let description_text_area: HTMLTextAreaElement;
-	let agent_abilities: Ability[];
+	let descriptionTextArea: HTMLTextAreaElement;
+	let agentAbilities: Ability[];
 </script>
 
 {#if $message}
@@ -25,7 +25,7 @@
 		name="agent"
 		bind:value={$form.agent}
 		on:change={() => {
-			agent_abilities = data.agent_abilities[$form.agent];
+			agentAbilities = data.agent_abilities[$form.agent];
 			$form.ability = 0;
 		}}
 	>
@@ -51,9 +51,9 @@
 
 	<label for="ability">Ability</label>
 	<select name="ability" bind:value={$form.ability}>
-		{#if agent_abilities}
+		{#if agentAbilities}
 			<option hidden selected />
-			{#each agent_abilities as ability}
+			{#each agentAbilities as ability}
 				<option value={ability.AbilityID}>{ability.Name}</option>
 			{/each}
 		{:else}
@@ -141,7 +141,7 @@
 		id=""
 		on:paste={() => {
 			setTimeout(() => {
-				description_text_area.value = description_text_area.value.replaceAll('\n', ' ');
+				descriptionTextArea.value = descriptionTextArea.value.replaceAll('\n', ' ');
 			});
 		}}
 		on:keydown={(event) => {
@@ -149,7 +149,7 @@
 				event.preventDefault();
 			}
 		}}
-		bind:this={description_text_area}
+		bind:this={descriptionTextArea}
 		bind:value={$form.description}
 	/>
 	{#if $errors.description}

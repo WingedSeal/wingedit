@@ -4,9 +4,9 @@
 	export let lineups: Lineup[];
 </script>
 
-{#each lineups as lineup_info, i}
+{#each lineups as lineup, i}
 	<li>
 		{i + 1}.{')'}
-		UUID: {lineup_info.UUID}, grade: {lineup_info.GradeID}
+		UUID: {lineup.UUID}, grade: {lineup.GradeID}
 	</li>
 {/each}

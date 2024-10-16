@@ -4,7 +4,7 @@
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
 	export let data: PageData;
-	let is_popup_hidden: boolean;
+	let isPopupHidden: boolean;
 	let lineup = data.lineups[0];
 </script>
 
@@ -17,11 +17,11 @@ Lineups:
 <button
 	class="w-10 h-10 bg-violet-800"
 	on:click={() => {
-		is_popup_hidden = !is_popup_hidden;
+		isPopupHidden = !isPopupHidden;
 	}}
 ></button>
 
 <div class="h-[100vh] bg-red-300"></div>
-<Popup title={`TITLE`} bind:is_hidden={is_popup_hidden}
-	><LineupShow {lineup} gameInfo={data.game_info} /></Popup
+<Popup title={`TITLE`} bind:is_hidden={isPopupHidden}
+	><LineupShow {lineup} gameInfo={data.gameInfo} /></Popup
 >

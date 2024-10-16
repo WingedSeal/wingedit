@@ -17,7 +17,7 @@ export const load: PageServerLoad = async () => {
 	};
 };
 
-const _image_schema = z
+const imageZod = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 10_000_000, 'Max 10 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
@@ -27,23 +27,25 @@ const _image_schema = z
 		return size.width == 1080 && size.height == 1980;
 	}, 'Please upload 1980x1080 image.');
 
+const gifZod = z
+	.instanceof(File, { message: 'Please upload a file.' })
+	.refine((f) => f.size < 20_00_000, 'Max 20 MB upload size.')
+	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
+	.refine((f) => f.type == 'image/gif', 'Please upload a GIF.')
+	.refine(async (f) => {
+		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
+		return size.width == 1080 && size.height == 1980;
+	}, 'Please upload 1980x1080 gif.');
+
 const schema = z.object({
 	agent: z.number().min(1, 'Please select an agent.'),
 	map: z.number().min(1, 'Please select a map.'),
 	ability: z.number().min(1, 'Please select an agent ability.'),
-	throwLineup: _image_schema,
-	throwGif: z
-		.instanceof(File, { message: 'Please upload a file.' })
-		.refine((f) => f.size < 20_00_000, 'Max 20 MB upload size.')
-		.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-		.refine((f) => f.type == 'image/gif', 'Please upload a GIF.')
-		.refine(async (f) => {
-			const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-			return size.width == 1080 && size.height == 1980;
-		}, 'Please upload 1980x1080 gif.'),
-	landSpot: _image_schema,
-	throwSpotFirstPerson: _image_schema,
-	throwSpotThirdPerson: _image_schema,
+	throwLineup: imageZod,
+	throwGif: gifZod,
+	landSpot: imageZod,
+	throwSpotFirstPerson: imageZod,
+	throwSpotThirdPerson: imageZod,
 	grade: z.number().min(1, 'Please select a grade.'),
 	throwType: z.number().min(1, 'Please select a throw type.'),
 	timeToLand: z
@@ -75,13 +77,13 @@ export const actions = {
 		};
 
 		const uuid = addLineup(lineup);
-		write_file(form.data.throwLineup, path.join(uuid, 'throw-lineup.jpg'));
+		writeFile(form.data.throwLineup, path.join(uuid, 'throw-lineup.jpg'));
 		return message(form, 'Sucess');
 	}
 };
 
-const write_file = (file: File, file_name: string) => {
+const writeFile = (file: File, fileName: string) => {
 	file.arrayBuffer().then((buffer) => {
-		fs.writeFile(path.join(IMAGES_PATH, file_name), new Uint8Array(buffer), () => {});
+		fs.writeFile(path.join(IMAGES_PATH, fileName), new Uint8Array(buffer), () => {});
 	});
 };
