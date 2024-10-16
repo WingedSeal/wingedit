@@ -36,11 +36,11 @@ CREATE TABLE
 
 CREATE TABLE
     IF NOT EXISTS "Abilities" (
+        "AgentID" TINYINT NOT NULL,
         "AbilityID" SMALLINT NOT NULL,
         "Name" VARCHAR(16) NOT NULL UNIQUE,
         "NameID" VARCHAR(16) NOT NULL UNIQUE,
-        "AgentID" TINYINT NOT NULL,
-        PRIMARY KEY ("AbilityID"),
+        PRIMARY KEY ("AgentID", "AbilityID"),
         CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT
     );
 

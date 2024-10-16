@@ -49,3 +49,13 @@ VALUES
     (9, 'Lotus'),
     (10, 'Sunset'),
     (11, 'Abyss');
+
+INSERT INTO
+    "Abilities" ("AgentID", "AbilityID", "Name", "NameID")
+VALUES
+    (1, 1, 'Stim Beacon', 'stim_beacon'),
+    (1, 2, 'Incendiary', 'incendiary'),
+    (1, 3, 'Sky Smoke', 'sky_smoke'),
+    (1, 4, 'Orbital Strike', 'orbital_strike'),
+    (2, 1, 'Snake Bite', 'snake_bite'),
+    (2, 2, 'Poison Cloud', 'poison_cloud');
