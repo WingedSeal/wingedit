@@ -19,7 +19,7 @@
 					DrawOverSub2Y={lineup.DrawOverSub2Y}
 				/>
 				<img
-					src="/api/image/test.jpg"
+					src={`/api/image/lineups/${lineup.ID}/throw-lineup.jpg`}
 					class="bg-black aspect-video w-full h-full"
 					alt="throw-lineup.jpg - How to line yourself up for the throw."
 				/>
@@ -33,16 +33,16 @@
 		</div>
 		<div>
 			<img
-				src="/api/image/test.jpg"
+				src={`/api/image/lineups/${lineup.ID}/throw.gif`}
 				class="bg-black aspect-video w-full h-full"
 				alt="throw.gif - GIF of thowing the lineup."
 			/>
 		</div>
 		<div>
 			<img
-				src="/api/image/test.jpg"
+				src={`/api/image/lineups/${lineup.ID}/land-spot.jpg`}
 				class="bg-black aspect-video w-full h-full"
-				alt="landspot.jpg - Where the lineup lands."
+				alt="land-spot.jpg - Where the lineup lands."
 			/>
 		</div>
 		<div class="relative">
@@ -60,14 +60,14 @@
 		</div>
 		<div>
 			<img
-				src="/api/image/test.jpg"
+				src={`/api/image/lineups/${lineup.ID}/throw-spot-third-person.jpg`}
 				class="bg-black aspect-video w-full h-full"
 				alt="throw-spot-third-person.jpg - Third person view of the throw spot of the lineup."
 			/>
 		</div>
 		<div>
 			<img
-				src="/api/image/test.jpg"
+				src={`/api/image/lineups/${lineup.ID}/throw-spot-first-person.jpg`}
 				class="bg-black aspect-video w-full h-full"
 				alt="throw-spot-first-person.jpg - First person view of the throw spot of the lineup."
 			/>

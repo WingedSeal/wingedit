@@ -5,6 +5,7 @@ import path from 'path';
 
 export const GET = async ({ params }) => {
 	const image_path = path.join(IMAGES_PATH, params.file);
+	console.log(image_path);
 	if (fs.existsSync(image_path)) {
 		return new Response(fs.readFileSync(image_path));
 	} else {
