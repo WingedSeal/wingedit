@@ -29,8 +29,8 @@ export type Ability = {
 
 export type Lineup = {
 	ID?: number;
-	AbilityID: number;
 	AgentID: number;
+	AbilityID: number;
 	MapID: number;
 	ExtraImageCount: number;
 	ThrowTypeID: number;

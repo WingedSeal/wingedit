@@ -105,3 +105,8 @@ export const addLineup = (lineup: Lineup): number => {
 		)
 		.run(lineup).lastInsertRowid as number;
 };
+
+export const getAllLineups = () => {
+	const rows = db.prepare(`SELECT * FROM "Lineups";`).all() as Lineup[];
+	return rows;
+};
