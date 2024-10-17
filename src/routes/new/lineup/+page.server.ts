@@ -81,24 +81,26 @@ export const actions = {
 		};
 
 		const lineupID = addLineup(lineup).toString();
-		writeFile(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.jpg'));
-		writeFile(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.gif'));
-		writeFile(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.jpg'));
-		writeFile(
-			form.data.throwSpotFirstPerson,
-			path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.jpg')
-		);
-		writeFile(
-			form.data.throwSpotThirdPerson,
-			path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.jpg')
-		);
+		fs.mkdirSync(path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID), { recursive: true });
+		await Promise.all([
+			writeFile(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.jpg')),
+			writeFile(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.gif')),
+			writeFile(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.jpg')),
+			writeFile(
+				form.data.throwSpotFirstPerson,
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.jpg')
+			),
+			writeFile(
+				form.data.throwSpotThirdPerson,
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.jpg')
+			)
+		]);
 
 		return message(form, 'Sucess');
 	}
 };
 
-const writeFile = (file: File, fileName: string) => {
-	file.arrayBuffer().then((buffer) => {
-		fs.writeFile(path.join(IMAGES_PATH, fileName), new Uint8Array(buffer), () => {});
-	});
+const writeFile = async (file: File, fileName: string) => {
+	const buffer = await file.arrayBuffer();
+	fs.writeFileSync(path.join(IMAGES_PATH, fileName), new Uint8Array(buffer));
 };
