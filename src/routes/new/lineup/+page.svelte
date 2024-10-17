@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import type { Ability } from '$lib/server/db/types';
+	import ClickableImage from './ClickableImage.svelte';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
 		taintedMessage: 'Changes you made may not be saved.',
@@ -158,6 +159,8 @@
 
 	<button type="submit" class="bg-red-300">button</button>
 </form>
+
+<ClickableImage src="/api/image/test.jpg" alt="" />
 
 <style lang="css">
 	small {
