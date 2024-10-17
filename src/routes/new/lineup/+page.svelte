@@ -2,11 +2,17 @@
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import type { Ability } from '$lib/server/db/types';
 	import ClickableImage from './ClickableImage.svelte';
+	import LineupShowOverlay from '../../lineups/[valorant_agent]/[valorant_map]/LineupShowOverlay.svelte';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
 		taintedMessage: 'Changes you made may not be saved.',
 		validationMethod: 'submit-only'
 	});
+	enum OverlayMode {
+		Main,
+		Sub1,
+		Sub2
+	}
 	let descriptionTextArea: HTMLTextAreaElement;
 	let agentAbilities: Ability[];
 	let throwLineup: FileList;
@@ -14,6 +20,9 @@
 	let landSpot: FileList;
 	let throwSpotFirstPerson: FileList;
 	let throwSpotThirdPerson: FileList;
+	let overlayMode = OverlayMode.Main;
+	let sub1: number | null;
+	$: sub1 = $form.sub1X;
 </script>
 
 {#if $message}
@@ -182,14 +191,116 @@
 		<small>{$errors.description[0]}</small>
 	{/if}
 
+	<label for="mainX">mainX (%)</label>
+	<input type="text" name="mainX" bind:value={$form.mainX} placeholder="0" />
+	{#if $errors.mainX}
+		<small>{$errors.mainX[0]}</small>
+	{/if}
+
+	<label for="mainY">mainY (%)</label>
+	<input type="text" name="mainY" bind:value={$form.mainY} placeholder="0" />
+	{#if $errors.mainY}
+		<small>{$errors.mainY[0]}</small>
+	{/if}
+
+	<label for="sub1X">Sub1X (%)</label>
+	<input type="text" name="sub1X" bind:value={$form.sub1X} placeholder="0" />
+	{#if $errors.sub1X}
+		<small>{$errors.sub1X[0]}</small>
+	{/if}
+
+	<label for="sub1Y">Sub1Y (%)</label>
+	<input type="text" name="sub1Y" bind:value={$form.sub1Y} placeholder="0" />
+	{#if $errors.sub1Y}
+		<small>{$errors.sub1Y[0]}</small>
+	{/if}
+
+	<label for="sub2X">Sub2X (%)</label>
+	<input type="text" name="sub2X" bind:value={$form.sub2X} placeholder="0" />
+	{#if $errors.sub2X}
+		<small>{$errors.sub2X[0]}</small>
+	{/if}
+
+	<label for="sub2Y">Sub2Y (%)</label>
+	<input type="text" name="sub2Y" bind:value={$form.sub2Y} placeholder="0" />
+	{#if $errors.sub2Y}
+		<small>{$errors.sub2Y[0]}</small>
+	{/if}
+
 	<button type="submit" class="bg-red-300">button</button>
 </form>
 
-{#if throwLineup}
-	<ClickableImage
-		src={URL.createObjectURL(throwLineup[0])}
-		alt={`Preview image of "Throw Lineup"`}
+<form class="m-4">
+	<input
+		type="radio"
+		id="main"
+		name="overlay-mode"
+		value={OverlayMode.Main}
+		bind:group={overlayMode}
 	/>
+	<label for="main">Main</label>
+
+	<input
+		type="radio"
+		id="sub1"
+		name="overlay-mode"
+		value={OverlayMode.Sub1}
+		bind:group={overlayMode}
+		on:click={() => {
+			$form.sub1X ??= 0;
+			$form.sub1Y ??= 0;
+			$form.sub2X ??= 0;
+			$form.sub2Y ??= 0;
+		}}
+	/>
+	<label for="sub1">Sub1</label>
+
+	<input
+		type="radio"
+		id="sub2"
+		name="overlay-mode"
+		value={OverlayMode.Sub2}
+		bind:group={overlayMode}
+		on:click={() => {
+			$form.sub1X ??= 0;
+			$form.sub1Y ??= 0;
+			$form.sub2X ??= 0;
+			$form.sub2Y ??= 0;
+		}}
+	/>
+	<label for="sub2">Sub2</label>
+</form>
+{#if throwLineup}
+	<div class="aspect-video w-[100rem] bg-red relative m-4">
+		<LineupShowOverlay
+			DrawOverMainX={$form.mainX}
+			DrawOverMainY={$form.mainY}
+			DrawOverSub1X={$form.sub1X}
+			DrawOverSub1Y={$form.sub1Y}
+			DrawOverSub2X={$form.sub2X}
+			DrawOverSub2Y={$form.sub2Y}
+		/>
+		<ClickableImage
+			src={URL.createObjectURL(throwLineup[0])}
+			alt={`Preview image of "Throw Lineup"`}
+			onClick={(x, y) => {
+				switch (overlayMode) {
+					case OverlayMode.Main:
+						$form.mainX = x;
+						$form.mainY = y;
+						break;
+					case OverlayMode.Sub1:
+						$form.sub1X = x;
+						$form.sub1Y = y;
+						break;
+					case OverlayMode.Sub2:
+						$form.sub2X = x;
+						$form.sub2Y = y;
+						break;
+				}
+			}}
+		/>
+	</div>
 {/if}
 
 <style lang="css">

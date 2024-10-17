@@ -37,6 +37,13 @@ const gifZod = z
 		return size.width == 1080 && size.height == 1980;
 	}, 'Please upload 1980x1080 gif.');
 
+const decimalZod = z
+	.number({ message: 'Expected a number.' })
+	.positive()
+	.max(100)
+	.refine((x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON, 'Expected up to 2 decimal points.')
+	.default(null as unknown as number);
+
 const schema = z.object({
 	agent: z.number().min(1, 'Please select an agent.'),
 	map: z.number().min(1, 'Please select a map.'),
@@ -57,7 +64,13 @@ const schema = z.object({
 			'Expected up to 2 decimal points.'
 		)
 		.default('' as unknown as number),
-	description: z.string()
+	description: z.string(),
+	mainX: decimalZod.default(50),
+	mainY: decimalZod.default(50),
+	sub1X: decimalZod.nullable(),
+	sub1Y: decimalZod.nullable(),
+	sub2X: decimalZod.nullable(),
+	sub2Y: decimalZod.nullable()
 });
 
 const LINEUP_DIRECTORY = 'lineups';
@@ -77,7 +90,11 @@ export const actions = {
 			TimeToLand: form.data.timeToLand,
 			GradeID: form.data.grade,
 			DrawOverMainX: -1, // TODO
-			DrawOverMainY: -1 // TODO
+			DrawOverMainY: -1, // TODO
+			DrawOverSub1X: null,
+			DrawOverSub1Y: null,
+			DrawOverSub2X: null,
+			DrawOverSub2Y: null
 		};
 
 		const lineupID = addLineup(lineup).toString();

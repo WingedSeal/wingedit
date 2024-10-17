@@ -38,10 +38,10 @@ export type Lineup = {
 	GradeID: number;
 	DrawOverMainX: number;
 	DrawOverMainY: number;
-	DrawOverSub1X?: number;
-	DrawOverSub1Y?: number;
-	DrawOverSub2X?: number;
-	DrawOverSub2Y?: number;
+	DrawOverSub1X: number | null;
+	DrawOverSub1Y: number | null;
+	DrawOverSub2X: number | null;
+	DrawOverSub2Y: number | null;
 };
 
 export type ThrowType = {
