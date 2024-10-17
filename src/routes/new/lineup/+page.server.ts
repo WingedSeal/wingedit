@@ -24,8 +24,8 @@ const imageZod = z
 	.refine((f) => f.type == 'image/jpeg', 'Please upload a jpeg image.')
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		return size.width == 1080 && size.height == 1980;
-	}, 'Please upload 1980x1080 image.');
+		return size.width == 1980 && size.height == 1080;
+	}, `Please upload 1980x1080 image.`);
 
 const gifZod = z
 	.instanceof(File, { message: 'Please upload a file.' })
