@@ -75,7 +75,9 @@ export const actions = {
 			ExtraImageCount: -1, // TODO
 			ThrowTypeID: getThrowTypes()[form.data.throwType].ID,
 			TimeToLand: form.data.timeToLand,
-			GradeID: form.data.grade
+			GradeID: form.data.grade,
+			DrawOverMainX: -1, // TODO
+			DrawOverMainY: -1 // TODO
 		};
 
 		const lineupID = addLineup(lineup).toString();
