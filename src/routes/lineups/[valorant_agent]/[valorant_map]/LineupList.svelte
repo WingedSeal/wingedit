@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Ability, Agent, GameInfo, Grade, Lineup } from '$lib/server/db/types';
-	import { v4 } from 'uuid';
 	export let lineups: Lineup[];
 	export let isPopupHidden: boolean;
 	export let lineupIndex: number;
@@ -29,7 +28,7 @@
 {#each lineups as lineup, i}
 	<li>
 		{i + 1}.{')'}
-		UUID: {lineup.UUID}, grade: {details[i].grade.Name}, agent: {details[i].agent.Name}, ability: {details[
+		ID: {lineup.ID}, grade: {details[i].grade.Name}, agent: {details[i].agent.Name}, ability: {details[
 			i
 		].ability.Name}
 		<button
@@ -41,3 +40,4 @@
 		/>
 	</li>
 {/each}
+ID

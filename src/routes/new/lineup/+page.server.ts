@@ -76,8 +76,8 @@ export const actions = {
 			GradeID: form.data.grade
 		};
 
-		const uuid = addLineup(lineup);
-		writeFile(form.data.throwLineup, path.join(uuid, 'throw-lineup.jpg'));
+		const lineupID = addLineup(lineup);
+		writeFile(form.data.throwLineup, path.join(lineupID.toString(), 'throw-lineup.jpg'));
 		return message(form, 'Sucess');
 	}
 };

@@ -28,7 +28,7 @@ export type Ability = {
 };
 
 export type Lineup = {
-	UUID?: string;
+	ID?: number;
 	AbilityID: number;
 	AgentID: number;
 	MapID: number;

@@ -17,7 +17,6 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/better-sqlite3": "^7.6.11",
 		"@types/eslint": "^9.6.0",
-		"@types/uuid": "^10.0.0",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -41,7 +40,6 @@
 		"better-sqlite3": "^11.3.0",
 		"image-size": "^1.1.1",
 		"jimp": "^1.6.0",
-		"uuid": "^10.0.0",
 		"wingedit": "file:"
 	}
 }

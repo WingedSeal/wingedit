@@ -6,8 +6,6 @@ export enum ImageType {
 	ThrowSpotThirdPerson = 'throw-spot-third-person'
 }
 
-export type UUID = string;
-
 /// Draw circles and lines over the first person image to explain how to line up.
 export interface DrawOver {
 	main_pixel: [number, number];
