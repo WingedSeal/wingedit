@@ -6,7 +6,7 @@
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
 		taintedMessage: 'Changes you made may not be saved.',
-		validationMethod: 'submit-only'
+		validationMethod: 'auto'
 	});
 	enum OverlayMode {
 		Main,

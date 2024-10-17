@@ -29,12 +29,12 @@ const imageZod = z
 
 const gifZod = z
 	.instanceof(File, { message: 'Please upload a file.' })
-	.refine((f) => f.size < 20_00_000, 'Max 20 MB upload size.')
+	.refine((f) => f.size < 20_000_000, 'Max 20 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
 	.refine((f) => f.type == 'image/gif', 'Please upload a GIF.')
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		return size.width == 1080 && size.height == 1980;
+		return size.width == 1980 && size.height == 1080;
 	}, 'Please upload 1980x1080 gif.');
 
 const decimalZod = z
@@ -99,12 +99,12 @@ export const actions = {
 			ThrowTypeID: getThrowTypes()[form.data.throwType].ID,
 			TimeToLand: form.data.timeToLand,
 			GradeID: form.data.grade,
-			DrawOverMainX: -1, // TODO
-			DrawOverMainY: -1, // TODO
-			DrawOverSub1X: null,
-			DrawOverSub1Y: null,
-			DrawOverSub2X: null,
-			DrawOverSub2Y: null
+			DrawOverMainX: form.data.mainX,
+			DrawOverMainY: form.data.mainY,
+			DrawOverSub1X: form.data.sub1X,
+			DrawOverSub1Y: form.data.sub1Y,
+			DrawOverSub2X: form.data.sub2X,
+			DrawOverSub2Y: form.data.sub2Y
 		};
 
 		const lineupID = addLineup(lineup).toString();

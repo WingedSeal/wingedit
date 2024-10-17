@@ -169,7 +169,6 @@ VALUES
     (26, 3, 'Age Rose', 'age_rose'),
     (26, 4, 'Steel Garden', 'steel_garden');
 
-
 INSERT INTO
     "Lineups" (
         'AgentID',
@@ -202,19 +201,4 @@ VALUES
         null,
         null,
         null
-    ),
-    (
-        1,
-        1,
-        2,
-        0,
-        1,
-        3.5,
-        1,
-        10,
-        10,
-        null,
-        null,
-        null,
-        null
-    );
+    )
