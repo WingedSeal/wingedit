@@ -12,7 +12,10 @@
 	let sub1: [number, number];
 	let sub2: [number, number];
 	let hasSub =
-		lineup.DrawOverSub1X && lineup.DrawOverSub1Y && lineup.DrawOverSub2X && lineup.DrawOverSub2Y;
+		lineup.DrawOverSub1X != null &&
+		lineup.DrawOverSub1Y != null &&
+		lineup.DrawOverSub2X != null &&
+		lineup.DrawOverSub2Y != null;
 	$: if (hasSub) {
 		const main = [
 			(lineup.DrawOverMainX! * clientWidth!) / 100,
@@ -56,7 +59,7 @@
 					rounded-[50%] border-solid border-red-600"
 					style={`height: ${mainSizePercent}%; left: ${lineup.DrawOverMainX}%; bottom: ${lineup.DrawOverMainY}%; border-width: ${clientHeight * 0.01}px;`}
 				/>
-				{#if hasSub}
+				{#if hasSub && !isNaN(sub1[0])}
 					<div
 						class="aspect-square absolute bg-transparent -translate-x-1/2 translate-y-1/2
 					rounded-[50%] border-solid border-red-300"
