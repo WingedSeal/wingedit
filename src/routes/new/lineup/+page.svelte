@@ -9,6 +9,11 @@
 	});
 	let descriptionTextArea: HTMLTextAreaElement;
 	let agentAbilities: Ability[];
+	let throwLineup: FileList;
+	let throwGif: FileList;
+	let landSpot: FileList;
+	let throwSpotFirstPerson: FileList;
+	let throwSpotThirdPerson: FileList;
 </script>
 
 {#if $message}
@@ -67,20 +72,38 @@
 	{/if}
 
 	<label for="throwLineup">Throw Lineup</label>
-	<input type="file" name="throwLineup" bind:value={$form.throwLineup} accept="image/jpeg" />
+	<input
+		type="file"
+		name="throwLineup"
+		bind:value={$form.throwLineup}
+		bind:files={throwLineup}
+		accept="image/jpeg"
+	/>
 	{#if $errors.throwLineup}
 		<small>{$errors.throwLineup[0]}</small>
 	{/if}
 
 	<label for="throwGif">Throw Gif</label>
 
-	<input type="file" name="throwGif" bind:value={$form.throwGif} accept="image/gif" />
+	<input
+		type="file"
+		name="throwGif"
+		bind:value={$form.throwGif}
+		bind:files={throwGif}
+		accept="image/gif"
+	/>
 	{#if $errors.throwGif}
 		<small>{$errors.throwGif[0]}</small>
 	{/if}
 
 	<label for="landSpot">Land Spot</label>
-	<input type="file" name="landSpot" bind:value={$form.landSpot} accept="image/jpeg" />
+	<input
+		type="file"
+		name="landSpot"
+		bind:value={$form.landSpot}
+		bind:files={landSpot}
+		accept="image/jpeg"
+	/>
 	{#if $errors.landSpot}
 		<small>{$errors.landSpot[0]}</small>
 	{/if}
@@ -90,6 +113,7 @@
 		type="file"
 		name="throwSpotFirstPerson"
 		bind:value={$form.throwSpotFirstPerson}
+		bind:files={throwSpotFirstPerson}
 		accept="image/jpeg"
 	/>
 	{#if $errors.throwSpotFirstPerson}
@@ -101,6 +125,7 @@
 		type="file"
 		name="throwSpotThirdPerson"
 		bind:value={$form.throwSpotThirdPerson}
+		bind:files={throwSpotThirdPerson}
 		accept="image/jpeg"
 	/>
 	{#if $errors.throwSpotThirdPerson}
@@ -160,7 +185,12 @@
 	<button type="submit" class="bg-red-300">button</button>
 </form>
 
-<ClickableImage src="/api/image/test.jpg" alt="" />
+{#if throwLineup}
+	<ClickableImage
+		src={URL.createObjectURL(throwLineup[0])}
+		alt={`Preview image of "Throw Lineup"`}
+	/>
+{/if}
 
 <style lang="css">
 	small {
