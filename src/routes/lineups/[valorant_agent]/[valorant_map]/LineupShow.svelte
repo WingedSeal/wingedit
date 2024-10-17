@@ -3,16 +3,29 @@
 	import type { GameInfo, Lineup } from '$lib/server/db/types';
 	export let lineup: Lineup;
 	export let gameInfo: GameInfo;
+	let clientHeight: number;
+	let circleBorder: number;
+	$: circleBorder = clientHeight * 0.01;
 </script>
 
 <ElementFit>
 	<div class="grid grid-cols-3 grid-rows-3 aspect-video gap-6 -translate-x-[3.3333%] m-auto">
 		<div class="col-span-2 row-span-2 relative">
-			<img
-				src="/api/image/test.jpg"
+			<div
 				class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute"
-				alt="throw-lineup.jpg - How to line yourself up for the throw."
-			/>
+				bind:clientHeight
+			>
+				<div
+					class="h-[10%] aspect-square absolute bg-transparent -translate-x-1/2 -translate-y-1/2
+					rounded-[50%] border-solid border-red-600"
+					style={`left: ${lineup.DrawOverMainX}%; bottom: ${lineup.DrawOverMainY}%; border-width: ${circleBorder}px;`}
+				/>
+				<img
+					src="/api/image/test.jpg"
+					class="bg-black aspect-video w-full h-full"
+					alt="throw-lineup.jpg - How to line yourself up for the throw."
+				/>
+			</div>
 			<h2
 				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase"
 			>
