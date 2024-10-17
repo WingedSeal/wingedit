@@ -92,8 +92,8 @@ export const actions = {
 			return fail(400, { form });
 		}
 		const lineup: Lineup = {
-			AbilityID: form.data.ability,
 			AgentID: form.data.agent,
+			AbilityID: form.data.ability,
 			MapID: form.data.map,
 			ExtraImageCount: -1, // TODO
 			ThrowTypeID: getThrowTypes()[form.data.throwType].ID,

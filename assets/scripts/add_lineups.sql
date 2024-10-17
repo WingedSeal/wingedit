@@ -1,0 +1,34 @@
+INSERT INTO
+    `Lineups` (
+        ID,
+        AgentID,
+        AbilityID,
+        MapID,
+        ExtraImageCount,
+        ThrowTypeID,
+        TimeToLand,
+        GradeID,
+        DrawOverMainX,
+        DrawOverMainY,
+        DrawOverSub1X,
+        DrawOverSub1Y,
+        DrawOverSub2X,
+        DrawOverSub2Y
+    )
+VALUES
+    (
+        3,
+        17,
+        2,
+        4,
+        -1,
+        3,
+        2.5,
+        2,
+        50,
+        50,
+        null,
+        null,
+        null,
+        null
+    )

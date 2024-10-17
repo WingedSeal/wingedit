@@ -7,9 +7,11 @@ export const GET = (async () => {
 		values += JSON.stringify(Object.values(lineup)).replace('[', '(').replace(']', ')') + ' ';
 	});
 	return json(
-		'INSERT INTO \
-`Lineups` (AgentID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand, GradeID, \
+		(
+			'INSERT INTO \
+`Lineups` (ID, AgentID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand, GradeID, \
 DrawOverMainX, DrawOverMainY, DrawOverSub1X, DrawOverSub1Y, DrawOverSub2X, DrawOverSub2Y) \
-VALUES ' + values.slice(0, -1)
+VALUES ' + values
+		).slice(0, -1)
 	);
 }) satisfies RequestHandler;

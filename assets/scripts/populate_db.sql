@@ -168,37 +168,3 @@ VALUES
     (26, 2, 'Shear', 'shear'),
     (26, 3, 'Age Rose', 'age_rose'),
     (26, 4, 'Steel Garden', 'steel_garden');
-
-INSERT INTO
-    "Lineups" (
-        'AgentID',
-        'MapID',
-        'AbilityID',
-        'ExtraImageCount',
-        'ThrowTypeID',
-        'TimeToLand',
-        'GradeID',
-        'DrawOverMainX',
-        'DrawOverMainY',
-        'DrawOverSub1X',
-        'DrawOverSub1Y',
-        'DrawOverSub2X',
-        'DrawOverSub2Y'
-    )
-VALUES
-    (1, 1, 1, 0, 1, 1.5, 1, 51.25, 40, 10, 10, 90, 90),
-    (
-        1,
-        1,
-        2,
-        0,
-        1,
-        2.5,
-        1,
-        10,
-        10,
-        null,
-        null,
-        null,
-        null
-    )

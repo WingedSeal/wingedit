@@ -108,5 +108,6 @@ export const addLineup = (lineup: Lineup): number => {
 
 export const getAllLineups = () => {
 	const rows = db.prepare(`SELECT * FROM "Lineups";`).all() as Lineup[];
+	console.log(rows);
 	return rows;
 };

@@ -22,6 +22,42 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    IF NOT EXISTS "Abilities" (
+        "AgentID" TINYINT NOT NULL,
+        "AbilityID" SMALLINT NOT NULL,
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
+        "NameID" VARCHAR(16) NOT NULL UNIQUE,
+        PRIMARY KEY ("AgentID", "AbilityID"),
+        CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT
+    );
+
+CREATE TABLE
+    IF NOT EXISTS "MapPositions" (
+        "ID" SMALLINT NOT NULL,
+        "Callout" VARCHAR(32) NOT NULL,
+        "MapID" TINYINT NOT NULL,
+        PRIMARY KEY ("ID"),
+        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT "UQ_Callout_MapID" UNIQUE ("Callout", "MapID")
+    );
+
+CREATE TABLE
+    IF NOT EXISTS "ThrowTypes" (
+        "ID" TINYINT NOT NULL,
+        "Name" VARCHAR(32) NOT NULL UNIQUE,
+        "Description" TEXT NOT NULL,
+        PRIMARY KEY ("ID")
+    );
+
+CREATE TABLE
+    IF NOT EXISTS "Grades" (
+        "ID" TINYINT NOT NULL,
+        "Name" VARCHAR(1) NOT NULL UNIQUE,
+        "Description" TEXT NOT NULL,
+        PRIMARY KEY ("ID")
+    );
+
+CREATE TABLE
     IF NOT EXISTS "Lineups" (
         "ID" INTEGER NOT NULL,
         "AgentID" SMALLINT NOT NULL,
@@ -56,40 +92,4 @@ CREATE TABLE
                 AND "DrawOverSub2Y" IS NOT NULL
             )
         )
-    );
-
-CREATE TABLE
-    IF NOT EXISTS "Abilities" (
-        "AgentID" TINYINT NOT NULL,
-        "AbilityID" SMALLINT NOT NULL,
-        "Name" VARCHAR(16) NOT NULL UNIQUE,
-        "NameID" VARCHAR(16) NOT NULL UNIQUE,
-        PRIMARY KEY ("AgentID", "AbilityID"),
-        CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT
-    );
-
-CREATE TABLE
-    IF NOT EXISTS "MapPositions" (
-        "ID" SMALLINT NOT NULL,
-        "Callout" VARCHAR(32) NOT NULL,
-        "MapID" TINYINT NOT NULL,
-        PRIMARY KEY ("ID"),
-        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT "UQ_Callout_MapID" UNIQUE ("Callout", "MapID")
-    );
-
-CREATE TABLE
-    IF NOT EXISTS "ThrowTypes" (
-        "ID" TINYINT NOT NULL,
-        "Name" VARCHAR(32) NOT NULL UNIQUE,
-        "Description" TEXT NOT NULL,
-        PRIMARY KEY ("ID")
-    );
-
-CREATE TABLE
-    IF NOT EXISTS "Grades" (
-        "ID" TINYINT NOT NULL,
-        "Name" VARCHAR(1) NOT NULL UNIQUE,
-        "Description" TEXT NOT NULL,
-        PRIMARY KEY ("ID")
     );
