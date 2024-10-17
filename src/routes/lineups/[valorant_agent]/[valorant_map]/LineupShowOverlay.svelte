@@ -5,8 +5,9 @@
 	export let DrawOverSub1Y: number | null;
 	export let DrawOverSub2X: number | null;
 	export let DrawOverSub2Y: number | null;
-	const mainSizePercent = 10;
-	const subSizePercent = 7;
+	const SIZE_MULTIPLIER = 1;
+	const mainSizePercent = 5 * SIZE_MULTIPLIER;
+	const subSizePercent = 2 * SIZE_MULTIPLIER;
 	let clientHeight: number;
 	let clientWidth: number;
 	let main1: [number, number];
@@ -51,23 +52,29 @@
 	<div
 		class="aspect-square absolute bg-transparent -translate-x-1/2 translate-y-1/2
 					rounded-[50%] border-solid border-red-600"
-		style={`height: ${mainSizePercent}%; left: ${DrawOverMainX}%; bottom: ${DrawOverMainY}%; border-width: ${clientHeight * 0.01}px;`}
+		style={`height: ${mainSizePercent}%; left: ${DrawOverMainX}%; bottom: ${DrawOverMainY}%; border-width: ${clientHeight * 0.005 * SIZE_MULTIPLIER}px;`}
 	/>
 	{#if hasSub && !isNaN(sub1[0])}
 		<div
 			class="aspect-square absolute bg-transparent -translate-x-1/2 translate-y-1/2
 					rounded-[50%] border-solid border-red-300"
-			style={`height: ${subSizePercent}%; left: ${DrawOverSub1X}%; bottom: ${DrawOverSub1Y}%; border-width: ${clientHeight * 0.01}px;`}
+			style={`height: ${subSizePercent}%; left: ${DrawOverSub1X}%; bottom: ${DrawOverSub1Y}%; border-width: ${clientHeight * 0.003 * SIZE_MULTIPLIER}px;`}
 		/>
 		<div
 			class="aspect-square absolute bg-transparent -translate-x-1/2 translate-y-1/2
 					rounded-[50%] border-solid border-red-300"
-			style={`height: ${subSizePercent}%; left: ${DrawOverSub2X}%; bottom: ${DrawOverSub2Y}%; border-width: ${clientHeight * 0.01}px;`}
+			style={`height: ${subSizePercent}%; left: ${DrawOverSub2X}%; bottom: ${DrawOverSub2Y}%; border-width: ${clientHeight * 0.003 * SIZE_MULTIPLIER}px;`}
 		/>
-		<svg class="h-full w-full absolute stroke-red-300 stroke-[0.5%]">
+		<svg
+			class="h-full w-full absolute stroke-red-300"
+			style={`stroke-width: ${0.15 * SIZE_MULTIPLIER}%;`}
+		>
 			<polyline points={`${sub1} ${main1}`}></polyline>
 		</svg>
-		<svg class="h-full w-full absolute stroke-red-300 stroke-[0.5%]">
+		<svg
+			class="h-full w-full absolute stroke-red-300"
+			style={`stroke-width: ${0.15 * SIZE_MULTIPLIER}%;`}
+		>
 			<polyline points={`${sub2} ${main2}`}></polyline>
 		</svg>
 	{/if}
