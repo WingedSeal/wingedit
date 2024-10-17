@@ -7,7 +7,7 @@ import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import sizeOf from 'image-size';
-import type { GameInfo, Lineup } from '$lib/server/db/types';
+import type { Lineup } from '$lib/server/db/types';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -60,6 +60,8 @@ const schema = z.object({
 	description: z.string()
 });
 
+const LINEUP_DIRECTORY = 'lineups';
+
 export const actions = {
 	upload: async ({ request }) => {
 		const form = await superValidate(request, zod(schema));
@@ -76,8 +78,19 @@ export const actions = {
 			GradeID: form.data.grade
 		};
 
-		const lineupID = addLineup(lineup);
-		writeFile(form.data.throwLineup, path.join(lineupID.toString(), 'throw-lineup.jpg'));
+		const lineupID = addLineup(lineup).toString();
+		writeFile(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.jpg'));
+		writeFile(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.gif'));
+		writeFile(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.jpg'));
+		writeFile(
+			form.data.throwSpotFirstPerson,
+			path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.jpg')
+		);
+		writeFile(
+			form.data.throwSpotThirdPerson,
+			path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.jpg')
+		);
+
 		return message(form, 'Sucess');
 	}
 };
