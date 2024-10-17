@@ -97,9 +97,11 @@ INSERT INTO
         'ExtraImageCount',
         'ThrowTypeID',
         'TimeToLand',
-        'GradeID'
+        'GradeID',
+        'DrawOverMainX',
+        'DrawOverMainY'
     )
 VALUES
-    (1, 1, 1, 0, 1, 1.5, 1),
-    (1, 1, 2, 0, 1, 2.5, 1),
-    (1, 1, 2, 0, 1, 3.5, 1);
+    (1, 1, 1, 0, 1, 1.5, 1, 10, 10),
+    (1, 1, 2, 0, 1, 2.5, 1, 10, 10),
+    (1, 1, 2, 0, 1, 3.5, 1, 10, 10);

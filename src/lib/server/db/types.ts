@@ -36,6 +36,12 @@ export type Lineup = {
 	ThrowTypeID: number;
 	TimeToLand: number;
 	GradeID: number;
+	DrawOverMainX: number;
+	DrawOverMainY: number;
+	DrawOverSub1X?: number;
+	DrawOverSub1Y?: number;
+	DrawOverSub2X?: number;
+	DrawOverSub2Y?: number;
 };
 
 export type ThrowType = {

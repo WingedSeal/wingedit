@@ -31,12 +31,32 @@ CREATE TABLE
         "ThrowTypeID" TINYINT NOT NULL,
         "TimeToLand" DECIMAL(5, 2) NOT NULL,
         "GradeID" TINYINT NOT NULL,
+        "DrawOverMainX" DECIMAL(5, 2) NOT NULL,
+        "DrawOverMainY" DECIMAL(5, 2) NOT NULL,
+        "DrawOverSub1X" DECIMAL(5, 2),
+        "DrawOverSub1Y" DECIMAL(5, 2),
+        "DrawOverSub2X" DECIMAL(5, 2),
+        "DrawOverSub2Y" DECIMAL(5, 2),
         PRIMARY KEY ("ID"),
         CONSTRAINT "FK_Abilities_AbilityID" FOREIGN KEY ("AbilityID") REFERENCES "Abilities" ("AbilityID") ON DELETE RESTRICT ON UPDATE RESTRICT,
         CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("AgentID") ON DELETE RESTRICT ON UPDATE RESTRICT,
         CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
         CONSTRAINT "FK_ThrowTypes_ThrowTypeID" FOREIGN KEY ("ThrowTypeID") REFERENCES "ThrowTypes" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT "FK_Grades_GradeID" FOREIGN KEY ("GradeID") REFERENCES "Grades" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT
+        CONSTRAINT "FK_Grades_GradeID" FOREIGN KEY ("GradeID") REFERENCES "Grades" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT "CON_DrawOverSub" CHECK (
+            (
+                "DrawOverSub1X" IS NULL
+                AND "DrawOverSub1Y" IS NULL
+                AND "DrawOverSub2X" IS NULL
+                AND "DrawOverSub2Y" IS NULL
+            )
+            OR (
+                "DrawOverSub1X" IS NOT NULL
+                AND "DrawOverSub1Y" IS NOT NULL
+                AND "DrawOverSub2X" IS NOT NULL
+                AND "DrawOverSub2Y" IS NOT NULL
+            )
+        )
     );
 
 CREATE TABLE

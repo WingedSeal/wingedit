@@ -28,6 +28,7 @@ export const getGrades = () => {
 	rows.forEach((grade) => {
 		grades[grade.ID] = grade;
 	});
+
 	return grades;
 };
 
