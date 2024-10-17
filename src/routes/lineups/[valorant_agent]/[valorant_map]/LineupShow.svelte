@@ -8,7 +8,11 @@
 <ElementFit>
 	<div class="grid grid-cols-3 grid-rows-3 aspect-video gap-6 -translate-x-[3.3333%] m-auto">
 		<div class="col-span-2 row-span-2 relative">
-			<canvas class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute" />
+			<img
+				src="/api/image/test.jpg"
+				class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute"
+				alt="throw-lineup.jpg - How to line yourself up for the throw."
+			/>
 			<h2
 				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase"
 			>
@@ -17,10 +21,18 @@
 			</h2>
 		</div>
 		<div>
-			<canvas class="bg-black aspect-video w-full h-full" />
+			<img
+				src="/api/image/test.jpg"
+				class="bg-black aspect-video w-full h-full"
+				alt="throw.gif - GIF of thowing the lineup."
+			/>
 		</div>
 		<div>
-			<canvas class="bg-black aspect-video w-full h-full" />
+			<img
+				src="/api/image/test.jpg"
+				class="bg-black aspect-video w-full h-full"
+				alt="landspot.jpg - Where the lineup lands."
+			/>
 		</div>
 		<div class="relative">
 			<div
@@ -36,10 +48,18 @@
 			</div>
 		</div>
 		<div>
-			<canvas class="bg-black aspect-video w-full h-full" />
+			<img
+				src="/api/image/test.jpg"
+				class="bg-black aspect-video w-full h-full"
+				alt="throw-spot-third-person.jpg - Third person view of the throw spot of the lineup."
+			/>
 		</div>
 		<div>
-			<canvas class="bg-black aspect-video w-full h-full" />
+			<img
+				src="/api/image/test.jpg"
+				class="bg-black aspect-video w-full h-full"
+				alt="throw-spot-first-person.jpg - First person view of the throw spot of the lineup."
+			/>
 		</div>
 	</div>
 </ElementFit>
