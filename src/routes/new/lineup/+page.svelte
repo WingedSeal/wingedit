@@ -226,6 +226,9 @@
 	{#if $errors.sub2Y}
 		<small>{$errors.sub2Y[0]}</small>
 	{/if}
+	{#if $errors._errors}
+		<small>{$errors._errors[0]}</small>
+	{/if}
 
 	<button type="submit" class="bg-red-300">button</button>
 </form>

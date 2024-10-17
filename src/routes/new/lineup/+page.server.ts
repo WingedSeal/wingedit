@@ -19,7 +19,7 @@ export const load: PageServerLoad = async () => {
 
 const imageZod = z
 	.instanceof(File, { message: 'Please upload a file.' })
-	.refine((f) => f.size < 10_000_000, 'Max 10 MB upload size.')
+	.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
 	.refine((f) => f.type == 'image/jpeg', 'Please upload a jpeg image.')
 	.refine(async (f) => {
@@ -44,34 +44,44 @@ const decimalZod = z
 	.refine((x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON, 'Expected up to 2 decimal points.')
 	.default(null as unknown as number);
 
-const schema = z.object({
-	agent: z.number().min(1, 'Please select an agent.'),
-	map: z.number().min(1, 'Please select a map.'),
-	ability: z.number().min(1, 'Please select an agent ability.'),
-	throwLineup: imageZod,
-	throwGif: gifZod,
-	landSpot: imageZod,
-	throwSpotFirstPerson: imageZod,
-	throwSpotThirdPerson: imageZod,
-	grade: z.number().min(1, 'Please select a grade.'),
-	throwType: z.number().min(1, 'Please select a throw type.'),
-	timeToLand: z
-		.number({ message: 'Expected a number.' })
-		.positive()
-		.max(300)
-		.refine(
-			(x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON,
-			'Expected up to 2 decimal points.'
-		)
-		.default('' as unknown as number),
-	description: z.string(),
-	mainX: decimalZod.default(50),
-	mainY: decimalZod.default(50),
-	sub1X: decimalZod.nullable(),
-	sub1Y: decimalZod.nullable(),
-	sub2X: decimalZod.nullable(),
-	sub2Y: decimalZod.nullable()
-});
+const schema = z
+	.object({
+		agent: z.number().min(1, 'Please select an agent.'),
+		map: z.number().min(1, 'Please select a map.'),
+		ability: z.number().min(1, 'Please select an agent ability.'),
+		throwLineup: imageZod,
+		throwGif: gifZod,
+		landSpot: imageZod,
+		throwSpotFirstPerson: imageZod,
+		throwSpotThirdPerson: imageZod,
+		grade: z.number().min(1, 'Please select a grade.'),
+		throwType: z.number().min(1, 'Please select a throw type.'),
+		timeToLand: z
+			.number({ message: 'Expected a number.' })
+			.positive()
+			.max(300)
+			.refine(
+				(x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON,
+				'Expected up to 2 decimal points.'
+			)
+			.default('' as unknown as number),
+		description: z.string(),
+		mainX: decimalZod.default(50),
+		mainY: decimalZod.default(50),
+		sub1X: decimalZod.nullable(),
+		sub1Y: decimalZod.nullable(),
+		sub2X: decimalZod.nullable(),
+		sub2Y: decimalZod.nullable()
+	})
+	.refine((data) => {
+		if ([data.sub1X, data.sub1Y, data.sub2X, data.sub2Y].every((x) => x === null)) {
+			return true;
+		}
+		if ([data.sub1X, data.sub1Y, data.sub2X, data.sub2Y].every((x) => x !== null)) {
+			return true;
+		}
+		return false;
+	}, 'sub1X, sub1Y, sub2X, sub2Y must either be all null or all non-null');
 
 const LINEUP_DIRECTORY = 'lineups';
 
