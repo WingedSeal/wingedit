@@ -16,6 +16,6 @@
 	};
 </script>
 
-<button class="bg-black aspect-video" on:mousemove={click}>
+<button class="bg-black aspect-video w-full h-full" on:mousemove={click}>
 	<img {src} {alt} class="w-full h-full" on:dragstart|preventDefault />
 </button>
