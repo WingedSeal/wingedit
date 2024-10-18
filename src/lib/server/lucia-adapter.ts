@@ -171,13 +171,10 @@ function transformIntoDatabaseSession(raw: SessionSchema): DatabaseSession {
 }
 
 function transformIntoDatabaseUser(raw: UserSchema): DatabaseUser {
-	const { UserID: id, Username: username, ...attributes } = raw;
+	const { UserID: id, ...attributes } = raw;
 	return {
 		id,
-		attributes: {
-			...attributes,
-			username
-		}
+		attributes
 	};
 }
 
