@@ -104,7 +104,7 @@ CREATE TABLE
 
 CREATE TABLE
     "Sessions" (
-        "SessionID" TEXT NOT NULL,
+        "SessionID" VARCHAR(40) NOT NULL,
         "ExpiresAt" INTEGER NOT NULL,
         "UserID" VARCHAR(16) NOT NULL,
         PRIMARY KEY ("SessionID"),
