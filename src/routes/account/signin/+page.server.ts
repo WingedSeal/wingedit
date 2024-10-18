@@ -74,5 +74,19 @@ export const actions: Actions = {
 		return {
 			message: 'done'
 		};
+	},
+	signout: async (event) => {
+		if (!event.locals.session) {
+			return fail(401, { message: 'u no logged in' });
+		}
+		await lucia.invalidateSession(event.locals.session.id);
+		const sessionCookie = lucia.createBlankSessionCookie();
+		event.cookies.set(sessionCookie.name, sessionCookie.value, {
+			path: '.',
+			...sessionCookie.attributes
+		});
+		return {
+			message: 'logged out'
+		};
 	}
 };

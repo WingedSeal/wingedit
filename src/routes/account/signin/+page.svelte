@@ -12,6 +12,11 @@
 	<input type="password" name="password" id="password" value="password" /><br />
 	<button>Continue</button>
 </form>
+
+<form method="post" use:enhance action="?/signout">
+	<button>Sign out</button>
+</form>
+
 <br />
 {form?.message}
 <br />
