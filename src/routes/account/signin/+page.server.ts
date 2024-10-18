@@ -18,7 +18,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	signin: async (event) => {
+	default: async (event) => {
 		const formData = await event.request.formData();
 		const username = formData.get('username');
 		const password = formData.get('password');
@@ -72,20 +72,6 @@ export const actions: Actions = {
 		});
 		return {
 			redirect: true
-		};
-	},
-	signout: async (event) => {
-		if (!event.locals.session) {
-			return fail(401, { message: 'u no logged in' });
-		}
-		await lucia.invalidateSession(event.locals.session.id);
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
-		return {
-			message: 'logged out'
 		};
 	}
 };

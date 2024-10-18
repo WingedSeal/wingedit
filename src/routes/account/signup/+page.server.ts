@@ -6,7 +6,6 @@ import { hash } from 'argon2';
 import { addUser, isUsernameExist } from '$lib/server/db/auth';
 import type { Actions, PageServerLoad } from './$types';
 import type { User } from '$lib/server/db/types';
-import { message } from 'sveltekit-superforms';
 
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user)
@@ -19,7 +18,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	signup: async (event) => {
+	default: async (event) => {
 		const formData = await event.request.formData();
 		const username = formData.get('username');
 		const password = formData.get('password');
