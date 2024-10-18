@@ -61,7 +61,8 @@ export const actions: Actions = {
 		const user: User = {
 			UserID: userId,
 			Username: username,
-			HashedPassword: passwordHash
+			HashedPassword: passwordHash,
+			Privilege: 1
 		};
 
 		addUser(user);
@@ -73,8 +74,6 @@ export const actions: Actions = {
 			...sessionCookie.attributes
 		});
 
-		return {
-			message: 'done'
-		};
+		throw redirect(302, '/' + (event.url.searchParams.get('redirectTo') || ''));
 	}
 };

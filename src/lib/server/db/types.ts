@@ -70,6 +70,7 @@ export type User = {
 	UserID: string;
 	Username: string;
 	HashedPassword: string;
+	Privilege: number;
 };
 
 export type Sessions = {

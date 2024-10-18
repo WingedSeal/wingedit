@@ -99,6 +99,7 @@ CREATE TABLE
         "UserID" VARCHAR(16) NOT NULL,
         "Username" TEXT NOT NULL UNIQUE,
         "HashedPassword" VARCHAR(32) NOT NULL,
+        "Privilege" TINYINT NOT NULL,
         PRIMARY KEY ("UserID")
     );
 

@@ -1,7 +1,7 @@
 import { lucia } from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { verify } from 'argon2';
-
+import { page } from '$app/stores';
 import type { Actions, PageServerLoad } from './$types';
 import { getUser } from '$lib/server/db/auth';
 import { PEPPER } from '$lib/server/auth';
@@ -70,10 +70,7 @@ export const actions: Actions = {
 			path: '/',
 			...sessionCookie.attributes
 		});
-
-		return {
-			message: 'done'
-		};
+		throw redirect(302, '/' + (event.url.searchParams.get('redirectTo') || ''));
 	},
 	signout: async (event) => {
 		if (!event.locals.session) {

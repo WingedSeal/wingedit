@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	export let form;
 	export let data;
 </script>
 
 <h1>Sign up</h1>
-<form method="post" use:enhance action="?/signup">
+<form
+	method="post"
+	use:enhance
+	action={`?/signup&redirectTo=${$page.url.searchParams.get('redirectTo') || ''}`}
+>
 	<label for="username">Username</label>
 	<input name="username" id="username" /><br />
 	<label for="password">Password</label>
