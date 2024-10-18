@@ -1,5 +1,5 @@
 import { IMAGES_PATH } from '$env/static/private';
-import { addLineup, getAgentAbilities, getGameInfo, getThrowTypes } from '$lib/server/db/index.js';
+import { addLineup, getAgentAbilities, getGameInfo, getThrowTypes } from '$lib/server/db/query.js';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';

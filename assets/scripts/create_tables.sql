@@ -93,3 +93,20 @@ CREATE TABLE
             )
         )
     );
+
+CREATE TABLE
+    "Users" (
+        "UserID" VARCHAR(16) NOT NULL,
+        "Username" TEXT NOT NULL UNIQUE,
+        "HashedPassword" VARCHAR(32) NOT NULL,
+        PRIMARY KEY ("UserID")
+    );
+
+CREATE TABLE
+    "Sessions" (
+        "SessionID" TEXT NOT NULL,
+        "ExpiresAt" INTEGER NOT NULL,
+        "UserID" VARCHAR(16) NOT NULL,
+        PRIMARY KEY ("SessionID"),
+        FOREIGN KEY ("UserID") REFERENCES "Users" ("UserID")
+    );

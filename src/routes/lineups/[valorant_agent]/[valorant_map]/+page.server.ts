@@ -1,4 +1,4 @@
-import { getAgents, getGameInfo, getLineups, getMaps } from '$lib/server/db';
+import { getAgents, getGameInfo, getLineups, getMaps } from '$lib/server/db/query';
 import { error } from '@sveltejs/kit';
 import { type Agent, type Lineup, type ValorantMap } from '$lib/server/db/types';
 

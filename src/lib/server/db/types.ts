@@ -65,3 +65,15 @@ export type GameInfo = {
 		[gradeID: number]: Grade;
 	};
 };
+
+export type User = {
+	UserID: string;
+	Username: string;
+	HashedPassword: string;
+};
+
+export type Sessions = {
+	SessionID: string;
+	ExpiresAt: number;
+	UserID: string;
+};
