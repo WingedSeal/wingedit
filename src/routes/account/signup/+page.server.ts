@@ -1,5 +1,5 @@
 import { lucia, PEPPER } from '$lib/server/auth';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { generateIdFromEntropySize } from 'lucia';
 import { hash } from 'argon2';
 
@@ -73,7 +73,8 @@ export const actions: Actions = {
 			path: '/',
 			...sessionCookie.attributes
 		});
-
-		throw redirect(302, '/' + (event.url.searchParams.get('redirectTo') || ''));
+		return {
+			redirect: true
+		};
 	}
 };

@@ -70,7 +70,9 @@ export const actions: Actions = {
 			path: '/',
 			...sessionCookie.attributes
 		});
-		throw redirect(302, '/' + (event.url.searchParams.get('redirectTo') || ''));
+		return {
+			redirect: true
+		};
 	},
 	signout: async (event) => {
 		if (!event.locals.session) {
