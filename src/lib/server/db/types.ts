@@ -25,6 +25,12 @@ export type ValorantMap = {
 	Name: string;
 };
 
+export type MapPosition = {
+	ID: number;
+	MapID: number;
+	Callout: string;
+};
+
 export type Ability = {
 	AgentID: number;
 	AbilityID: number;

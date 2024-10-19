@@ -7,6 +7,7 @@ import type {
 	GameInfo,
 	Grade,
 	Lineup,
+	MapPosition,
 	ThrowType,
 	ValorantMap
 } from './types';
@@ -100,6 +101,18 @@ export const getAbilities = () => {
 		abilities.set([ability.AgentID, ability.AbilityID].toString(), ability);
 	});
 	return abilities;
+};
+
+export const getMapPositions = () => {
+	const rows = db.prepare(`SELECT * FROM "MapPositions";`).all() as MapPosition[];
+	let mapPositions: { [mapID: number]: { [mapPositionID: number]: MapPosition } } = {};
+	rows.forEach((mapPosition) => {
+		if (mapPositions[mapPosition.MapID]!) {
+			mapPositions[mapPosition.MapID] = {};
+		}
+		mapPositions[mapPosition.MapID][mapPosition.ID] = mapPosition;
+	});
+	return mapPositions;
 };
 
 export const getAgentAbilities = () => {

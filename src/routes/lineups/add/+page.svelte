@@ -3,6 +3,7 @@
 	import type { Ability } from '$lib/server/db/types';
 	import ClickableImage from './ClickableImage.svelte';
 	import LineupShowOverlay from '../../lineups/[valorant_agent]/[valorant_map]/LineupShowOverlay.svelte';
+	import Popup from '$lib/components/Popup.svelte';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
 		taintedMessage: 'Changes you made may not be saved.',
@@ -13,6 +14,7 @@
 		Sub1,
 		Sub2
 	}
+	let is_hidden: boolean = true;
 	let descriptionTextArea: HTMLTextAreaElement;
 	let agentAbilities: Ability[];
 	let throwLineup: FileList;
@@ -361,6 +363,8 @@
 		/>
 	</div>
 {/if}
+
+<Popup bind:is_hidden title="TITLE"></Popup>
 
 <style lang="css">
 	small {

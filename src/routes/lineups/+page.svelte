@@ -1,12 +1,12 @@
-<script src="ts">
+<script lang="ts">
 	import { goto } from '$app/navigation';
 
 	export let data;
-	let chosenMap = null;
-	let chosenAgent = null;
+	let chosenMap: string | null = null;
+	let chosenAgent: string | null = null;
 	let canSubmit = false;
 	let submitText = '';
-	$: canSubmit = chosenMap && chosenAgent;
+	$: canSubmit = !!chosenMap && !!chosenAgent;
 	$: if (canSubmit) {
 		submitText = 'SELECT';
 	} else if (!chosenAgent) {
@@ -60,6 +60,6 @@ MAPS
 	class="bg-amber-100"
 	disabled={!canSubmit}
 	on:click={() => {
-		goto('/lineups/' + chosenAgent.toLowerCase() + '/' + chosenMap.toLowerCase());
+		goto('/lineups/' + chosenAgent?.toLowerCase() + '/' + chosenMap?.toLowerCase());
 	}}>{submitText}</button
 >
