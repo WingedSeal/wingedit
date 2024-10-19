@@ -7,12 +7,12 @@ export const load = ({ params }) => {
 	let agent: Agent | undefined;
 	let map: ValorantMap | undefined;
 	Object.values(getAgents()).forEach((_agent) => {
-		if (_agent.Name.toLowerCase() == params.valorant_agent) {
+		if (_agent.Name.toLowerCase() === params.valorant_agent) {
 			agent = _agent;
 		}
 	});
 	Object.values(getMaps()).forEach((_map) => {
-		if (_map.Name.toLowerCase() == params.valorant_map) {
+		if (_map.Name.toLowerCase() === params.valorant_map) {
 			map = _map;
 		}
 	});

@@ -21,20 +21,20 @@ const imageZod = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-	.refine((f) => f.type == 'image/jpeg', 'Please upload a jpeg image.')
+	.refine((f) => f.type === 'image/jpeg', 'Please upload a jpeg image.')
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		return size.width == 1980 && size.height == 1080;
+		return size.width === 1980 && size.height === 1080;
 	}, `Please upload 1980x1080 image.`);
 
 const gifZod = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 20_000_000, 'Max 20 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-	.refine((f) => f.type == 'image/gif', 'Please upload a GIF.')
+	.refine((f) => f.type === 'image/gif', 'Please upload a GIF.')
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		return size.width == 1980 && size.height == 1080;
+		return size.width === 1980 && size.height === 1080;
 	}, 'Please upload 1980x1080 gif.');
 
 const decimalZod = z

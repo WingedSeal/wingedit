@@ -1,7 +1,7 @@
 import { toUserInfo } from '$lib/server/db/auth';
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 
-export const load: PageServerLoad = async (event) => {
+export const load: LayoutServerLoad = async (event) => {
 	if (!event.locals.user)
 		return {
 			user: null
