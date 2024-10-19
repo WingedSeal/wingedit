@@ -36,8 +36,6 @@ CREATE TABLE
         "ID" SMALLINT NOT NULL,
         "MapID" TINYINT NOT NULL,
         "Callout" VARCHAR(32) NOT NULL,
-        "PosX" DECIMAL(5, 2) NOT NULL,
-        "PosY" DECIMAL(5, 2) NOT NULL,
         PRIMARY KEY ("ID", "MapID"),
         CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
         CONSTRAINT "UQ_Callout_MapID" UNIQUE ("Callout", "MapID")
