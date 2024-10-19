@@ -1,5 +1,14 @@
 import { db } from '.';
-import type { Ability, Agent, GameInfo, Grade, Lineup, ThrowType, ValorantMap } from './types';
+import type {
+	Ability,
+	Agent,
+	AgentRole,
+	GameInfo,
+	Grade,
+	Lineup,
+	ThrowType,
+	ValorantMap
+} from './types';
 
 export const getAgents = () => {
 	const rows = db.prepare(`SELECT * FROM "Agents";`).all() as Agent[];
@@ -8,6 +17,28 @@ export const getAgents = () => {
 		agents[agent.ID] = agent;
 	});
 	return agents;
+};
+
+export const getLastAgentID = () => {
+	const agentID = db
+		.prepare(
+			`
+SELECT
+	ID
+FROM
+	"Agents"
+ORDER BY
+	ID DESC
+LIMIT
+	1;`
+		)
+		.get() as { ID: number };
+	return agentID.ID;
+};
+
+export const getAgentRoles = () => {
+	const rows = db.prepare(`SELECT * FROM "AgentRoles";`).all() as AgentRole[];
+	return rows;
 };
 
 export const getMaps = () => {

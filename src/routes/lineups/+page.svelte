@@ -62,4 +62,4 @@ MAPS
 	on:click={() => {
 		goto('/lineups/' + chosenAgent.toLowerCase() + '/' + chosenMap.toLowerCase());
 	}}>{submitText}</button
->{' '}
+>
