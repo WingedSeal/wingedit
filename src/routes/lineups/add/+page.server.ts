@@ -12,8 +12,7 @@ import type { Lineup } from '$lib/server/db/types';
 export const load: PageServerLoad = async () => {
 	return {
 		form: await superValidate(zod(schema)),
-		game_info: getGameInfo(),
-		agent_abilities: getAgentAbilities()
+		game_info: getGameInfo()
 	};
 };
 

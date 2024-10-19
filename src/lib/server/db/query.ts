@@ -96,9 +96,12 @@ export const getGrades = () => {
 
 export const getAbilities = () => {
 	const rows = db.prepare(`SELECT * FROM "Abilities";`).all() as Ability[];
-	let abilities = new Map<string, Ability>();
+	let abilities: { [agentID: number]: { [abilityID: number]: Ability } } = {};
 	rows.forEach((ability) => {
-		abilities.set([ability.AgentID, ability.AbilityID].toString(), ability);
+		if (!abilities[ability.AgentID]) {
+			abilities[ability.AgentID] = {};
+		}
+		abilities[ability.AgentID][ability.AbilityID] = ability;
 	});
 	return abilities;
 };
@@ -107,7 +110,7 @@ export const getMapPositions = () => {
 	const rows = db.prepare(`SELECT * FROM "MapPositions";`).all() as MapPosition[];
 	let mapPositions: { [mapID: number]: { [mapPositionID: number]: MapPosition } } = {};
 	rows.forEach((mapPosition) => {
-		if (mapPositions[mapPosition.MapID]!) {
+		if (!mapPositions[mapPosition.MapID]) {
 			mapPositions[mapPosition.MapID] = {};
 		}
 		mapPositions[mapPosition.MapID][mapPosition.ID] = mapPosition;

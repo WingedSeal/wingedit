@@ -1,4 +1,4 @@
-import { getAgents, getGameInfo, getMaps } from '$lib/server/db/query';
+import { getAgents, getMaps } from '$lib/server/db/query';
 import type { Agent, ValorantMap } from '$lib/server/db/types';
 import type { PageServerLoad } from './$types';
 

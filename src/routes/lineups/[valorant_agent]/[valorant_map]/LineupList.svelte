@@ -15,7 +15,7 @@
 	const getDetails = (lineup: Lineup): Details => {
 		return {
 			grade: gameInfo.grades[lineup.GradeID],
-			ability: gameInfo.abilities.get([lineup.AgentID, lineup.AbilityID].toString())!,
+			ability: gameInfo.abilities[lineup.AgentID][lineup.AbilityID],
 			agent: gameInfo.agents[lineup.AgentID]
 		};
 	};
