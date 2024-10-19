@@ -9,6 +9,14 @@
 		taintedMessage: 'Changes you made may not be saved.',
 		validationMethod: 'auto'
 	});
+	const onChange = (event: Event) => {
+		let target = event.target! as HTMLSelectElement;
+		if (target.value !== 'add') {
+			return;
+		}
+		target.selectedIndex = 0;
+		is_hidden = false;
+	};
 	enum OverlayMode {
 		Main,
 		Sub1,
@@ -281,6 +289,29 @@
 		max="100"
 		step="0.01"
 	/>
+
+	<label for="from">From:</label>
+	<select name="from" on:change={onChange}>
+		<option hidden selected />
+		{#if data.game_info.mapPositions[$form.map]}
+			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
+				<option value={mapPosition.ID}>{mapPosition.Callout}</option>
+			{/each}
+		{/if}
+		<option value="add">ADD MAP POSITION</option>
+	</select>
+
+	<label for="to">To:</label>
+	<select name="to" on:change={onChange}>
+		<option hidden selected />
+		{#if data.game_info.mapPositions[$form.map]}
+			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
+				<option value={mapPosition.ID}>{mapPosition.Callout}</option>
+			{/each}
+		{/if}
+		<option value="add">ADD MAP POSITION</option>
+	</select>
+
 	{#if $errors.sub2Y}
 		<small>{$errors.sub2Y[0]}</small>
 	{/if}
@@ -364,7 +395,13 @@
 	</div>
 {/if}
 
-<Popup bind:is_hidden title="TITLE"></Popup>
+<Popup bind:is_hidden title="TITLE">
+	<form action="?/addMapPosition" method="post">
+		<label for="callout">Callout:</label>
+		<input type="text" name="callout" />
+		<button type="submit">ADD MAP POSITION</button>
+	</form>
+</Popup>
 
 <style lang="css">
 	small {

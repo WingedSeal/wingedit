@@ -124,6 +124,9 @@ export const actions = {
 		]);
 
 		return message(form, 'Sucess');
+	},
+	addMapPosition: async ({ request }) => {
+		console.log('WIP');
 	}
 };
 
