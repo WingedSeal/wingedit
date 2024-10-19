@@ -88,7 +88,6 @@ export const actions = {
 	upload: async ({ request }) => {
 		const form = await superValidate(request, zod(schema));
 		if (!form.valid) {
-			console.log(form);
 			return fail(400, { form });
 		}
 		const lineup: Lineup = {

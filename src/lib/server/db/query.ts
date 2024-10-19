@@ -31,8 +31,10 @@ export const addAgent = (agent: Agent): boolean => {
 			(@ID, @Name, @RoleID);
 		`
 		).run(agent);
-	} catch (SqliteError) {
-		return false;
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
 	}
 	return true;
 };
@@ -47,8 +49,10 @@ export const addAbility = (ability: Ability): boolean => {
 			(@AgentID, @AbilityID, @Name, @NameID);
 		`
 		).run(ability);
-	} catch (SqliteError) {
-		return false;
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
 	}
 	return true;
 };
