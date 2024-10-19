@@ -164,7 +164,15 @@
 	{/if}
 
 	<label for="timeToLand">Time to land (s)</label>
-	<input type="text" name="timeToLand" bind:value={$form.timeToLand} placeholder="0" />
+	<input
+		type="number"
+		name="timeToLand"
+		min="0"
+		max="300"
+		step="0.01"
+		bind:value={$form.timeToLand}
+		placeholder="0"
+	/>
 
 	{#if $errors.timeToLand}
 		<small>{$errors.timeToLand[0]}</small>
@@ -192,37 +200,85 @@
 	{/if}
 
 	<label for="mainX">mainX (%)</label>
-	<input type="text" name="mainX" bind:value={$form.mainX} placeholder="0" />
+	<input
+		type="number"
+		name="mainX"
+		bind:value={$form.mainX}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
 	{#if $errors.mainX}
 		<small>{$errors.mainX[0]}</small>
 	{/if}
 
 	<label for="mainY">mainY (%)</label>
-	<input type="text" name="mainY" bind:value={$form.mainY} placeholder="0" />
+	<input
+		type="number"
+		name="mainY"
+		bind:value={$form.mainY}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
 	{#if $errors.mainY}
 		<small>{$errors.mainY[0]}</small>
 	{/if}
 
 	<label for="sub1X">Sub1X (%)</label>
-	<input type="text" name="sub1X" bind:value={$form.sub1X} placeholder="0" />
+	<input
+		type="number"
+		name="sub1X"
+		bind:value={$form.sub1X}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
 	{#if $errors.sub1X}
 		<small>{$errors.sub1X[0]}</small>
 	{/if}
 
 	<label for="sub1Y">Sub1Y (%)</label>
-	<input type="text" name="sub1Y" bind:value={$form.sub1Y} placeholder="0" />
+	<input
+		type="number"
+		name="sub1Y"
+		bind:value={$form.sub1Y}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
 	{#if $errors.sub1Y}
 		<small>{$errors.sub1Y[0]}</small>
 	{/if}
 
 	<label for="sub2X">Sub2X (%)</label>
-	<input type="text" name="sub2X" bind:value={$form.sub2X} placeholder="0" />
+	<input
+		type="number"
+		name="sub2X"
+		bind:value={$form.sub2X}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
 	{#if $errors.sub2X}
 		<small>{$errors.sub2X[0]}</small>
 	{/if}
 
 	<label for="sub2Y">Sub2Y (%)</label>
-	<input type="text" name="sub2Y" bind:value={$form.sub2Y} placeholder="0" />
+	<input
+		type="number"
+		name="sub2Y"
+		bind:value={$form.sub2Y}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
 	{#if $errors.sub2Y}
 		<small>{$errors.sub2Y[0]}</small>
 	{/if}

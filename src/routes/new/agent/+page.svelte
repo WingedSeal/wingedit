@@ -77,3 +77,10 @@
 	{/each}
 	<button type="submit" class="bg-red-300">SUBMIT</button>
 </form>
+
+<style lang="css">
+	small {
+		--tw-text-opacity: 1;
+		color: rgb(239 68 68 / var(--tw-text-opacity)); /* #ef4444 */
+	}
+</style>
