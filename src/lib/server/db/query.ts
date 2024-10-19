@@ -118,19 +118,6 @@ export const getMapPositions = () => {
 	return mapPositions;
 };
 
-export const getAgentAbilities = () => {
-	const rows = db.prepare(`SELECT * FROM "Abilities";`).all() as Ability[];
-	let abilities: { [agentID: number]: Ability[] } = {};
-	rows.forEach((ability) => {
-		if (abilities[ability.AgentID]) {
-			abilities[ability.AgentID].push(ability);
-		} else {
-			abilities[ability.AgentID] = [ability];
-		}
-	});
-	return abilities;
-};
-
 export const getThrowTypes = () => {
 	const rows = db.prepare(`SELECT * FROM "ThrowTypes";`).all() as ThrowType[];
 	let throwTypes: { [throwTypeID: number]: ThrowType } = {};
