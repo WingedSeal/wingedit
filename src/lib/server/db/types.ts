@@ -79,6 +79,11 @@ export type GameInfo = {
 	grades: {
 		[gradeID: number]: Grade;
 	};
+	mapPositions: {
+		[mapID: number]: {
+			[mapPositionID: number]: MapPosition;
+		};
+	};
 };
 
 export type User = {

@@ -133,7 +133,8 @@ export const getGameInfo = (): GameInfo => {
 		maps: getMaps(),
 		abilities: getAbilities(),
 		throw_types: getThrowTypes(),
-		grades: getGrades()
+		grades: getGrades(),
+		mapPositions: getMapPositions()
 	};
 };
 
