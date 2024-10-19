@@ -74,6 +74,9 @@
 			name={`abilities[${i}].abilityNameID`}
 			bind:value={$form.abilities[i].abilityNameID}
 		/>
+		{#if $errors.abilities && $errors.abilities[i] && $errors.abilities[i].abilityNameID}
+			<small>{$errors.abilities[i].abilityNameID[0]} </small>
+		{/if}
 	{/each}
 	<button type="submit" class="bg-red-300">SUBMIT</button>
 </form>
