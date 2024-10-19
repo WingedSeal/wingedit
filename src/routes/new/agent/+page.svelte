@@ -1,19 +1,37 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import { superForm } from 'sveltekit-superforms';
 
 	export let data;
-	let temp: number = 4;
-	let tempAbilityIDs: number[] = [];
+	const DEFAULT_ABILITY_COUNT = 4;
+	let abilityCount = DEFAULT_ABILITY_COUNT;
+	const { form, errors, enhance, message } = superForm(data.form, {
+		// taintedMessage: 'Changes you made may not be saved.',
+		validationMethod: 'auto',
+		dataType: 'json'
+	});
+	if (!$form.agentID) $form.agentID = data.lastAgentId + 1;
+	$: $form.abilities.length = abilityCount;
+	$: for (let i = 0; i < abilityCount; i++) {
+		$form.abilities[i] ??= {} as any;
+	}
 </script>
 
-<form action="" class="flex flex-col w-1/2 p-10">
-	<label for="id">Agent ID</label>
-	<input type="text" id="name" value={data.lastAgentId + 1} />
-	<label for="name">Agent Name</label>
-	<input type="text" name="name" />
-
-	<label for="role">Agent Role</label>
-	<select name="role">
+{#if $message}
+	{$message}
+{/if}
+<form action="?/upload" class="flex flex-col w-1/2 p-10" method="post" use:enhance>
+	<label for="agentID">Agent ID</label>
+	<input type="number" id="agentID" bind:value={$form.agentID} />
+	{#if $errors.agentID}
+		<small>{$errors.agentID[0]}</small>
+	{/if}
+	<label for="agentName">Agent Name</label>
+	<input type="text" name="agentName" bind:value={$form.agentName} />
+	{#if $errors.agentName}
+		<small>{$errors.agentName[0]}</small>
+	{/if}
+	<label for="agentRole">Agent Role</label>
+	<select name="agentRole" bind:value={$form.agentRole}>
 		{#if data.agentRoles}
 			<option hidden selected />
 			{#each data.agentRoles as agentRole}
@@ -23,14 +41,39 @@
 			<option selected />
 		{/if}
 	</select>
+	{#if $errors.agentRole}
+		<small>{$errors.agentRole[0]}</small>
+	{/if}
 	<label for="ability-count">Ability Count</label>
-	<input type="text" name="ability-count" bind:value={temp} />
-	{#each { length: temp } as _, i}
-		<label for="abilityId">Ability ID</label>
-		<input type="text" id="abilityId" bind:value={tempAbilityIDs[i]} placeholder={i.toString()} />
-		<label for="abilityName">Ability Name</label>
-		<input type="text" name="abilityName" />
-		<label for="abilityNameID">Ability Name ID</label>
-		<input type="text" name="abilityNameID" />
+	abilityCount = {abilityCount}
+	<button type="button" class="bg-green-300" on:click={() => abilityCount++}>+</button>
+	<button
+		type="button"
+		class="bg-red-300"
+		on:click={() => (abilityCount = Math.max(abilityCount - 1, 0))}>-</button
+	>
+	<button
+		type="button"
+		class="bg-purple-300"
+		on:click={() => (abilityCount = DEFAULT_ABILITY_COUNT)}>RESET</button
+	>
+	{#each { length: abilityCount } as _, i}
+		<label for="abilityId">Ability ID: {i}</label>
+		<label for={`abilities[${i}].abilityName`}>Ability Name</label>
+		<input
+			type="text"
+			name={`abilities[${i}].abilityName`}
+			bind:value={$form.abilities[i].abilityName}
+		/>
+		{#if $errors.abilities && $errors.abilities[i] && $errors.abilities[i].abilityName}
+			<small>{$errors.abilities[i].abilityName[0]} </small>
+		{/if}
+		<label for={`abilities[${i}].abilityNameID`}>Ability Name ID</label>
+		<input
+			type="text"
+			name={`abilities[${i}].abilityNameID`}
+			bind:value={$form.abilities[i].abilityNameID}
+		/>
 	{/each}
+	<button type="submit" class="bg-red-300">SUBMIT</button>
 </form>

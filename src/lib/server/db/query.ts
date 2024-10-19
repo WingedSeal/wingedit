@@ -1,4 +1,5 @@
 import { db } from '.';
+import { SqliteError } from 'better-sqlite3';
 import type {
 	Ability,
 	Agent,
@@ -17,6 +18,38 @@ export const getAgents = () => {
 		agents[agent.ID] = agent;
 	});
 	return agents;
+};
+
+export const addAgent = (agent: Agent): boolean => {
+	try {
+		db.prepare(
+			`
+		INSERT INTO 
+			"Agents" (ID, Name, RoleID)
+		VALUES
+			(@ID, @Name, @RoleID);
+		`
+		).run(agent);
+	} catch (SqliteError) {
+		return false;
+	}
+	return true;
+};
+
+export const addAbility = (ability: Ability): boolean => {
+	try {
+		db.prepare(
+			`
+		INSERT INTO 
+			"Abilities" (AgentID, AbilityID, Name, NameID)
+		VALUES
+			(@AgentID, @AbilityID, @Name, @NameID);
+		`
+		).run(ability);
+	} catch (SqliteError) {
+		return false;
+	}
+	return true;
 };
 
 export const getLastAgentID = () => {

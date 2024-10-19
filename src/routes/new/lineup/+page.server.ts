@@ -46,16 +46,16 @@ const decimalZod = z
 
 const schema = z
 	.object({
-		agent: z.number().min(1, 'Please select an agent.'),
-		map: z.number().min(1, 'Please select a map.'),
-		ability: z.number().min(1, 'Please select an agent ability.'),
+		agent: z.number().int().min(1, 'Please select an agent.'),
+		map: z.number().int().min(1, 'Please select a map.'),
+		ability: z.number().int().min(1, 'Please select an agent ability.'),
 		throwLineup: imageZod,
 		throwGif: gifZod,
 		landSpot: imageZod,
 		throwSpotFirstPerson: imageZod,
 		throwSpotThirdPerson: imageZod,
-		grade: z.number().min(1, 'Please select a grade.'),
-		throwType: z.number().min(1, 'Please select a throw type.'),
+		grade: z.number().int().min(1, 'Please select a grade.'),
+		throwType: z.number().int().min(1, 'Please select a throw type.'),
 		timeToLand: z
 			.number({ message: 'Expected a number.' })
 			.positive()
@@ -89,6 +89,7 @@ export const actions = {
 	upload: async ({ request }) => {
 		const form = await superValidate(request, zod(schema));
 		if (!form.valid) {
+			console.log(form);
 			return fail(400, { form });
 		}
 		const lineup: Lineup = {
