@@ -38,9 +38,8 @@ export const actions: Actions = {
 			RoleID: form.data.agentRole
 		};
 
-		const abilities: Ability[] = [];
-		form.data.abilities.forEach((ability, i) => {
-			abilities[i] = {
+		const abilities = form.data.abilities.map((ability, i) => {
+			return {
 				AbilityID: i + 1,
 				AgentID: agent.ID,
 				Name: ability.abilityName,

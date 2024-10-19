@@ -4,7 +4,6 @@
 	export let isPopupHidden: boolean;
 	export let lineupIndex: number;
 	export let gameInfo: GameInfo;
-	export let details: Details[] = [];
 
 	type Details = {
 		grade: Grade;
@@ -20,8 +19,8 @@
 		};
 	};
 
-	lineups.forEach((lineup, i) => {
-		details[i] = getDetails(lineup);
+	const details = lineups.map((lineup) => {
+		return getDetails(lineup);
 	});
 </script>
 
