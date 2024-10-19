@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { enhance } from '$app/forms';
 	export let data;
 	export let form;
@@ -29,7 +30,7 @@
 					{#each Object.values(row) as col}
 						<td>{col}</td>
 					{/each}
-					<td><button>EDIT BUTTON SOON TM</button></td>
+					<td><button><i class="fa-solid fa-pen-to-square mx-2" /></button></td>
 				</tr>
 			{/each}
 		</table>
