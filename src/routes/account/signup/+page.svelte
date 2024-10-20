@@ -5,6 +5,7 @@
 
 	export let data;
 	let confirmPassword: HTMLInputElement;
+
 	let confirmPasswordError: string | null = null;
 	const { form, errors, message, enhance } = superForm(data.form);
 	$: if ($message?.redirect) goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
@@ -35,9 +36,14 @@
 	{/if}
 
 	<label for="confirmPassword">Confirm Password</label>
-	<input type="password" name="confirmPassword" id="confirmPassword" bind:this={confirmPassword} />
-	{#if confirmPasswordError}
-		<small>{confirmPasswordError}</small>
+	<input
+		type="password"
+		name="confirmPassword"
+		id="confirmPassword"
+		bind:value={$form.confirmPassword}
+	/>
+	{#if $errors.confirmPassword}
+		<small>{$errors.confirmPassword[0]}</small>
 	{/if}
 
 	<label for="referralCode">Referral Code</label>
@@ -48,3 +54,15 @@
 
 	<button>Continue</button>
 </form>
+
+{#if $message}
+	{$message}
+{/if}
+<br />
+
+{#if $errors._errors}
+	{$errors._errors}
+{/if}
+<br />
+
+<a href={'/account/signin' + $page.url.search}>Already Has Account?</a>

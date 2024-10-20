@@ -1,45 +1,40 @@
 import { lucia } from '$lib/server/auth';
-import { fail, redirect } from '@sveltejs/kit';
 import { verify } from 'argon2';
 import { page } from '$app/stores';
 import type { Actions, PageServerLoad } from './$types';
 import { getUser } from '$lib/server/db/auth';
 import { PEPPER } from '$lib/server/auth';
-import { message } from 'sveltekit-superforms';
+import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
+import { z } from 'zod';
+import { zod } from 'sveltekit-superforms/adapters';
+import { redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async (event) => {
-	if (!event.locals.user)
-		return {
-			username: null
-		};
+	if (event.locals.user) {
+		redirect(303, '/' + (event.url.searchParams.get('redirectTo') || ''));
+	}
 	return {
-		username: event.locals.user.username
+		form: await superValidate<Infer<typeof schema>, { redirect: boolean }>(zod(schema))
 	};
 };
 
+const schema = z.object({
+	username: z
+		.string()
+		.min(4)
+		.max(32)
+		.regex(/^[a-zA-Z0-9_-]+$/)
+		.trim(),
+	password: z.string().min(4).max(255).trim()
+});
+
 export const actions: Actions = {
-	default: async (event) => {
-		const formData = await event.request.formData();
-		const username = formData.get('username');
-		const password = formData.get('password');
-
-		if (
-			typeof username !== 'string' ||
-			username.length < 3 ||
-			username.length > 31 ||
-			!/^[a-z0-9_-]+$/.test(username)
-		) {
-			return fail(400, {
-				message: 'Invalid username'
-			});
+	default: async ({ request, cookies }) => {
+		const form = await superValidate(request, zod(schema));
+		if (!form.valid) {
+			return fail(400, { form });
 		}
-		if (typeof password !== 'string' || password.length < 6 || password.length > 255) {
-			return fail(400, {
-				message: 'Invalid password'
-			});
-		}
-
-		const existingUser = getUser(username);
+		const existingUser = getUser(form.data.username);
 
 		if (!existingUser) {
 			// NOTE:
@@ -51,27 +46,23 @@ export const actions: Actions = {
 			// Since protecting against this is non-trivial,
 			// it is crucial your implementation is protected against brute-force attacks with login throttling etc.
 			// If usernames are public, you may outright tell the user that the username is invalid.
-			return fail(400, {
-				message: 'no username'
-			});
+			return setError(form, 'username', "Username doesn't exist.");
 		}
 
-		const validPassword = await verify(existingUser.HashedPassword, password + PEPPER);
+		const validPassword = await verify(existingUser.HashedPassword, form.data.password + PEPPER);
 
 		if (!validPassword) {
-			return fail(400, {
-				message: 'Incorrect username or password'
-			});
+			return setError(form, 'password', 'Password is invalid.');
 		}
 
 		const session = await lucia.createSession(existingUser.UserID, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
+		cookies.set(sessionCookie.name, sessionCookie.value, {
 			path: '.',
 			...sessionCookie.attributes
 		});
-		return {
+		return message(form, {
 			redirect: true
-		};
+		});
 	}
 };
