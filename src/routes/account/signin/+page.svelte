@@ -19,9 +19,12 @@
 <form method="post" use:enhance action="/account/signout?">
 	<button>Sign out</button>
 </form>
-
 <br />
 {form?.message}
+<br />
+<br />
+<a href={'/account/signup' + $page.url.search}>No Account?</a>
+<br />
 <br />
 {#if data.username}
 	WELCOME {data.username}

@@ -4,7 +4,7 @@ CREATE TABLE
         "Name" VARCHAR(16) NOT NULL UNIQUE,
         "RoleID" TINYINT NOT NULL,
         PRIMARY KEY ("ID"),
-        CONSTRAINT "FK_AgentRoles_RoleID" FOREIGN KEY ("RoleID") REFERENCES "AgentRoles" ("RoleID") ON DELETE RESTRICT ON UPDATE RESTRICT
+        CONSTRAINT "FK_AgentRoles_RoleID" FOREIGN KEY ("RoleID") REFERENCES "AgentRoles" ("RoleID") ON DELETE RESTRICT ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -28,7 +28,7 @@ CREATE TABLE
         "Name" VARCHAR(16) NOT NULL UNIQUE,
         "NameID" VARCHAR(16) NOT NULL UNIQUE,
         PRIMARY KEY ("AgentID", "AbilityID"),
-        CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT
+        CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -37,7 +37,7 @@ CREATE TABLE
         "MapID" TINYINT NOT NULL,
         "Callout" VARCHAR(32) NOT NULL,
         PRIMARY KEY ("ID", "MapID"),
-        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "UQ_Callout_MapID" UNIQUE ("Callout", "MapID")
     );
 
@@ -74,10 +74,10 @@ CREATE TABLE
         "DrawOverSub2X" DECIMAL(5, 2),
         "DrawOverSub2Y" DECIMAL(5, 2),
         PRIMARY KEY ("ID"),
-        CONSTRAINT "FK_Abilities" FOREIGN KEY ("AgentID", "AbilityID") REFERENCES "Abilities" ("AgentID", "AbilityID") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT "FK_ThrowTypes_ThrowTypeID" FOREIGN KEY ("ThrowTypeID") REFERENCES "ThrowTypes" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
-        CONSTRAINT "FK_Grades_GradeID" FOREIGN KEY ("GradeID") REFERENCES "Grades" ("ID") ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT "FK_Abilities" FOREIGN KEY ("AgentID", "AbilityID") REFERENCES "Abilities" ("AgentID", "AbilityID") ON DELETE RESTRICT ON UPDATE CASCADE,
+        CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
+        CONSTRAINT "FK_ThrowTypes_ThrowTypeID" FOREIGN KEY ("ThrowTypeID") REFERENCES "ThrowTypes" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
+        CONSTRAINT "FK_Grades_GradeID" FOREIGN KEY ("GradeID") REFERENCES "Grades" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "CON_DrawOverSub" CHECK (
             (
                 "DrawOverSub1X" IS NULL
@@ -100,7 +100,7 @@ CREATE TABLE
         "Username" TEXT NOT NULL UNIQUE,
         "HashedPassword" CHAR(32) NOT NULL,
         "Privilege" TINYINT NOT NULL,
-        PRIMARY KEY ("UserID")
+        PRIMARY KEY ("UserID") CONSTRAINT "FK_PrivilegeRoles_Privilege" FOREIGN KEY ("Privilege") REFERENCES "PrivilegeRoles" ("Privilege") ON DELETE RESTRICT ON UPDATE RESTRICT
     );
 
 CREATE TABLE
@@ -111,3 +111,11 @@ CREATE TABLE
         PRIMARY KEY ("SessionID"),
         FOREIGN KEY ("UserID") REFERENCES "Users" ("UserID")
     );
+
+CREATE TABLE
+    "PrivilegeRoles" (
+        "Privilege" TINYINT NOT NULL,
+        "RoleName" VARCHAR(16) NOT NULL,
+        "Description" TEXT NOT NULL,
+        PRIMARY KEY ("Privilege")
+    )
