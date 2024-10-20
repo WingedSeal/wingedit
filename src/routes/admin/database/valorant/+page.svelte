@@ -48,6 +48,8 @@
 			code: string;
 			why: string;
 			where: string;
+			isAdd: boolean;
+			row: number;
 		};
 		success?: boolean;
 	} | null = null;
@@ -59,9 +61,9 @@
 				primaryKeys: form!.primaryKeys!,
 				columnNames: Object.keys(form?.table[0]),
 				query: {
-					delete: [...query.delete].map((row) => getPK(row)),
+					delete: [...query.delete].map((row) => [getPK(row), row]),
 					add: query.add,
-					edit: [...query.edit].map((row) => [getPK(row), getDatabaseObject(row)])
+					edit: [...query.edit].map((row) => [getPK(row), getDatabaseObject(row), row])
 				}
 			}),
 			headers: {
@@ -104,7 +106,8 @@
 			{#each form.table as row, rowIndex}
 				<tr
 					class={(query.delete.has(rowIndex) ? 'bg-red-400' : '') +
-						(query.edit.has(rowIndex) ? 'bg-green-300' : '')}
+						(query.edit.has(rowIndex) ? 'bg-green-300' : '') +
+						(save?.error?.row == rowIndex && !save.error.isAdd ? ' bg-red-900' : '')}
 				>
 					{#each Object.values(row) as colValue, colIndex}
 						<td>
@@ -124,6 +127,7 @@
 						<button
 							type="button"
 							on:click={() => {
+								save = null;
 								if (query.edit.has(rowIndex)) query.edit.delete(rowIndex);
 								else {
 									query.edit.add(rowIndex);
@@ -139,6 +143,7 @@
 						<button
 							type="button"
 							on:click={() => {
+								save = null;
 								if (query.delete.has(rowIndex)) query.delete.delete(rowIndex);
 								else {
 									query.delete.add(rowIndex);
@@ -153,7 +158,10 @@
 				</tr>
 			{/each}
 			{#each query.add as newRow, newRowIndex}
-				<tr class="bg-blue-100">
+				<tr
+					class={'bg-blue-100' +
+						(save?.error?.row == newRowIndex && save.error.isAdd ? '  bg-red-900' : '')}
+				>
 					{#each newRow as colValue}
 						<td>
 							{colValue}
@@ -163,6 +171,7 @@
 						<button
 							type="button"
 							on:click={() => {
+								save = null;
 								query.add.splice(newRowIndex, 1);
 								query.add = query.add;
 							}}
@@ -180,6 +189,7 @@
 					><button
 						type="button"
 						on:click={() => {
+							save = null;
 							addNewRow();
 							query.add = query.add;
 						}}>ADD</button

@@ -41,15 +41,17 @@ export const executeQuery = (
 	primaryKeys: PrimaryKeyName[],
 	columnNames: ColumnName[],
 	query: {
-		delete: PrimaryKeyValue[];
+		delete: [PrimaryKeyValue, number][];
 		add: RowValue[];
-		edit: [PrimaryKeyValue, RowValue][];
+		edit: [PrimaryKeyValue, RowValue, number][];
 	}
 ): {
 	error?: {
 		code: string;
 		why: string;
 		where: string;
+		isAdd: boolean;
+		row: number;
 	};
 	success?: boolean;
 } | null => {
@@ -77,32 +79,38 @@ export const executeQuery = (
 		VALUES
 			(${values});`);
 	let where: string = '';
+	let isAdd = false;
+	let errorRow: number;
 	try {
 		db.transaction(() => {
-			query.delete.forEach((values) => {
+			query.delete.forEach(([values, row]) => {
 				try {
 					deleteRows.run(...values);
 				} catch (error) {
 					const pos = values.map((value, i) => `${primaryKeys[i]}="${value}"`).join(', ');
 					where = `Query failed during deletion of (${pos})`;
+					errorRow = row;
 					throw error;
 				}
 			});
-			query.edit.forEach(([keyValues, values]) => {
+			query.edit.forEach(([keyValues, values, row]) => {
 				try {
 					updateRows.run(...values, ...keyValues);
 				} catch (error) {
 					const pos = keyValues.map((value, i) => `${primaryKeys[i]}="${value}"`).join(', ');
 					where = `Query failed during updation of (${pos})`;
+					errorRow = row;
 					throw error;
 				}
 			});
-			query.add.forEach((values) => {
+			query.add.forEach((values, row) => {
 				try {
 					insertRows.run(...values);
 				} catch (error) {
 					const pos = values.map((value, i) => `${columnNames[i]}="${value}"`).join(', ');
+					isAdd = true;
 					where = `Query failed during insertion of (${pos})`;
+					errorRow = row;
 					throw error;
 				}
 			});
@@ -111,7 +119,7 @@ export const executeQuery = (
 		if (!(error instanceof SqliteError)) {
 			throw error;
 		}
-		return { error: { code: error.code, why: error.message, where } };
+		return { error: { code: error.code, why: error.message, where, isAdd, row: errorRow! } };
 	}
 	return { success: true };
 };

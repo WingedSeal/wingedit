@@ -20,9 +20,9 @@ export const POST: RequestHandler = async ({ request }) => {
 			primaryKeys: string[];
 			columnNames: string[];
 			query: {
-				delete: string[][];
+				delete: [string[], number][];
 				add: string[][];
-				edit: [string[], string[]][];
+				edit: [string[], string[], number][];
 			};
 		};
 		const returnJson = executeQuery(tableName, primaryKeys, columnNames, query);
