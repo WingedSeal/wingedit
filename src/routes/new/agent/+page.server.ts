@@ -19,12 +19,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 const schema = z.object({
 	agentID: z.number().int(),
-	agentName: z.string().min(1).max(16),
+	agentName: z.string().min(1).max(16).trim(),
 	agentRole: z.number().int().min(1).max(4),
 	abilities: z
 		.object({
-			abilityName: z.string().min(1).max(16),
-			abilityNameID: z.string().min(1).max(16)
+			abilityName: z.string().min(1).max(16).trim(),
+			abilityNameID: z.string().min(1).max(16).trim()
 		})
 		.array()
 });

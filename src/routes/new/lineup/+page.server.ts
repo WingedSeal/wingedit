@@ -68,7 +68,7 @@ const schema = z
 				'Expected up to 2 decimal points.'
 			)
 			.default('' as unknown as number),
-		description: z.string(),
+		description: z.string().trim(),
 		mainX: decimalZod.default(50),
 		mainY: decimalZod.default(50),
 		sub1X: decimalZod.nullable(),
