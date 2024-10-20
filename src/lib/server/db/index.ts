@@ -31,7 +31,7 @@ export const getTable = (tableName: string) => {
 	}
 };
 
-type ColumnName = string[];
+type ColumnName = string;
 type RowValue = string[];
 type PrimaryKeyName = ColumnName;
 type PrimaryKeyValue = RowValue;
@@ -69,15 +69,39 @@ export const executeQuery = (
 			${tableName} (${into})
 		VALUES
 			(${values});`);
-	db.transaction(() => {
-		query.delete.forEach((values) => {
-			deleteRows.run(...values);
-		});
-		query.edit.forEach(([keyValues, values]) => {
-			updateRows.run(...values, ...keyValues);
-		});
-		query.add.forEach((values) => {
-			insertRows.run(...values);
-		});
-	})();
+	let customMessage: string = '';
+	try {
+		db.transaction(() => {
+			query.delete.forEach((values) => {
+				try {
+					deleteRows.run(...values);
+				} catch (error) {
+					customMessage = `Query failed during deletion of ${values}`;
+					throw error;
+				}
+			});
+			query.edit.forEach(([keyValues, values]) => {
+				try {
+					updateRows.run(...values, ...keyValues);
+				} catch (error) {
+					customMessage = `Query failed during updation of ${keyValues}`;
+					throw error;
+				}
+			});
+			query.add.forEach((values) => {
+				try {
+					insertRows.run(...values);
+				} catch (error) {
+					customMessage = `Query failed during insertion of ${values}`;
+					throw error;
+				}
+			});
+		})();
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
+		return { code: error.code, message: error.message, customMessage };
+	}
+	return { success: true };
 };

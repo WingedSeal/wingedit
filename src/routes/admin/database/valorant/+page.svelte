@@ -8,16 +8,15 @@
 	type DatabaseObject = string[];
 	let query: {
 		delete: Set<number>;
-		add: any[][];
+		add: string[][];
 		edit: Set<number>;
 	} = {
 		delete: new Set(),
 		add: [],
 		edit: new Set()
 	};
-	const getPK = (row: number): PK[] => {
+	const getPK = (row: number): PK => {
 		if (!form || !form.primaryKeys) throw Error('form is null');
-		console.log(form.primaryKeys);
 		return form.primaryKeys.map((key) => {
 			return form.table[row][key];
 		});
@@ -42,10 +41,24 @@
 			})
 		);
 	};
-	const confirm = () => {
-		query.delete.forEach((row) => {
-			getPK(row);
+	const confirm = async () => {
+		const response = await fetch('/api/query', {
+			method: 'POST',
+			body: JSON.stringify({
+				tableName: form!.tableName,
+				primaryKeys: form!.primaryKeys!,
+				columnNames: Object.keys(form?.table[0]),
+				query: {
+					delete: [...query.delete].map((row) => getPK(row)),
+					add: query.add,
+					edit: [...query.edit].map((row) => [getPK(row), getDatabaseObject(row)])
+				}
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
 		});
+		console.log(await response.json());
 	};
 </script>
 
@@ -162,10 +175,11 @@
 {/if}
 
 <button
-	on:click={() => {
-		console.log(query.delete);
-		console.log([...query.edit].map((number) => getDatabaseObject(number)));
-		console.log(query.add);
+	on:click={async () => {
+		// console.log(query.delete);
+		// console.log([...query.edit].map((number) => getDatabaseObject(number)));
+		// console.log(query.add);
+		await confirm();
 	}}>TEST</button
 >
 
