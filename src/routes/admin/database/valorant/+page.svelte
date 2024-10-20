@@ -42,6 +42,11 @@
 			})
 		);
 	};
+	const confirm = () => {
+		query.delete.forEach((row) => {
+			getPK(row);
+		});
+	};
 </script>
 
 <form action="?/getTable" bind:this={formElement} method="post" use:enhance>
