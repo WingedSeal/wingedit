@@ -91,6 +91,7 @@ export type User = {
 	Username: string;
 	HashedPassword: string;
 	Privilege: number;
+	ReferredByUserID: string | null;
 };
 
 export type Session = {
@@ -101,6 +102,12 @@ export type Session = {
 
 export type ReferralCode = {
 	Code: string;
-	FromUserID: string;
+	FromUserID: string | null;
 	Privilege: number;
+};
+
+export type PrivilegeRole = {
+	Privilege: string;
+	RoleName: string;
+	Description: string;
 };

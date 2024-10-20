@@ -100,8 +100,10 @@ CREATE TABLE
         "Username" VARCHAR(32) NOT NULL UNIQUE,
         "HashedPassword" CHAR(32) NOT NULL,
         "Privilege" TINYINT NOT NULL,
+        "ReferredByUserID" CHAR(16),
         PRIMARY KEY ("UserID"),
-        CONSTRAINT "FK_PrivilegeRoles_Privilege" FOREIGN KEY ("Privilege") REFERENCES "PrivilegeRoles" ("Privilege") ON DELETE RESTRICT ON UPDATE RESTRICT
+        CONSTRAINT "FK_PrivilegeRoles_Privilege" FOREIGN KEY ("Privilege") REFERENCES "PrivilegeRoles" ("Privilege") ON DELETE RESTRICT ON UPDATE RESTRICT,
+        CONSTRAINT "FK_Users_ReferredByUserID" FOREIGN KEY ("ReferredByUserID") REFERENCES "Users" ("UserID") ON DELETE SET NULL ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -124,7 +126,7 @@ CREATE TABLE
 CREATE TABLE
     "ReferralCodes" (
         "Code" CHAR(16) NOT NULL,
-        "FromUserID" CHAR(16) NOT NULL,
+        "FromUserID" CHAR(16),
         "Privilege" TINYINT NOT NULL,
         PRIMARY KEY ("Code"),
         CONSTRAINT "FK_Users_UserID" FOREIGN KEY ("FromUserID") REFERENCES "Users" ("UserID") ON DELETE CASCADE ON UPDATE RESTRICT

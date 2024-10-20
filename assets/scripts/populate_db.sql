@@ -187,3 +187,8 @@ VALUES
         'Admin',
         'Can directly interact with database.'
     );
+
+INSERT INTO
+    "ReferralCodes" ("Code", "Privilege")
+VALUES
+    ('1234567890123456', 3);

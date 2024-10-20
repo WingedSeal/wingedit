@@ -2,7 +2,7 @@ import { lucia, PEPPER, Privilege } from '$lib/server/auth';
 import { generateIdFromEntropySize } from 'lucia';
 import { hash } from 'argon2';
 
-import { addUser, isUsernameExist } from '$lib/server/db/auth';
+import { addUser, deleteReferralCode, getReferralCode, isUsernameExist } from '$lib/server/db/auth';
 import type { Actions, PageServerLoad } from './$types';
 import type { User } from '$lib/server/db/types';
 import { z } from 'zod';
@@ -42,7 +42,10 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-
+		const referralCode = getReferralCode(form.data.referralCode);
+		if (!referralCode) {
+			return setError(form, 'referralCode', 'Invalid code');
+		}
 		const userId = generateIdFromEntropySize(10); // 16 characters long
 		const passwordHash = await hash(form.data.password + PEPPER, {
 			memoryCost: 2 ** 16,
@@ -58,11 +61,12 @@ export const actions: Actions = {
 			UserID: userId,
 			Username: form.data.username,
 			HashedPassword: passwordHash,
-			Privilege: Privilege.Admin // TODO
+			Privilege: referralCode.Privilege,
+			ReferredByUserID: referralCode.FromUserID
 		};
 
 		addUser(user);
-
+		deleteReferralCode(referralCode.Code);
 		const session = await lucia.createSession(userId, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 		cookies.set(sessionCookie.name, sessionCookie.value, {

@@ -1,8 +1,6 @@
 <script lang="ts">
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import { error } from '@sveltejs/kit';
 	export let data;
 	export let form;
 	let formElement: HTMLFormElement;
