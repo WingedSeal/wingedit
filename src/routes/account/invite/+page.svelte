@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { enhance as svelteEnhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { superForm } from 'sveltekit-superforms';
 	export let data;
 	const { form, errors, message, enhance: superEnhance } = superForm(data.form);
+	$: if ($message?.code) {
+		navigator.clipboard.writeText($page.url.origin + '/account/signup?code=' + $message?.code);
+	}
 </script>
 
 INVITE
@@ -25,7 +29,8 @@ INVITE
 
 {#if $message}
 	{$message.message}<br />
-	{$message?.code}
+	{$message?.code} <br />
+	Invite link copied
 {/if}
 
 <br />

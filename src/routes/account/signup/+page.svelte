@@ -9,6 +9,7 @@
 	let confirmPasswordError: string | null = null;
 	const { form, errors, message, enhance } = superForm(data.form);
 	$: if ($message?.redirect) goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
+	$form.referralCode = $page.url.searchParams.get('code') || '';
 </script>
 
 <h1>Sign up</h1>
