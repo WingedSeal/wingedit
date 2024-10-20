@@ -93,8 +93,14 @@ export type User = {
 	Privilege: number;
 };
 
-export type Sessions = {
+export type Session = {
 	SessionID: string;
 	ExpiresAt: number;
 	UserID: string;
+};
+
+export type ReferralCode = {
+	Code: string;
+	FromUserID: string;
+	Privilege: number;
 };
