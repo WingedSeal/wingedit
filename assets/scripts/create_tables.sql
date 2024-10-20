@@ -97,7 +97,7 @@ CREATE TABLE
 CREATE TABLE
     "Users" (
         "UserID" CHAR(16) NOT NULL,
-        "Username" TEXT NOT NULL UNIQUE,
+        "Username" VARCHAR(32) NOT NULL UNIQUE,
         "HashedPassword" CHAR(32) NOT NULL,
         "Privilege" TINYINT NOT NULL,
         PRIMARY KEY ("UserID"),
