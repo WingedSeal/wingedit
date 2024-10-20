@@ -33,15 +33,16 @@
 	};
 	const addNewRow = () => {
 		if (!form) throw Error('form is null');
-		query.add.push(
-			Object.keys(form.table[0]).map((_, col) => {
-				const input = document.getElementById(`add-${col}`) as HTMLInputElement;
-				if (!input) throw Error('Missing input');
-				const value = input.value;
-				input.value = '';
-				return value;
-			})
-		);
+		let isSomething = false;
+		const newRow = Object.keys(form.table[0]).map((_, col) => {
+			const input = document.getElementById(`add-${col}`) as HTMLInputElement;
+			if (!input) throw Error('Missing input');
+			const value = input.value;
+			if (value) isSomething = true;
+			input.value = '';
+			return value;
+		});
+		if (isSomething) query.add.push(newRow);
 	};
 	let save: {
 		error?: {
@@ -167,7 +168,23 @@
 							{colValue}
 						</td>
 					{/each}
-					<td colspan="2">
+					<td>
+						<button
+							type="button"
+							on:click={() => {
+								save = null;
+								Object.keys(form.table[0]).forEach((_, i) => {
+									// @ts-ignore: Assuming element exists and has a value property
+									document.getElementById(`add-${i}`).value = query.add[newRowIndex][i];
+								});
+								query.add.splice(newRowIndex, 1);
+								query.add = query.add;
+							}}
+						>
+							E
+						</button>
+					</td>
+					<td>
 						<button
 							type="button"
 							on:click={() => {
