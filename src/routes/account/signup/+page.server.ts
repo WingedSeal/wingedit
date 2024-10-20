@@ -31,12 +31,10 @@ const schema = z
 		confirmPassword: z.string().min(4).max(255).trim(),
 		referralCode: z.string().length(16).trim()
 	})
-	.refine(
-		(data) => {
-			data.password === data.confirmPassword;
-		},
-		{ message: 'Passwords do not match', path: ['confirmPassword'] }
-	);
+	.refine((data) => data.password === data.confirmPassword, {
+		message: 'Passwords do not match',
+		path: ['confirmPassword']
+	});
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {

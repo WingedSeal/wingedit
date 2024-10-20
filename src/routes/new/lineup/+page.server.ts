@@ -8,8 +8,12 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import sizeOf from 'image-size';
 import type { Lineup } from '$lib/server/db/types';
+import { error, redirect } from '@sveltejs/kit';
+import { Privilege } from '$lib/server/auth';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals, url }) => {
+	if (!locals.user) throw redirect(303, `/account/signin?redirectTo=${url.pathname.slice(1)}`);
+	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
 	return {
 		form: await superValidate(zod(schema)),
 		game_info: getGameInfo()
@@ -85,7 +89,13 @@ const schema = z
 const LINEUP_DIRECTORY = 'lineups';
 
 export const actions = {
-	upload: async ({ request }) => {
+	upload: async ({ request, locals }) => {
+		if (!locals.user) {
+			return error(401, 'Invalid or missing session');
+		}
+		if (locals.user.privilege < Privilege.Moderator) {
+			return error(403, 'Not enough privilege');
+		}
 		const form = await superValidate(request, zod(schema));
 		if (!form.valid) {
 			return fail(400, { form });

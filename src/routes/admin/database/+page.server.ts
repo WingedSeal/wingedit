@@ -1,6 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { getTables, getTable, getPrimaryKeys } from '$lib/server/db/index';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
+import { Privilege } from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {
 	return {
@@ -9,7 +10,13 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	getTable: async ({ request }) => {
+	getTable: async ({ request, locals }) => {
+		if (!locals.user) {
+			return error(401, 'Invalid or missing session');
+		}
+		if (locals.user.privilege < Privilege.Admin) {
+			return error(403, 'Not enough privilege');
+		}
 		const form = await request.formData();
 		const tableName = form.get('tableName') as string;
 		if (!tableName) return fail(400);

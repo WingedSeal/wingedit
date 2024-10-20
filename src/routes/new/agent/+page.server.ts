@@ -3,10 +3,13 @@ import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { Actions } from '@sveltejs/kit';
+import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { Ability, Agent } from '$lib/server/db/types';
+import { Privilege } from '$lib/server/auth';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals, url }) => {
+	if (!locals.user) throw redirect(303, `/account/signin?redirectTo=${url.pathname.slice(1)}`);
+	if (locals.user.privilege < Privilege.Moderator) throw redirect(303, '/');
 	return {
 		form: await superValidate(zod(schema)),
 		agentRoles: getAgentRoles(),
@@ -27,7 +30,13 @@ const schema = z.object({
 });
 
 export const actions: Actions = {
-	upload: async ({ request }) => {
+	upload: async ({ request, locals }) => {
+		if (!locals.user) {
+			return error(401, 'Invalid or missing session');
+		}
+		if (locals.user.privilege < Privilege.Moderator) {
+			return error(403, 'Not enough privilege');
+		}
 		let form = await superValidate(request, zod(schema));
 		if (!form.valid) {
 			return fail(400, { form });

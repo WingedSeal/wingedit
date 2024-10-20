@@ -3,13 +3,11 @@ import type { RequestHandler } from './$types';
 import { executeQuery, getTable } from '$lib/server/db';
 import { lucia, Privilege } from '$lib/server/auth';
 
-export const GET: RequestHandler = async ({ url, cookies }) => {
-	const sessionId = cookies.get(lucia.sessionCookieName);
-	const { user } = await lucia.validateSession(sessionId ?? '');
-	if (!user) {
+export const GET: RequestHandler = async ({ url, locals }) => {
+	if (!locals.user) {
 		return error(401, 'Invalid or missing session');
 	}
-	if (user.privilege < Privilege.Admin) {
+	if (locals.user.privilege < Privilege.Admin) {
 		return error(403, 'Not enough privilege');
 	}
 	if (!url.searchParams.has('tableName')) return error(400, 'Missing tableName in params');
@@ -30,13 +28,11 @@ ${table.map((row) => '(' + Object.values(row).join(',') + ')').join(',')};`;
 	return json(sql);
 };
 
-export const POST: RequestHandler = async ({ request, cookies }) => {
-	const sessionId = cookies.get(lucia.sessionCookieName);
-	const { user } = await lucia.validateSession(sessionId ?? '');
-	if (!user) {
+export const POST: RequestHandler = async ({ request, locals }) => {
+	if (!locals.user) {
 		return error(401, 'Invalid or missing session');
 	}
-	if (user.privilege < Privilege.Admin) {
+	if (locals.user.privilege < Privilege.Admin) {
 		return error(403, 'Not enough privilege');
 	}
 
