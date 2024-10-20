@@ -45,7 +45,14 @@ export const executeQuery = (
 		add: RowValue[];
 		edit: [PrimaryKeyValue, RowValue][];
 	}
-) => {
+): {
+	error?: {
+		code: string;
+		why: string;
+		where: string;
+	};
+	success?: boolean;
+} | null => {
 	if (!tableName.match(/^[a-zA-Z0-9]+$/i)) return null;
 	const condition = primaryKeys.map((key) => `"${key}"=?`).join(' AND ');
 
@@ -69,14 +76,15 @@ export const executeQuery = (
 			${tableName} (${into})
 		VALUES
 			(${values});`);
-	let customMessage: string = '';
+	let where: string = '';
 	try {
 		db.transaction(() => {
 			query.delete.forEach((values) => {
 				try {
 					deleteRows.run(...values);
 				} catch (error) {
-					customMessage = `Query failed during deletion of ${values}`;
+					const pos = values.map((value, i) => `${primaryKeys[i]}="${value}"`).join(', ');
+					where = `Query failed during deletion of (${pos})`;
 					throw error;
 				}
 			});
@@ -84,7 +92,8 @@ export const executeQuery = (
 				try {
 					updateRows.run(...values, ...keyValues);
 				} catch (error) {
-					customMessage = `Query failed during updation of ${keyValues}`;
+					const pos = keyValues.map((value, i) => `${primaryKeys[i]}="${value}"`).join(', ');
+					where = `Query failed during updation of (${pos})`;
 					throw error;
 				}
 			});
@@ -92,7 +101,8 @@ export const executeQuery = (
 				try {
 					insertRows.run(...values);
 				} catch (error) {
-					customMessage = `Query failed during insertion of ${values}`;
+					const pos = values.map((value, i) => `${columnNames[i]}="${value}"`).join(', ');
+					where = `Query failed during insertion of (${pos})`;
 					throw error;
 				}
 			});
@@ -101,7 +111,7 @@ export const executeQuery = (
 		if (!(error instanceof SqliteError)) {
 			throw error;
 		}
-		return { code: error.code, message: error.message, customMessage };
+		return { error: { code: error.code, why: error.message, where } };
 	}
 	return { success: true };
 };

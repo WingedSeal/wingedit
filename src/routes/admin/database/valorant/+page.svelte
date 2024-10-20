@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import { error } from '@sveltejs/kit';
 	export let data;
 	export let form;
 	let formElement: HTMLFormElement;
@@ -41,6 +43,14 @@
 			})
 		);
 	};
+	let save: {
+		error?: {
+			code: string;
+			why: string;
+			where: string;
+		};
+		success?: boolean;
+	} | null = null;
 	const confirm = async () => {
 		const response = await fetch('/api/query', {
 			method: 'POST',
@@ -58,10 +68,18 @@
 				'Content-Type': 'application/json'
 			}
 		});
-		console.log(await response.json());
+		save = await response.json();
+		if (save!.success) {
+			formElement.submit();
+		}
 	};
 </script>
 
+{#if save && save.error}
+	<p class="text-red-500">Code: {save.error?.code}</p>
+	<p class="text-red-500">{save.error?.where}</p>
+	<p class="text-red-500">{save.error?.why}</p>
+{/if}
 <form action="?/getTable" bind:this={formElement} method="post" use:enhance>
 	<label for="tableName">Table:</label>
 	<select name="tableName" on:change={() => formElement.submit()} value={form?.tableName}>
@@ -174,14 +192,7 @@
 	{/if}
 {/if}
 
-<button
-	on:click={async () => {
-		// console.log(query.delete);
-		// console.log([...query.edit].map((number) => getDatabaseObject(number)));
-		// console.log(query.add);
-		await confirm();
-	}}>TEST</button
->
+<button on:click={confirm}>Save</button>
 
 <style lang="css">
 	table,
