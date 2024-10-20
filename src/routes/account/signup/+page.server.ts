@@ -1,4 +1,4 @@
-import { lucia, PEPPER } from '$lib/server/auth';
+import { lucia, PEPPER, Privilege } from '$lib/server/auth';
 import { fail } from '@sveltejs/kit';
 import { generateIdFromEntropySize } from 'lucia';
 import { hash } from 'argon2';
@@ -61,7 +61,7 @@ export const actions: Actions = {
 			UserID: userId,
 			Username: username,
 			HashedPassword: passwordHash,
-			Privilege: 1
+			Privilege: Privilege.Admin
 		};
 
 		addUser(user);
