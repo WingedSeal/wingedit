@@ -52,7 +52,7 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS "Grades" (
         "ID" TINYINT NOT NULL,
-        "Name" VARCHAR(1) NOT NULL UNIQUE,
+        "Name" CHAR(1) NOT NULL UNIQUE,
         "Description" TEXT NOT NULL,
         PRIMARY KEY ("ID")
     );
@@ -96,18 +96,18 @@ CREATE TABLE
 
 CREATE TABLE
     "Users" (
-        "UserID" VARCHAR(16) NOT NULL,
+        "UserID" CHAR(16) NOT NULL,
         "Username" TEXT NOT NULL UNIQUE,
-        "HashedPassword" VARCHAR(32) NOT NULL,
+        "HashedPassword" CHAR(32) NOT NULL,
         "Privilege" TINYINT NOT NULL,
         PRIMARY KEY ("UserID")
     );
 
 CREATE TABLE
     "Sessions" (
-        "SessionID" VARCHAR(40) NOT NULL,
+        "SessionID" CHAR(40) NOT NULL,
         "ExpiresAt" INTEGER NOT NULL,
-        "UserID" VARCHAR(16) NOT NULL,
+        "UserID" CHAR(16) NOT NULL,
         PRIMARY KEY ("SessionID"),
         FOREIGN KEY ("UserID") REFERENCES "Users" ("UserID")
     );
