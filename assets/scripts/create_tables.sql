@@ -101,6 +101,7 @@ CREATE TABLE
         "HashedPassword" CHAR(32) NOT NULL,
         "Privilege" TINYINT NOT NULL,
         "ReferredByUserID" CHAR(16),
+        "CreationTimestamp" INTEGER NOT NULL,
         PRIMARY KEY ("UserID"),
         CONSTRAINT "FK_PrivilegeRoles_Privilege" FOREIGN KEY ("Privilege") REFERENCES "PrivilegeRoles" ("Privilege") ON DELETE RESTRICT ON UPDATE RESTRICT,
         CONSTRAINT "FK_Users_ReferredByUserID" FOREIGN KEY ("ReferredByUserID") REFERENCES "Users" ("UserID") ON DELETE SET NULL ON UPDATE CASCADE

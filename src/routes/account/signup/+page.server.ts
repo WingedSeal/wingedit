@@ -62,7 +62,8 @@ export const actions: Actions = {
 			Username: form.data.username,
 			HashedPassword: passwordHash,
 			Privilege: referralCode.Privilege,
-			ReferredByUserID: referralCode.FromUserID
+			ReferredByUserID: referralCode.FromUserID,
+			CreationTimestamp: Date.now()
 		};
 
 		addUser(user);

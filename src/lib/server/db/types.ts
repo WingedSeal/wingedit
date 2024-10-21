@@ -92,6 +92,7 @@ export type User = {
 	HashedPassword: string;
 	Privilege: number;
 	ReferredByUserID: string | null;
+	CreationTimestamp: number;
 };
 
 export type Session = {

@@ -38,8 +38,8 @@ export const addUser = (user: User) => {
 	db.prepare(
 		`
             INSERT INTO
-            "Users" ("UserID", "Username", "HashedPassword", "Privilege") VALUES (
-                @UserID, @Username, @HashedPassword, @Privilege
+            "Users" ("UserID", "Username", "HashedPassword", "Privilege", "CreationTimestamp") VALUES (
+                @UserID, @Username, @HashedPassword, @Privilege, @CreationTimestamp
             );`
 	).run(user);
 };
