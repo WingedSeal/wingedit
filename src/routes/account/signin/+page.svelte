@@ -24,7 +24,7 @@
 	<button>Continue</button>
 </form>
 
-<form method="post" use:enhance action="/account/signout?">
+<form method="post" use:enhance action="/account/signout">
 	<button>Sign out</button>
 </form>
 {#if $message}

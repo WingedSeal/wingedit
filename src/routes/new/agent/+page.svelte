@@ -19,7 +19,7 @@
 {#if $message}
 	{$message}
 {/if}
-<form action="?/upload" class="flex flex-col w-1/2 p-10" method="post" use:enhance>
+<form class="flex flex-col w-1/2 p-10" method="post" use:enhance>
 	<label for="agentID">Agent ID</label>
 	<input type="number" id="agentID" bind:value={$form.agentID} />
 	{#if $errors.agentID}

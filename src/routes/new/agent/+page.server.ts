@@ -30,7 +30,7 @@ const schema = z.object({
 });
 
 export const actions: Actions = {
-	upload: async ({ request, locals }) => {
+	default: async ({ request, locals }) => {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
