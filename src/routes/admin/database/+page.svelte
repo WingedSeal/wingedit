@@ -74,6 +74,20 @@
 			formElement.submit();
 		}
 	};
+	let isFetching = false;
+	let tableSQL: string = '';
+	const fetchSQL = async () => {
+		if (isFetching) return;
+		isFetching = true;
+		const response = await fetch('/api/database?tableName=' + form?.tableName);
+		console.log('/api/database?table=' + form?.tableName);
+		if (!response.ok) {
+			isFetching = false;
+			throw new Error(`Response status: ${response.status}`);
+		}
+		tableSQL = await response.json();
+		isFetching = false;
+	};
 </script>
 
 {#if save && save.error}
@@ -94,6 +108,17 @@
 <button on:click={() => formElement.submit()}>REFRESH</button>
 
 <br />
+<button on:click={fetchSQL}>DUMP</button>
+<br />
+{#if isFetching}
+	FETCHING...
+{/if}
+<br />
+{#if tableSQL}
+	SQL READY:
+	<br />
+	<button on:click={() => navigator.clipboard.writeText(tableSQL)}>COPY</button>
+{/if}
 
 {#if form && form.table}
 	{#if form.table.length !== 0}

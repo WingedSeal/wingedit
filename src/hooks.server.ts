@@ -1,7 +1,12 @@
 import { lucia } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
 
+const simulateLatency = (ms: number) => {
+	return new Promise((res) => setTimeout(res, ms));
+};
+
 export const handle: Handle = async ({ event, resolve }) => {
+	// await simulateLatency(1000);
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
 	if (!sessionId) {
 		event.locals.user = null;

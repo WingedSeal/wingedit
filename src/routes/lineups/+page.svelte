@@ -50,6 +50,7 @@
 		});
 	};
 	getSorted();
+	$: if (agentSearch) getSorted();
 </script>
 
 {#if data.user}
