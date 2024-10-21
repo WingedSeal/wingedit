@@ -65,6 +65,12 @@ export const actions: Actions = {
 		}
 		const data = await request.formData();
 		const deleteCode = data.get('code')! as string;
+		console.log(locals.user.privilege);
+		if (locals.user.privilege >= Privilege.Admin) {
+			deleteReferralCode(deleteCode);
+			return;
+		}
+
 		const codes = getReferralCodes(locals.user.id);
 		if (!codes.map((code) => code.Code).includes(deleteCode)) {
 			return error(403, 'Unowned code');

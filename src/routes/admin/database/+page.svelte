@@ -81,7 +81,7 @@
 	<p class="text-red-500">{save.error?.where}</p>
 	<p class="text-red-500">{save.error?.why}</p>
 {/if}
-<form action="?/getTable" bind:this={formElement} method="post" use:enhance>
+<form bind:this={formElement} method="post" use:enhance>
 	<label for="tableName">Table:</label>
 	<select name="tableName" on:change={() => formElement.submit()} value={form?.tableName}>
 		<option selected hidden />
@@ -90,6 +90,8 @@
 		{/each}
 	</select>
 </form>
+
+<button on:click={() => formElement.submit()}>REFRESH</button>
 
 <br />
 

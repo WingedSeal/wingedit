@@ -10,7 +10,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	getTable: async ({ request, locals }) => {
+	default: async ({ request, locals }) => {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
