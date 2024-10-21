@@ -4,6 +4,7 @@ import type { PageServerLoad } from './$types';
 import {
 	addReferralCode,
 	deleteReferralCode,
+	getHiddenReferralCodes,
 	getPrivileges,
 	getReferralCodeCount,
 	getReferralCodes
@@ -17,7 +18,8 @@ import { Privilege } from '$lib/server/auth';
 const MAX_CODE_COUNT = 4;
 
 const schema = z.object({
-	privilege: z.number().int().positive()
+	privilege: z.number().int().default(1),
+	isHideSource: z.boolean()
 });
 
 export const actions: Actions = {
@@ -30,6 +32,9 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 		if (form.data.privilege > locals.user.privilege) {
+			return error(403, 'Not enough privilege');
+		}
+		if (form.data.isHideSource && locals.user.privilege < Privilege.Admin) {
 			return error(403, 'Not enough privilege');
 		}
 		const referralCode = generateIdFromEntropySize(10); // 16 characters long
@@ -45,7 +50,7 @@ export const actions: Actions = {
 		}
 		const code: ReferralCode = {
 			Code: referralCode,
-			FromUserID: locals.user.id,
+			FromUserID: form.data.isHideSource ? null : locals.user.id,
 			Privilege: form.data.privilege
 		};
 		addReferralCode(code);
@@ -73,13 +78,16 @@ type FormMessage = {
 	message: string;
 };
 
-export const load: PageServerLoad = async (event) => {
+export const load = async (event: Parameters<PageServerLoad>[0]) => {
 	if (!event.locals.user) {
 		redirect(303, '/');
 	}
+	const canHideSource = event.locals.user.privilege >= Privilege.Admin;
 	return {
 		form: await superValidate<Infer<typeof schema>, FormMessage>(zod(schema)),
 		privileges: getPrivileges(),
-		codes: getReferralCodes(event.locals.user.id)
+		codes: getReferralCodes(event.locals.user.id),
+		hiddenCodes: canHideSource ? getHiddenReferralCodes() : null,
+		canHideSource
 	};
 };

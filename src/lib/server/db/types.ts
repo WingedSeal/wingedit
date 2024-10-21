@@ -107,7 +107,7 @@ export type ReferralCode = {
 };
 
 export type PrivilegeRole = {
-	Privilege: string;
+	Privilege: number;
 	RoleName: string;
 	Description: string;
 };

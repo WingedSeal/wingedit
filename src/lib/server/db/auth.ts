@@ -66,6 +66,21 @@ WHERE
 	return rows;
 };
 
+export const getHiddenReferralCodes = (): ReferralCode[] => {
+	const rows = db
+		.prepare(
+			`
+SELECT
+    *
+FROM
+    "ReferralCodes"
+WHERE
+    "FromUserID" IS NULL;`
+		)
+		.all() as ReferralCode[];
+	return rows;
+};
+
 export const getReferralCode = (code: string): ReferralCode => {
 	return db
 		.prepare(
