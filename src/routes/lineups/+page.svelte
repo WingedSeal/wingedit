@@ -1,9 +1,23 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import type { Agent } from '$lib/server/db/types.js';
 
 	export let data;
-	let chosenMap: string | null = null;
-	let chosenAgent: string | null = null;
+	const FAVOURITE_AGENT = 'favourite';
+	const MAIN_AGENT = 'main';
+
+	let favouriteAgents: Set<number> = new Set();
+	if (browser && localStorage.getItem(FAVOURITE_AGENT)) {
+		favouriteAgents = new Set(JSON.parse(localStorage.getItem(FAVOURITE_AGENT)!));
+	}
+	let mainAgent: number = 0;
+	if (browser && localStorage.getItem(MAIN_AGENT)) {
+		mainAgent = Number.parseInt(localStorage.getItem(MAIN_AGENT)!);
+	}
+
+	let chosenMap: number | null = null;
+	let chosenAgent: number | null = mainAgent;
 	let canSubmit = false;
 	let submitText = '';
 	$: canSubmit = !!chosenMap && !!chosenAgent;
@@ -16,6 +30,26 @@
 	}
 	let agentSearch = '';
 	let mapSearch = '';
+
+	let mains: Agent[] = [];
+	let favourites: Agent[] = [];
+	let others: Agent[] = [];
+	const getSorted = () => {
+		mains = [];
+		favourites = [];
+		others = [];
+		Object.values(data.agents).forEach((agent) => {
+			if (!agent.Name.toLowerCase().includes(agentSearch.toLowerCase())) return;
+			if (mainAgent === agent.ID) {
+				mains.push(agent);
+			} else if (favouriteAgents.has(agent.ID)) {
+				favourites.push(agent);
+			} else {
+				others.push(agent);
+			}
+		});
+	};
+	getSorted();
 </script>
 
 {#if data.user}
@@ -23,24 +57,73 @@
 {:else}
 	You are not signed in
 {/if}
-<br />
-agent = {chosenAgent}
-<br />
-map = {chosenMap}
-<br />
 AGENTS
 <br />
 <input type="text" placeholder="search" bind:value={agentSearch} />
 <br />
-{#each Object.values(data.agents) as agent}
-	{#if agent.Name.toLowerCase().includes(agentSearch.toLowerCase())}
+{#each mains as agent}
+	<div class="flex flex-col m-10">
 		<button
-			class={chosenAgent === agent.Name ? `bg-blue-300` : `bg-slate-100`}
-			on:click={() => (chosenAgent = agent.Name)}>{agent.Name}</button
+			class={chosenAgent === agent.ID ? `bg-blue-300` : `bg-slate-100`}
+			on:click={() => (chosenAgent = agent.ID)}>{agent.Name}</button
 		>{' '}
-	{/if}
+		<button
+			class="bg-red-400"
+			on:click={() => {
+				mainAgent = -1;
+				getSorted();
+				localStorage.setItem(MAIN_AGENT, mainAgent.toString());
+			}}>MAIN</button
+		>
+	</div>
 {/each}
-<br />
+{#each favourites as agent}
+	<div class="flex flex-col m-10">
+		<button
+			class={chosenAgent === agent.ID ? `bg-blue-300` : `bg-slate-100`}
+			on:click={() => (chosenAgent = agent.ID)}>{agent.Name}</button
+		>{' '}
+		<button
+			class={favouriteAgents.has(agent.ID) ? ' bg-yellow-100' : ''}
+			on:click={() => {
+				favouriteAgents.delete(agent.ID);
+				favouriteAgents = favouriteAgents;
+				getSorted();
+				localStorage.setItem(FAVOURITE_AGENT, JSON.stringify([...favouriteAgents]));
+			}}>FAV</button
+		>
+		<button
+			on:click={() => {
+				mainAgent = agent.ID;
+				getSorted();
+				localStorage.setItem(MAIN_AGENT, mainAgent.toString());
+			}}>MAIN</button
+		>
+	</div>
+{/each}
+{#each others as agent}
+	<div class="flex flex-col m-10">
+		<button
+			class={chosenAgent === agent.ID ? `bg-blue-300` : `bg-slate-100`}
+			on:click={() => (chosenAgent = agent.ID)}>{agent.Name}</button
+		>{' '}
+		<button
+			on:click={() => {
+				favouriteAgents.add(agent.ID);
+				favouriteAgents = favouriteAgents;
+				getSorted();
+				localStorage.setItem(FAVOURITE_AGENT, JSON.stringify([...favouriteAgents]));
+			}}>FAV</button
+		>
+		<button
+			on:click={() => {
+				mainAgent = agent.ID;
+				getSorted();
+				localStorage.setItem(MAIN_AGENT, mainAgent.toString());
+			}}>MAIN</button
+		>
+	</div>
+{/each}
 MAPS
 <br />
 <input type="text" placeholder="search" bind:value={mapSearch} />
@@ -48,8 +131,8 @@ MAPS
 {#each Object.values(data.maps) as map}
 	{#if map.Name.toLowerCase().includes(mapSearch.toLowerCase())}
 		<button
-			class={chosenMap === map.Name ? `bg-blue-300` : `bg-slate-100`}
-			on:click={() => (chosenMap = map.Name)}>{map.Name}</button
+			class={chosenMap === map.ID ? `bg-blue-300` : `bg-slate-100`}
+			on:click={() => (chosenMap = map.ID)}>{map.Name}</button
 		>{' '}
 	{/if}
 {/each}
@@ -60,6 +143,13 @@ MAPS
 	class="bg-amber-100"
 	disabled={!canSubmit}
 	on:click={() => {
-		goto('/lineups/' + chosenAgent?.toLowerCase() + '/' + chosenMap?.toLowerCase());
+		goto(
+			'/lineups/' +
+				// @ts-ignore
+				data.agents[chosenAgent].Name.toLowerCase() +
+				'/' +
+				// @ts-ignore
+				data.maps[chosenMap].Name.toLowerCase()
+		);
 	}}>{submitText}</button
 >
