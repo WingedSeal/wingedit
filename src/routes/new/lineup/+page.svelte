@@ -2,7 +2,7 @@
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import type { Ability } from '$lib/server/db/types';
 	import ClickableImage from './ClickableImage.svelte';
-	import LineupShowOverlay from '../../lineups/[valorant_agent]/[valorant_map]/LineupShowOverlay.svelte';
+	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup from '$lib/components/Popup.svelte';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
