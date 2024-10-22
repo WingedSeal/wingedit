@@ -395,10 +395,10 @@
 		value={OverlayMode.Sub1}
 		bind:group={overlayMode}
 		on:click={() => {
-			$form.sub1X ??= 0;
-			$form.sub1Y ??= 0;
-			$form.sub2X ??= 0;
-			$form.sub2Y ??= 0;
+			$form.sub1X ??= $form.mainX;
+			$form.sub1Y ??= $form.mainY;
+			$form.sub2X ??= $form.mainX;
+			$form.sub2Y ??= $form.mainY;
 		}}
 	/>
 	<label for="sub1">Sub1</label>
@@ -410,10 +410,10 @@
 		value={OverlayMode.Sub2}
 		bind:group={overlayMode}
 		on:click={() => {
-			$form.sub1X ??= 0;
-			$form.sub1Y ??= 0;
-			$form.sub2X ??= 0;
-			$form.sub2Y ??= 0;
+			$form.sub1X ??= $form.mainX;
+			$form.sub1Y ??= $form.mainY;
+			$form.sub2X ??= $form.mainX;
+			$form.sub2Y ??= $form.mainY;
 		}}
 	/>
 	<label for="sub2">Sub2</label>
