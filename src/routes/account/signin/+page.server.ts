@@ -1,12 +1,11 @@
 import { lucia } from '$lib/server/auth';
 import { verify } from 'argon2';
-import { page } from '$app/stores';
 import type { Actions, PageServerLoad } from './$types';
 import { getUser } from '$lib/server/db/auth';
 import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
-import { z } from 'zod';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from '@sveltejs/kit';
+import { signinSchema as schema } from '$lib/schema';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -16,16 +15,6 @@ export const load: PageServerLoad = async (event) => {
 		form: await superValidate<Infer<typeof schema>, { redirect: boolean }>(zod(schema))
 	};
 };
-
-const schema = z.object({
-	username: z
-		.string()
-		.min(4)
-		.max(32)
-		.regex(/^[a-zA-Z0-9_-]+$/)
-		.trim(),
-	password: z.string().min(4).max(255).trim()
-});
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {

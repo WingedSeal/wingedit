@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from '../account/signup/$types';
-import { toUserInfo } from '$lib/server/db/auth';
+import { toUserInfo } from '$lib/server/db/types';
 import { Privilege } from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {

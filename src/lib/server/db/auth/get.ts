@@ -1,6 +1,5 @@
-import { db } from '.';
-import type { PrivilegeRole, ReferralCode, User } from './types';
-import { type User as LuciaUser } from 'lucia';
+import { db } from '..';
+import type { User, ReferralCode, PrivilegeRole } from '../types';
 
 export const isUsernameExist = (username: string) => {
 	const isExists = db
@@ -32,23 +31,6 @@ LIMIT
 		)
 		.get({ username }) as User;
 	return user;
-};
-
-export const addUser = (user: User) => {
-	db.prepare(
-		`
-            INSERT INTO
-            "Users" ("UserID", "Username", "HashedPassword", "Privilege", "CreationTimestamp") VALUES (
-                @UserID, @Username, @HashedPassword, @Privilege, @CreationTimestamp
-            );`
-	).run(user);
-};
-
-export type UserInfo = Omit<LuciaUser, 'id'>;
-
-export const toUserInfo = (user: LuciaUser): UserInfo => {
-	const { id, ...attributes } = user;
-	return { ...attributes };
 };
 
 export const getReferralCodes = (userID: string): ReferralCode[] => {
@@ -108,26 +90,6 @@ WHERE
 		)
 		.get({ userID }) as { 'COUNT(*)': number };
 	return count['COUNT(*)'];
-};
-
-export const addReferralCode = (referralCode: ReferralCode) => {
-	db.prepare(
-		`
-INSERT INTO
-	"ReferralCodes" ("Code", "FromUserID", "Privilege")
-VALUES
-	(@Code, @FromUserID, @Privilege);`
-	).run(referralCode);
-};
-
-export const deleteReferralCode = (code: string) => {
-	db.prepare(
-		`
-DELETE FROM
-	"ReferralCodes"
-WHERE
-	"Code"=@code;`
-	).run({ code });
 };
 
 export const getPrivileges = () => {

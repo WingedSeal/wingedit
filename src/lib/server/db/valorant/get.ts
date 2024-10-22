@@ -1,5 +1,4 @@
-import { db } from '.';
-import { SqliteError } from 'better-sqlite3';
+import { db } from '..';
 import type {
 	Ability,
 	Agent,
@@ -10,7 +9,7 @@ import type {
 	MapPosition,
 	ThrowType,
 	ValorantMap
-} from './types';
+} from '../types';
 
 export const getAgents = () => {
 	const rows = db.prepare(`SELECT * FROM "Agents";`).all() as Agent[];
@@ -19,42 +18,6 @@ export const getAgents = () => {
 		agents[agent.ID] = agent;
 	});
 	return agents;
-};
-
-export const addAgent = (agent: Agent): boolean => {
-	try {
-		db.prepare(
-			`
-		INSERT INTO 
-			"Agents" (ID, Name, RoleID)
-		VALUES
-			(@ID, @Name, @RoleID);
-		`
-		).run(agent);
-	} catch (error) {
-		if (!(error instanceof SqliteError)) {
-			throw error;
-		}
-	}
-	return true;
-};
-
-export const addAbility = (ability: Ability): boolean => {
-	try {
-		db.prepare(
-			`
-		INSERT INTO 
-			"Abilities" (AgentID, AbilityID, Name, NameID)
-		VALUES
-			(@AgentID, @AbilityID, @Name, @NameID);
-		`
-		).run(ability);
-	} catch (error) {
-		if (!(error instanceof SqliteError)) {
-			throw error;
-		}
-	}
-	return true;
 };
 
 export const getLastAgentID = () => {
@@ -157,24 +120,6 @@ export const getLineups = (agentID: number, mapID: number): Lineup[] => {
 		)
 		.all({ agentID, mapID }) as Lineup[];
 	return rows;
-};
-
-export const addLineup = (lineup: Lineup): number => {
-	if (lineup.ID) throw Error('Expected lineup without ID');
-	return db
-		.prepare(
-			`
-	INSERT INTO 
-		"Lineups" (AgentID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand, GradeID,
-		CreatedBy, FromMapPositionID, ToMapPositionID, FromX, FromY, ToX, ToY, 
-		DrawOverMainX, DrawOverMainY, DrawOverSub1X, DrawOverSub1Y, DrawOverSub2X, DrawOverSub2Y)
-	VALUES
-		(@AgentID, @AbilityID, @MapID, @ExtraImageCount, @ThrowTypeID, @TimeToLand, @GradeID,
-		@CreatedBy, @FromMapPositionID, @ToMapPositionID, @FromX, @FromY, @ToX, @ToY, 
-		@DrawOverMainX, @DrawOverMainY, @DrawOverSub1X, @DrawOverSub1Y, @DrawOverSub2X, @DrawOverSub2Y);
-	`
-		)
-		.run(lineup).lastInsertRowid as number;
 };
 
 export const getAllLineups = () => {

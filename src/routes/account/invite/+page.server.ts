@@ -14,13 +14,9 @@ import { fail, message, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import { Privilege } from '$lib/server/auth';
+import { inviteSchema as schema } from '$lib/schema';
 
 const MAX_CODE_COUNT = 4;
-
-const schema = z.object({
-	privilege: z.number().int().default(1),
-	isHideSource: z.boolean()
-});
 
 export const actions: Actions = {
 	new: async ({ request, locals }) => {

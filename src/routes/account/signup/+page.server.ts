@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from '@sveltejs/kit';
+import { signupSChema as schema } from '$lib/schema';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -18,23 +19,6 @@ export const load: PageServerLoad = async (event) => {
 		form: await superValidate<Infer<typeof schema>, { redirect: boolean }>(zod(schema))
 	};
 };
-
-const schema = z
-	.object({
-		username: z
-			.string()
-			.min(4)
-			.max(32)
-			.regex(/^[a-zA-Z0-9_-]+$/)
-			.trim(),
-		password: z.string().min(4).max(255).trim(),
-		confirmPassword: z.string().min(4).max(255).trim(),
-		referralCode: z.string().length(16).trim()
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: 'Passwords do not match',
-		path: ['confirmPassword']
-	});
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {

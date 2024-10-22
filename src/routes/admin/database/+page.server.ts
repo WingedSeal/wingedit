@@ -1,5 +1,5 @@
 import type { Actions, PageServerLoad } from './$types';
-import { getTables, getTable, getPrimaryKeys } from '$lib/server/db/index';
+import { getTables, getTable, getPrimaryKeys } from '$lib/server/db/admin';
 import { error, fail } from '@sveltejs/kit';
 import { Privilege } from '$lib/server/auth';
 

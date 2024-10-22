@@ -1,4 +1,4 @@
-import { addAbility, addAgent, getAgentRoles, getLastAgentID } from '$lib/server/db/query';
+import { addAbility, addAgent, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 import { fail, message, superValidate } from 'sveltekit-superforms';
@@ -6,6 +6,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { Ability, Agent } from '$lib/server/db/types';
 import { Privilege } from '$lib/server/auth';
+import { agentSchema as schema } from '$lib/schema';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirectTo=${url.pathname.slice(1)}`);
@@ -16,18 +17,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		lastAgentId: getLastAgentID()
 	};
 };
-
-const schema = z.object({
-	agentID: z.number().int(),
-	agentName: z.string().min(1).max(16).trim(),
-	agentRole: z.number().int().min(1).max(4),
-	abilities: z
-		.object({
-			abilityName: z.string().min(1).max(16).trim(),
-			abilityNameID: z.string().min(1).max(16).trim()
-		})
-		.array()
-});
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
