@@ -45,7 +45,7 @@ CREATE TABLE
     IF NOT EXISTS "ThrowTypes" (
         "ID" TINYINT NOT NULL,
         "Name" VARCHAR(32) NOT NULL, --UNIQUE
-        "Description" TEXT NOT NULL,
+        "Description" VARCHAR(255) NOT NULL,
         PRIMARY KEY ("ID")
     );
 
@@ -53,7 +53,7 @@ CREATE TABLE
     IF NOT EXISTS "Grades" (
         "ID" TINYINT NOT NULL,
         "Name" CHAR(1) NOT NULL, --UNIQUE
-        "Description" TEXT NOT NULL,
+        "Description" VARCHAR(255) NOT NULL,
         PRIMARY KEY ("ID")
     );
 
@@ -133,7 +133,7 @@ CREATE TABLE
     IF NOT EXISTS "PrivilegeRoles" (
         "Privilege" TINYINT NOT NULL,
         "RoleName" VARCHAR(16) NOT NULL, --UNIQUE
-        "Description" TEXT NOT NULL,
+        "Description" VARCHAR(255) NOT NULL,
         PRIMARY KEY ("Privilege")
     );
 
