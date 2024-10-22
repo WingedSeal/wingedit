@@ -3,6 +3,15 @@ import type { RequestHandler } from './$types';
 import { executeQuery, getTable } from '$lib/server/db';
 import { lucia, Privilege } from '$lib/server/auth';
 
+const intoStringLiteral = (value: any) => {
+	if (typeof value !== 'string') {
+		const str = JSON.stringify(value);
+		return str;
+	}
+	const str = value.toString();
+	return "'" + str.replace("'", "''").slice(1, -1) + "'";
+};
+
 export const GET: RequestHandler = async ({ url, locals }) => {
 	if (!locals.user) {
 		return error(401, 'Invalid or missing session');
@@ -21,9 +30,18 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 	}
 	const columnNames = Object.keys(table[0]) as string[];
 	const sql = `INSERT INTO \
-${tableName} (${columnNames.join(',')}) \
+"${tableName}" (${columnNames.map((value) => JSON.stringify(value)).join(',')}) \
 VALUES \
-${table.map((row) => '(' + Object.values(row).join(',') + ')').join(',')};`;
+${table
+	.map(
+		(row) =>
+			'(' +
+			Object.values(row)
+				.map((value) => intoStringLiteral(value))
+				.join(',') +
+			')'
+	)
+	.join(',')};`;
 
 	return json(sql);
 };
