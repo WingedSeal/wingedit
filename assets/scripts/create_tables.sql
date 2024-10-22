@@ -95,7 +95,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    "Users" (
+    IF NOT EXISTS "Users" (
         "UserID" CHAR(16) NOT NULL,
         "Username" VARCHAR(32) NOT NULL UNIQUE,
         "HashedPassword" CHAR(32) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    "Sessions" (
+    IF NOT EXISTS "Sessions" (
         "SessionID" CHAR(40) NOT NULL,
         "ExpiresAt" INTEGER NOT NULL,
         "UserID" CHAR(16) NOT NULL,
@@ -117,7 +117,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    "PrivilegeRoles" (
+    IF NOT EXISTS "PrivilegeRoles" (
         "Privilege" TINYINT NOT NULL,
         "RoleName" VARCHAR(16) NOT NULL UNIQUE,
         "Description" TEXT NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    "ReferralCodes" (
+    IF NOT EXISTS "ReferralCodes" (
         "Code" CHAR(16) NOT NULL,
         "FromUserID" CHAR(16),
         "Privilege" TINYINT NOT NULL,
