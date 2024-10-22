@@ -10,6 +10,7 @@ import sizeOf from 'image-size';
 import type { Lineup } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
 import { Privilege } from '$lib/server/auth';
+import sharp from 'sharp';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirectTo=${url.pathname.slice(1)}`);
@@ -24,10 +25,10 @@ const imageZod = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-	.refine((f) => f.type === 'image/jpeg', 'Please upload a jpeg image.')
+	.refine((f) => f.type === 'image/jpeg' || f.type === 'image/png', 'Please upload an image.')
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		return size.width === 1980 && size.height === 1080;
+		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
 	}, `Please upload 1980x1080 image.`);
 
 const gifZod = z
@@ -37,7 +38,8 @@ const gifZod = z
 	.refine((f) => f.type === 'image/gif', 'Please upload a GIF.')
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		return size.width === 1980 && size.height === 1080;
+		// return size.width === 1980 && size.height === 1080;
+		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
 	}, 'Please upload 1980x1080 gif.');
 
 const decimalZod = z
@@ -126,14 +128,14 @@ export const actions = {
 		const lineupID = addLineup(lineup).toString();
 		fs.mkdirSync(path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID), { recursive: true });
 		await Promise.all([
-			writeFile(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.jpg')),
-			writeFile(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.gif')),
-			writeFile(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.jpg')),
-			writeFile(
+			writeJPG(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.jpg')),
+			writeGif(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.gif')),
+			writeJPG(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.jpg')),
+			writeJPG(
 				form.data.throwSpotFirstPerson,
 				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.jpg')
 			),
-			writeFile(
+			writeJPG(
 				form.data.throwSpotThirdPerson,
 				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.jpg')
 			)
@@ -146,7 +148,12 @@ export const actions = {
 	}
 };
 
-const writeFile = async (file: File, fileName: string) => {
+const writeJPG = async (file: File, fileName: string) => {
 	const buffer = await file.arrayBuffer();
-	fs.writeFileSync(path.join(IMAGES_PATH, fileName), new Uint8Array(buffer));
+	sharp(buffer).resize(1980, 1080).jpeg({ mozjpeg: true }).toFile(path.join(IMAGES_PATH, fileName));
+};
+
+const writeGif = async (file: File, fileName: string) => {
+	const buffer = await file.arrayBuffer();
+	sharp(buffer).resize(1980, 1080).gif().toFile(path.join(IMAGES_PATH, fileName));
 };

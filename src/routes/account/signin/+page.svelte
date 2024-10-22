@@ -1,11 +1,19 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { redirect } from '@sveltejs/kit';
 	import { superForm } from 'sveltekit-superforms';
 	export let data;
 
 	const { form, errors, message, enhance } = superForm(data.form);
-	$: if ($message?.redirect) goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
+	$: if ($message?.redirect) {
+		if (browser) {
+			goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
+		} else {
+			redirect(302, '/' + ($page.url.searchParams.get('redirectTo') || ''));
+		}
+	}
 </script>
 
 <h1>Sign in</h1>
