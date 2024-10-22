@@ -1,7 +1,7 @@
 CREATE TABLE
     IF NOT EXISTS "Agents" (
         "ID" TINYINT NOT NULL,
-        "Name" VARCHAR(16) NOT NULL, --UNIQUE
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
         "RoleID" TINYINT NOT NULL,
         PRIMARY KEY ("ID"),
         CONSTRAINT "FK_AgentRoles_RoleID" FOREIGN KEY ("RoleID") REFERENCES "AgentRoles" ("RoleID") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -10,14 +10,14 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS "Maps" (
         "ID" TINYINT NOT NULL,
-        "Name" VARCHAR(16) NOT NULL, --UNIQUE
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
         PRIMARY KEY ("ID")
     );
 
 CREATE TABLE
     IF NOT EXISTS "AgentRoles" (
         "RoleID" TINYINT NOT NULL,
-        "Name" VARCHAR(16) NOT NULL, --UNIQUE
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
         PRIMARY KEY ("RoleID")
     );
 
@@ -25,8 +25,8 @@ CREATE TABLE
     IF NOT EXISTS "Abilities" (
         "AgentID" TINYINT NOT NULL,
         "AbilityID" SMALLINT NOT NULL,
-        "Name" VARCHAR(16) NOT NULL, --UNIQUE
-        "NameID" VARCHAR(16) NOT NULL, --UNIQUE
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
+        "NameID" VARCHAR(16) NOT NULL UNIQUE,
         PRIMARY KEY ("AgentID", "AbilityID"),
         CONSTRAINT "FK_Agents_AgentID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE
     );
@@ -44,7 +44,7 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS "ThrowTypes" (
         "ID" TINYINT NOT NULL,
-        "Name" VARCHAR(32) NOT NULL, --UNIQUE
+        "Name" VARCHAR(32) NOT NULL UNIQUE,
         "Description" VARCHAR(255) NOT NULL,
         PRIMARY KEY ("ID")
     );
@@ -52,7 +52,7 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS "Grades" (
         "ID" TINYINT NOT NULL,
-        "Name" CHAR(1) NOT NULL, --UNIQUE
+        "Name" CHAR(1) NOT NULL UNIQUE,
         "Description" VARCHAR(255) NOT NULL,
         PRIMARY KEY ("ID")
     );
@@ -132,7 +132,7 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS "PrivilegeRoles" (
         "Privilege" TINYINT NOT NULL,
-        "RoleName" VARCHAR(16) NOT NULL, --UNIQUE
+        "RoleName" VARCHAR(16) NOT NULL UNIQUE,
         "Description" VARCHAR(255) NOT NULL,
         PRIMARY KEY ("Privilege")
     );
