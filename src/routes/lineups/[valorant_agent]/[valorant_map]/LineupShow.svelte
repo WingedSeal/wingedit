@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ElementFit from '$lib/components/ElementFit.svelte';
 	import type { GameInfo, Lineup } from '$lib/server/db/types';
-	import LineupShowOverlay from './LineupShowOverlay.svelte';
+	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	export let lineup: Lineup;
 	export let gameInfo: GameInfo;
 </script>
