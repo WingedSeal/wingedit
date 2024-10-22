@@ -1,5 +1,10 @@
 import { lucia } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
+import { IMAGES_PATH, DB_PATH } from '$env/static/private';
+
+if (!IMAGES_PATH || !DB_PATH) {
+	throw Error('Missing .env');
+}
 
 const simulateLatency = (ms: number) => {
 	return new Promise((res) => setTimeout(res, ms));
