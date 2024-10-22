@@ -96,7 +96,7 @@
 		name="throwLineup"
 		bind:value={$form.throwLineup}
 		bind:files={throwLineup}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwLineup}
 		<small>{$errors.throwLineup[0]}</small>
@@ -121,7 +121,7 @@
 		name="landSpot"
 		bind:value={$form.landSpot}
 		bind:files={landSpot}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.landSpot}
 		<small>{$errors.landSpot[0]}</small>
@@ -133,7 +133,7 @@
 		name="throwSpotFirstPerson"
 		bind:value={$form.throwSpotFirstPerson}
 		bind:files={throwSpotFirstPerson}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwSpotFirstPerson}
 		<small>{$errors.throwSpotFirstPerson[0]}</small>
@@ -145,7 +145,7 @@
 		name="throwSpotThirdPerson"
 		bind:value={$form.throwSpotThirdPerson}
 		bind:files={throwSpotThirdPerson}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwSpotThirdPerson}
 		<small>{$errors.throwSpotThirdPerson[0]}</small>

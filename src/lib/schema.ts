@@ -49,7 +49,10 @@ const imageSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-	.refine((f) => f.type === 'image/jpeg' || f.type === 'image/png', 'Please upload an image.')
+	.refine(
+		(f) => f.type === 'image/jpeg' || f.type === 'image/png' || f.type === 'image/webp',
+		'Please upload an image.'
+	)
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
 		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
