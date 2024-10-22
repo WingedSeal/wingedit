@@ -289,9 +289,12 @@
 		max="100"
 		step="0.01"
 	/>
+	{#if $errors.sub2Y}
+		<small>{$errors.sub2Y[0]}</small>
+	{/if}
 
 	<label for="from">From:</label>
-	<select name="from" on:change={onChange}>
+	<select name="from" on:change={onChange} bind:value={$form.from}>
 		<option hidden selected />
 		{#if data.game_info.mapPositions[$form.map]}
 			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
@@ -302,7 +305,7 @@
 	</select>
 
 	<label for="to">To:</label>
-	<select name="to" on:change={onChange}>
+	<select name="to" on:change={onChange} bind:value={$form.to}>
 		<option hidden selected />
 		{#if data.game_info.mapPositions[$form.map]}
 			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
@@ -312,11 +315,64 @@
 		<option value="add">ADD MAP POSITION</option>
 	</select>
 
-	{#if $errors.sub2Y}
-		<small>{$errors.sub2Y[0]}</small>
-	{/if}
 	{#if $errors._errors}
 		<small>{$errors._errors[0]}</small>
+	{/if}
+
+	<label for="fromX">fromX (%)</label>
+	<input
+		type="number"
+		name="fromX"
+		bind:value={$form.fromX}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.fromX}
+		<small>{$errors.fromX[0]}</small>
+	{/if}
+
+	<label for="fromY">fromY (%)</label>
+	<input
+		type="number"
+		name="fromY"
+		bind:value={$form.fromY}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.fromY}
+		<small>{$errors.fromY[0]}</small>
+	{/if}
+
+	<label for="toX">toX (%)</label>
+	<input
+		type="number"
+		name="toX"
+		bind:value={$form.toX}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.toX}
+		<small>{$errors.toX[0]}</small>
+	{/if}
+
+	<label for="toY">toY (%)</label>
+	<input
+		type="number"
+		name="toY"
+		bind:value={$form.toY}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.toY}
+		<small>{$errors.toY[0]}</small>
 	{/if}
 
 	<button type="submit" class="bg-red-300">button</button>
@@ -393,6 +449,10 @@
 			}}
 		/>
 	</div>
+{/if}
+
+{#if $form.map}
+	<img src={`api/image/maps/${$form.map}`} alt="minimap" />
 {/if}
 
 <Popup bind:is_hidden title="TITLE">
