@@ -418,15 +418,16 @@
 	/>
 	<label for="sub2">Sub2</label>
 </form>
+
 {#if throwLineup}
 	<div class="aspect-video w-[100rem] bg-red relative m-4">
 		<LineupShowOverlay
 			DrawOverMainX={$form.mainX}
 			DrawOverMainY={$form.mainY}
-			DrawOverSub1X={$form.sub1X}
-			DrawOverSub1Y={$form.sub1Y}
-			DrawOverSub2X={$form.sub2X}
-			DrawOverSub2Y={$form.sub2Y}
+			DrawOverSub1X={$form.sub1X || null}
+			DrawOverSub1Y={$form.sub1Y || null}
+			DrawOverSub2X={$form.sub2X || null}
+			DrawOverSub2Y={$form.sub2Y || null}
 		/>
 		<ClickableImage
 			src={URL.createObjectURL(throwLineup[0])}

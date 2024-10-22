@@ -15,10 +15,6 @@
 	let sub1: [number, number];
 	let sub2: [number, number];
 	let hasSub: boolean;
-	$: if ((DrawOverSub1X as unknown as string) === '') DrawOverSub1X = null;
-	$: if ((DrawOverSub1Y as unknown as string) === '') DrawOverSub1Y = null;
-	$: if ((DrawOverSub2X as unknown as string) === '') DrawOverSub2X = null;
-	$: if ((DrawOverSub2Y as unknown as string) === '') DrawOverSub2Y = null;
 	$: hasSub =
 		DrawOverSub1X != null &&
 		DrawOverSub1Y != null &&
