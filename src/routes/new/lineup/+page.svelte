@@ -452,7 +452,7 @@
 {/if}
 
 {#if $form.map}
-	<img src={`api/image/maps/${$form.map}`} alt="minimap" />
+	<img src={`/api/image/maps/${$form.map}/minimap.webp`} alt="minimap" />
 {/if}
 
 <Popup bind:is_hidden title="TITLE">
