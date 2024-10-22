@@ -3,7 +3,6 @@ import { verify } from 'argon2';
 import { page } from '$app/stores';
 import type { Actions, PageServerLoad } from './$types';
 import { getUser } from '$lib/server/db/auth';
-import { PEPPER } from '$lib/server/auth';
 import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { z } from 'zod';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -49,7 +48,7 @@ export const actions: Actions = {
 			return setError(form, 'username', "Username doesn't exist.");
 		}
 
-		const validPassword = await verify(existingUser.HashedPassword, form.data.password + PEPPER);
+		const validPassword = await verify(existingUser.HashedPassword, form.data.password);
 
 		if (!validPassword) {
 			return setError(form, 'password', 'Password is invalid.');

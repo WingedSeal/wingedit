@@ -1,4 +1,4 @@
-import { lucia, PEPPER, Privilege } from '$lib/server/auth';
+import { lucia } from '$lib/server/auth';
 import { generateIdFromEntropySize } from 'lucia';
 import { hash } from 'argon2';
 
@@ -47,7 +47,7 @@ export const actions: Actions = {
 			return setError(form, 'referralCode', 'Invalid code');
 		}
 		const userId = generateIdFromEntropySize(10); // 16 characters long
-		const passwordHash = await hash(form.data.password + PEPPER, {
+		const passwordHash = await hash(form.data.password, {
 			memoryCost: 2 ** 16,
 			timeCost: 2,
 			hashLength: 32,
