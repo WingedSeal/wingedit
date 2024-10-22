@@ -1,5 +1,10 @@
 INSERT INTO
-    `Lineups` (
+    MapPositions (ID, MapID, Callout)
+VALUES
+    (1, 4, 'THERE');
+
+INSERT INTO
+    "Lineups" (
         ID,
         AgentID,
         AbilityID,
@@ -8,6 +13,13 @@ INSERT INTO
         ThrowTypeID,
         TimeToLand,
         GradeID,
+        CreatedBy,
+        fromMapPositionID,
+        toMapPositionID,
+        fromX,
+        fromY,
+        toX,
+        toY,
         DrawOverMainX,
         DrawOverMainY,
         DrawOverSub1X,
@@ -25,6 +37,13 @@ VALUES
         3,
         2.5,
         2,
+        null,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
         50,
         50,
         null,
