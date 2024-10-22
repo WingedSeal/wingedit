@@ -166,11 +166,11 @@ export const addLineup = (lineup: Lineup): number => {
 			`
 	INSERT INTO 
 		"Lineups" (AgentID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand, GradeID,
-		CreatedBy, fromMapPositionID, toMapPositionID, fromX, fromY, toX, toY, 
+		CreatedBy, FromMapPositionID, ToMapPositionID, FromX, FromY, ToX, ToY, 
 		DrawOverMainX, DrawOverMainY, DrawOverSub1X, DrawOverSub1Y, DrawOverSub2X, DrawOverSub2Y)
 	VALUES
 		(@AgentID, @AbilityID, @MapID, @ExtraImageCount, @ThrowTypeID, @TimeToLand, @GradeID,
-		@CreatedBy, @fromMapPositionID, @toMapPositionID, @fromX, @fromY, @toX, @toY, 
+		@CreatedBy, @FromMapPositionID, @ToMapPositionID, @FromX, @FromY, @ToX, @ToY, 
 		@DrawOverMainX, @DrawOverMainY, @DrawOverSub1X, @DrawOverSub1Y, @DrawOverSub2X, @DrawOverSub2Y);
 	`
 		)

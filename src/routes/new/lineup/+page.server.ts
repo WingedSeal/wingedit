@@ -109,12 +109,12 @@ export const actions = {
 			TimeToLand: form.data.timeToLand,
 			GradeID: form.data.grade,
 			CreatedBy: null, // TODO
-			fromMapPositionID: -1, // TODO
-			toMapPositionID: -1, // TODO
-			fromX: -1, // TODO
-			fromY: -1, // TODO
-			toX: -1, // TODO
-			toY: -1, // TODO
+			FromMapPositionID: -1, // TODO
+			ToMapPositionID: -1, // TODO
+			FromX: -1, // TODO
+			FromY: -1, // TODO
+			ToX: -1, // TODO
+			ToY: -1, // TODO
 			DrawOverMainX: form.data.mainX,
 			DrawOverMainY: form.data.mainY,
 			DrawOverSub1X: form.data.sub1X,

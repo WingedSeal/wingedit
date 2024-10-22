@@ -48,12 +48,12 @@ export type Lineup = {
 	TimeToLand: number;
 	GradeID: number;
 	CreatedBy: string | null;
-	fromMapPositionID: number;
-	toMapPositionID: number;
-	fromX: number;
-	fromY: number;
-	toX: number;
-	toY: number;
+	FromMapPositionID: number;
+	ToMapPositionID: number;
+	FromX: number;
+	FromY: number;
+	ToX: number;
+	ToY: number;
 	DrawOverMainX: number;
 	DrawOverMainY: number;
 	DrawOverSub1X: number | null;
