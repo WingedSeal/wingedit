@@ -146,4 +146,4 @@ CREATE TABLE
         CONSTRAINT "FK_Users_UserID" FOREIGN KEY ("FromUserID") REFERENCES "Users" ("UserID") ON DELETE CASCADE ON UPDATE RESTRICT
     );
 
--- CREATE INDEX "IDX_ReferralCodes_FromUserID" ON "ReferralCodes" ("FromUserID");
+CREATE INDEX "IDX_ReferralCodes_FromUserID" ON "ReferralCodes" ("FromUserID");
