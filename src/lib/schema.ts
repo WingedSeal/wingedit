@@ -49,7 +49,10 @@ const imageSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-	.refine((f) => f.type === 'image/jpeg' || f.type === 'image/png', 'Please upload an image.')
+	.refine(
+		(f) => f.type === 'image/jpeg' || f.type === 'image/png' || f.type === 'image/webp',
+		'Please upload an image.'
+	)
 	.refine(async (f) => {
 		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
 		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
@@ -100,7 +103,13 @@ export const lineupSchema = z
 		sub1X: decimalSchema.nullable(),
 		sub1Y: decimalSchema.nullable(),
 		sub2X: decimalSchema.nullable(),
-		sub2Y: decimalSchema.nullable()
+		sub2Y: decimalSchema.nullable(),
+		from: z.number().int().min(1, 'Please select map position.'),
+		to: z.number().int().min(1, 'Please select map position.'),
+		fromX: decimalSchema,
+		fromY: decimalSchema,
+		toX: decimalSchema,
+		toY: decimalSchema
 	})
 	.refine((data) => {
 		if ([data.sub1X, data.sub1Y, data.sub2X, data.sub2Y].every((x) => x === null)) {

@@ -2,7 +2,7 @@
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import type { Ability } from '$lib/server/db/types';
 	import ClickableImage from './ClickableImage.svelte';
-	import LineupShowOverlay from '../../lineups/[valorant_agent]/[valorant_map]/LineupShowOverlay.svelte';
+	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup from '$lib/components/Popup.svelte';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
@@ -96,7 +96,7 @@
 		name="throwLineup"
 		bind:value={$form.throwLineup}
 		bind:files={throwLineup}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwLineup}
 		<small>{$errors.throwLineup[0]}</small>
@@ -121,7 +121,7 @@
 		name="landSpot"
 		bind:value={$form.landSpot}
 		bind:files={landSpot}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.landSpot}
 		<small>{$errors.landSpot[0]}</small>
@@ -133,7 +133,7 @@
 		name="throwSpotFirstPerson"
 		bind:value={$form.throwSpotFirstPerson}
 		bind:files={throwSpotFirstPerson}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwSpotFirstPerson}
 		<small>{$errors.throwSpotFirstPerson[0]}</small>
@@ -145,7 +145,7 @@
 		name="throwSpotThirdPerson"
 		bind:value={$form.throwSpotThirdPerson}
 		bind:files={throwSpotThirdPerson}
-		accept="image/jpeg, image/png"
+		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwSpotThirdPerson}
 		<small>{$errors.throwSpotThirdPerson[0]}</small>
@@ -289,9 +289,12 @@
 		max="100"
 		step="0.01"
 	/>
+	{#if $errors.sub2Y}
+		<small>{$errors.sub2Y[0]}</small>
+	{/if}
 
 	<label for="from">From:</label>
-	<select name="from" on:change={onChange}>
+	<select name="from" on:change={onChange} bind:value={$form.from}>
 		<option hidden selected />
 		{#if data.game_info.mapPositions[$form.map]}
 			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
@@ -302,7 +305,7 @@
 	</select>
 
 	<label for="to">To:</label>
-	<select name="to" on:change={onChange}>
+	<select name="to" on:change={onChange} bind:value={$form.to}>
 		<option hidden selected />
 		{#if data.game_info.mapPositions[$form.map]}
 			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
@@ -312,11 +315,64 @@
 		<option value="add">ADD MAP POSITION</option>
 	</select>
 
-	{#if $errors.sub2Y}
-		<small>{$errors.sub2Y[0]}</small>
-	{/if}
 	{#if $errors._errors}
 		<small>{$errors._errors[0]}</small>
+	{/if}
+
+	<label for="fromX">fromX (%)</label>
+	<input
+		type="number"
+		name="fromX"
+		bind:value={$form.fromX}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.fromX}
+		<small>{$errors.fromX[0]}</small>
+	{/if}
+
+	<label for="fromY">fromY (%)</label>
+	<input
+		type="number"
+		name="fromY"
+		bind:value={$form.fromY}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.fromY}
+		<small>{$errors.fromY[0]}</small>
+	{/if}
+
+	<label for="toX">toX (%)</label>
+	<input
+		type="number"
+		name="toX"
+		bind:value={$form.toX}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.toX}
+		<small>{$errors.toX[0]}</small>
+	{/if}
+
+	<label for="toY">toY (%)</label>
+	<input
+		type="number"
+		name="toY"
+		bind:value={$form.toY}
+		placeholder="0"
+		min="0"
+		max="100"
+		step="0.01"
+	/>
+	{#if $errors.toY}
+		<small>{$errors.toY[0]}</small>
 	{/if}
 
 	<button type="submit" class="bg-red-300">button</button>
@@ -362,15 +418,16 @@
 	/>
 	<label for="sub2">Sub2</label>
 </form>
+
 {#if throwLineup}
 	<div class="aspect-video w-[100rem] bg-red relative m-4">
 		<LineupShowOverlay
 			DrawOverMainX={$form.mainX}
 			DrawOverMainY={$form.mainY}
-			DrawOverSub1X={$form.sub1X}
-			DrawOverSub1Y={$form.sub1Y}
-			DrawOverSub2X={$form.sub2X}
-			DrawOverSub2Y={$form.sub2Y}
+			DrawOverSub1X={$form.sub1X || null}
+			DrawOverSub1Y={$form.sub1Y || null}
+			DrawOverSub2X={$form.sub2X || null}
+			DrawOverSub2Y={$form.sub2Y || null}
 		/>
 		<ClickableImage
 			src={URL.createObjectURL(throwLineup[0])}
@@ -393,6 +450,10 @@
 			}}
 		/>
 	</div>
+{/if}
+
+{#if $form.map}
+	<img src={`/api/image/maps/${$form.map}/minimap.webp`} alt="minimap" />
 {/if}
 
 <Popup bind:is_hidden title="TITLE">
