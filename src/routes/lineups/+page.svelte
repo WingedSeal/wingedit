@@ -2,22 +2,23 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import type { Agent } from '$lib/server/db/types.js';
+	import {
+		clientFavouriteAgents,
+		clientMainAgent,
+		serverFavouriteAgents,
+		serverMainAgent
+	} from './localstorage';
 
 	export let data;
-	const FAVOURITE_AGENT = 'favourite';
-	const MAIN_AGENT = 'main';
 
-	let favouriteAgents: Set<number> = new Set();
-	if (browser && localStorage.getItem(FAVOURITE_AGENT)) {
-		favouriteAgents = new Set(JSON.parse(localStorage.getItem(FAVOURITE_AGENT)!));
-	}
-	let mainAgent: number = 0;
-	if (browser && localStorage.getItem(MAIN_AGENT)) {
-		mainAgent = Number.parseInt(localStorage.getItem(MAIN_AGENT)!);
-	}
+	let favouriteAgents = serverFavouriteAgents();
+	$: if (browser) favouriteAgents = clientFavouriteAgents();
+
+	let mainAgent = serverMainAgent();
+	$: if (browser) mainAgent = clientMainAgent();
 
 	let chosenMap: number | null = null;
-	let chosenAgent: number | null = mainAgent;
+	let chosenAgent: number | null = $mainAgent;
 	let canSubmit = false;
 	let submitText = '';
 	$: canSubmit = !!chosenMap && !!chosenAgent;
@@ -40,9 +41,9 @@
 		others = [];
 		Object.values(data.agents).forEach((agent) => {
 			if (!agent.Name.toLowerCase().includes(agentSearch.toLowerCase())) return;
-			if (mainAgent === agent.ID) {
+			if ($mainAgent === agent.ID) {
 				mains.push(agent);
-			} else if (favouriteAgents.has(agent.ID)) {
+			} else if ($favouriteAgents.has(agent.ID)) {
 				favourites.push(agent);
 			} else {
 				others.push(agent);
@@ -71,9 +72,8 @@ AGENTS
 		<button
 			class="bg-red-400"
 			on:click={() => {
-				mainAgent = -1;
+				$mainAgent = -1;
 				getSorted();
-				localStorage.setItem(MAIN_AGENT, mainAgent.toString());
 			}}>MAIN</button
 		>
 	</div>
@@ -85,19 +85,16 @@ AGENTS
 			on:click={() => (chosenAgent = agent.ID)}>{agent.Name}</button
 		>{' '}
 		<button
-			class={favouriteAgents.has(agent.ID) ? ' bg-yellow-100' : ''}
+			class={$favouriteAgents.has(agent.ID) ? ' bg-yellow-100' : ''}
 			on:click={() => {
-				favouriteAgents.delete(agent.ID);
-				favouriteAgents = favouriteAgents;
+				$favouriteAgents.delete(agent.ID);
 				getSorted();
-				localStorage.setItem(FAVOURITE_AGENT, JSON.stringify([...favouriteAgents]));
 			}}>FAV</button
 		>
 		<button
 			on:click={() => {
-				mainAgent = agent.ID;
+				$mainAgent = agent.ID;
 				getSorted();
-				localStorage.setItem(MAIN_AGENT, mainAgent.toString());
 			}}>MAIN</button
 		>
 	</div>
@@ -110,17 +107,14 @@ AGENTS
 		>{' '}
 		<button
 			on:click={() => {
-				favouriteAgents.add(agent.ID);
-				favouriteAgents = favouriteAgents;
+				$favouriteAgents.add(agent.ID);
 				getSorted();
-				localStorage.setItem(FAVOURITE_AGENT, JSON.stringify([...favouriteAgents]));
 			}}>FAV</button
 		>
 		<button
 			on:click={() => {
-				mainAgent = agent.ID;
+				$mainAgent = agent.ID;
 				getSorted();
-				localStorage.setItem(MAIN_AGENT, mainAgent.toString());
 			}}>MAIN</button
 		>
 	</div>
