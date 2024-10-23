@@ -6,7 +6,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { signupSchema as schema } from '$lib/schema.js';
-
+	import {} from 'zod';
 	export let data;
 	let confirmPassword: HTMLInputElement;
 

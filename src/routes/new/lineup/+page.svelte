@@ -5,7 +5,9 @@
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup from '$lib/components/Popup.svelte';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { lineupSchema as schema } from '$lib/schema';
+	import { getLineupSchema, gifSchema, imageSchema } from '$lib/schema';
+
+	const schema = getLineupSchema(imageSchema, gifSchema);
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
 		validators: zodClient(schema),

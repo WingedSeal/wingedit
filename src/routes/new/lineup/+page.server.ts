@@ -9,8 +9,21 @@ import { z } from 'zod';
 import type { Lineup } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
 import { Privilege } from '$lib/server/auth';
-import { lineupSchema as schema } from '$lib/schema';
+import { getLineupSchema, imageSchema, gifSchema } from '$lib/schema';
 import sharp from 'sharp';
+
+const schema = getLineupSchema(
+	imageSchema.refine(async (f) => {
+		const size = await sharp(await f.arrayBuffer()).metadata();
+
+		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
+	}, 'Please upload 1980x1080 image.'),
+	gifSchema.refine(async (f) => {
+		const size = await sharp(await f.arrayBuffer()).metadata();
+
+		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
+	}, 'Please upload 1980x1080 gif.')
+);
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirectTo=${url.pathname.slice(1)}`);
