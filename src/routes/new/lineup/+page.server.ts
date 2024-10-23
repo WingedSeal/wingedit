@@ -96,7 +96,7 @@ const writeWebp = async (file: File, fileName: string) => {
 	const buffer = await file.arrayBuffer();
 	sharp(buffer)
 		.resize(1980, 1080)
-		.webp({ minSize: true, effort: 2 })
+		.webp({ minSize: true, effort: 6 })
 		.toFile(path.join(IMAGES_PATH, fileName));
 };
 
@@ -104,6 +104,6 @@ const writeWebpAnimated = async (file: File, fileName: string) => {
 	const buffer = await file.arrayBuffer();
 	sharp(buffer, { animated: true })
 		.resize(1980, 1080)
-		.webp({ minSize: true, effort: 2 })
+		.webp({ minSize: true, effort: 6 })
 		.toFile(path.join(IMAGES_PATH, fileName));
 };
