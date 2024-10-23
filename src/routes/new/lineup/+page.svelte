@@ -116,7 +116,7 @@
 		name="throwGif"
 		bind:value={$form.throwGif}
 		bind:files={throwGif}
-		accept="image/gif"
+		accept="image/gif, image/webp"
 	/>
 	{#if $errors.throwGif}
 		<small>{$errors.throwGif[0]}</small>

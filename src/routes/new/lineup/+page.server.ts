@@ -15,12 +15,10 @@ import sharp from 'sharp';
 const schema = getLineupSchema(
 	imageSchema.refine(async (f) => {
 		const size = await sharp(await f.arrayBuffer()).metadata();
-		return true;
 		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
 	}, 'Please upload 1920x1080 image.'),
 	gifSchema.refine(async (f) => {
 		const size = await sharp(await f.arrayBuffer()).metadata();
-		return true;
 		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
 	}, 'Please upload 1920x1080 gif.')
 );
@@ -106,6 +104,6 @@ const writeWebpAnimated = async (file: File, fileName: string) => {
 	const buffer = await file.arrayBuffer();
 	sharp(buffer, { animated: true })
 		.resize(1980, 1080)
-		.webp({ minSize: true, effort: 2, delay: 1000 })
+		.webp({ minSize: true, effort: 2 })
 		.toFile(path.join(IMAGES_PATH, fileName));
 };
