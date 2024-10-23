@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import { readable, writable } from 'svelte/store';
 
 const FAVOURITE_AGENT = 'favourite-agents';
