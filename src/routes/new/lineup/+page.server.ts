@@ -15,14 +15,14 @@ import sharp from 'sharp';
 const schema = getLineupSchema(
 	imageSchema.refine(async (f) => {
 		const size = await sharp(await f.arrayBuffer()).metadata();
-
-		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
-	}, 'Please upload 1980x1080 image.'),
+		return true;
+		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
+	}, 'Please upload 1920x1080 image.'),
 	gifSchema.refine(async (f) => {
 		const size = await sharp(await f.arrayBuffer()).metadata();
-
-		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
-	}, 'Please upload 1980x1080 gif.')
+		return true;
+		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
+	}, 'Please upload 1920x1080 gif.')
 );
 
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -57,12 +57,12 @@ export const actions = {
 			TimeToLand: form.data.timeToLand,
 			GradeID: form.data.grade,
 			CreatedBy: null, // TODO
-			FromMapPositionID: -1, // TODO
-			ToMapPositionID: -1, // TODO
-			FromX: -1, // TODO
-			FromY: -1, // TODO
-			ToX: -1, // TODO
-			ToY: -1, // TODO
+			FromMapPositionID: form.data.from,
+			ToMapPositionID: form.data.to,
+			FromX: form.data.fromX,
+			FromY: form.data.fromY,
+			ToX: form.data.toX,
+			ToY: form.data.toY,
 			DrawOverMainX: form.data.mainX,
 			DrawOverMainY: form.data.mainY,
 			DrawOverSub1X: form.data.sub1X,
@@ -74,16 +74,16 @@ export const actions = {
 		const lineupID = addLineup(lineup).toString();
 		fs.mkdirSync(path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID), { recursive: true });
 		await Promise.all([
-			writeJPG(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.jpg')),
-			writeGif(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.gif')),
-			writeJPG(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.jpg')),
-			writeJPG(
+			writeWebp(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.webp')),
+			writeWebpAnimated(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.webp')),
+			writeWebp(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.webp')),
+			writeWebp(
 				form.data.throwSpotFirstPerson,
-				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.jpg')
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.webp')
 			),
-			writeJPG(
+			writeWebp(
 				form.data.throwSpotThirdPerson,
-				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.jpg')
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.webp')
 			)
 		]);
 
@@ -94,12 +94,18 @@ export const actions = {
 	}
 };
 
-const writeJPG = async (file: File, fileName: string) => {
+const writeWebp = async (file: File, fileName: string) => {
 	const buffer = await file.arrayBuffer();
-	sharp(buffer).resize(1980, 1080).jpeg({ mozjpeg: true }).toFile(path.join(IMAGES_PATH, fileName));
+	sharp(buffer)
+		.resize(1980, 1080)
+		.webp({ minSize: true, effort: 2 })
+		.toFile(path.join(IMAGES_PATH, fileName));
 };
 
-const writeGif = async (file: File, fileName: string) => {
+const writeWebpAnimated = async (file: File, fileName: string) => {
 	const buffer = await file.arrayBuffer();
-	sharp(buffer).resize(1980, 1080).gif().toFile(path.join(IMAGES_PATH, fileName));
+	sharp(buffer, { animated: true })
+		.resize(1980, 1080)
+		.webp({ minSize: true, effort: 2, delay: 1000 })
+		.toFile(path.join(IMAGES_PATH, fileName));
 };

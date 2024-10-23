@@ -5,10 +5,11 @@
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup from '$lib/components/Popup.svelte';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { getLineupSchema, gifSchema, imageSchema } from '$lib/schema';
+	import { getLineupSchema } from '$lib/schema';
+	import { z } from 'zod';
 
-	const schema = getLineupSchema(imageSchema, gifSchema);
 	export let data;
+	const schema = getLineupSchema(z.any(), z.any());
 	const { form, errors, enhance, message } = superForm(data.form, {
 		validators: zodClient(schema),
 		taintedMessage: 'Changes you made may not be saved.',
@@ -102,9 +103,10 @@
 		bind:value={$form.throwLineup}
 		bind:files={throwLineup}
 		accept="image/jpeg, image/png, image/webp"
+		on:change={() => console.log(typeof $form.throwLineup)}
 	/>
 	{#if $errors.throwLineup}
-		<small>{$errors.throwLineup[0]}</small>
+		<small>{$errors.throwLineup}</small>
 	{/if}
 
 	<label for="throwGif">Throw Gif</label>

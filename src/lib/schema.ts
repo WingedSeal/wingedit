@@ -57,7 +57,7 @@ export const gifSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 20_000_000, 'Max 20 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-	.refine((f) => f.type === 'image/gif', 'Please upload a GIF.');
+	.refine((f) => f.type === 'image/gif' || f.type === 'image/webp', 'Please upload a GIF.');
 
 const decimalSchema = z
 	.number({ message: 'Expected a number.' })
