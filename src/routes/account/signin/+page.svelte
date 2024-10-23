@@ -4,9 +4,13 @@
 	import { page } from '$app/stores';
 	import { redirect } from '@sveltejs/kit';
 	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { signinSchema as schema } from '$lib/schema.js';
 	export let data;
 
-	const { form, errors, message, enhance } = superForm(data.form);
+	const { form, errors, message, enhance } = superForm(data.form, {
+		validators: zodClient(schema)
+	});
 	$: if ($message?.redirect) {
 		if (browser) {
 			goto('/' + ($page.url.searchParams.get('redirectTo') || ''));

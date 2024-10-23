@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { agentSchema as schema } from '$lib/schema.js';
 
 	export let data;
 	const DEFAULT_ABILITY_COUNT = 4;
 	let abilityCount = DEFAULT_ABILITY_COUNT;
 	const { form, errors, enhance, message } = superForm(data.form, {
-		// taintedMessage: 'Changes you made may not be saved.',
+		validators: zodClient(schema),
 		validationMethod: 'auto',
 		dataType: 'json'
 	});

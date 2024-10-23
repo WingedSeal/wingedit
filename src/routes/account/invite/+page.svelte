@@ -2,9 +2,18 @@
 	import { enhance as svelteEnhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import '@fortawesome/fontawesome-free/css/all.min.css';
-	import SuperDebug, { superForm } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { inviteSchema as schema } from '$lib/schema';
 	export let data;
-	const { form, errors, message, enhance: superEnhance } = superForm(data.form);
+	const {
+		form,
+		errors,
+		message,
+		enhance: superEnhance
+	} = superForm(data.form, {
+		validators: zodClient(schema)
+	});
 	const copyCode = (code: string) => {
 		return navigator.clipboard.writeText($page.url.origin + '/account/signup?code=' + code);
 	};

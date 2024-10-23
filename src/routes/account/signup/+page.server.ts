@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from '@sveltejs/kit';
-import { signupSChema as schema } from '$lib/schema';
+import { signupSchema as schema } from '$lib/schema';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {

@@ -4,8 +4,11 @@
 	import ClickableImage from './ClickableImage.svelte';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup from '$lib/components/Popup.svelte';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { lineupSchema as schema } from '$lib/schema';
 	export let data;
 	const { form, errors, enhance, message } = superForm(data.form, {
+		validators: zodClient(schema),
 		taintedMessage: 'Changes you made may not be saved.',
 		validationMethod: 'auto'
 	});

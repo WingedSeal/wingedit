@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import sizeOf from 'image-size';
 
 export const inviteSchema = z.object({
 	privilege: z.number().int().default(1),
@@ -16,7 +15,7 @@ export const signinSchema = z.object({
 	password: z.string().min(4).max(255).trim()
 });
 
-export const signupSChema = z
+export const signupSchema = z
 	.object({
 		username: z
 			.string()
@@ -52,22 +51,21 @@ const imageSchema = z
 	.refine(
 		(f) => f.type === 'image/jpeg' || f.type === 'image/png' || f.type === 'image/webp',
 		'Please upload an image.'
-	)
-	.refine(async (f) => {
-		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
-	}, `Please upload 1980x1080 image.`);
+	);
+// .refine(async (f) => {
+// 	const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
+// 	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
+// }, `Please upload 1980x1080 image.`);
 
 const gifSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 20_000_000, 'Max 20 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
-	.refine((f) => f.type === 'image/gif', 'Please upload a GIF.')
-	.refine(async (f) => {
-		const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
-		// return size.width === 1980 && size.height === 1080;
-		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
-	}, 'Please upload 1980x1080 gif.');
+	.refine((f) => f.type === 'image/gif', 'Please upload a GIF.');
+// .refine(async (f) => {
+// 	const size = sizeOf(new Uint8Array(await f.arrayBuffer()));
+// 	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1980;
+// }, 'Please upload 1980x1080 gif.');
 
 const decimalSchema = z
 	.number({ message: 'Expected a number.' })

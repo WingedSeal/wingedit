@@ -4,12 +4,16 @@
 	import { page } from '$app/stores';
 	import { redirect } from '@sveltejs/kit';
 	import { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { signupSchema as schema } from '$lib/schema.js';
 
 	export let data;
 	let confirmPassword: HTMLInputElement;
 
 	let confirmPasswordError: string | null = null;
-	const { form, errors, message, enhance } = superForm(data.form);
+	const { form, errors, message, enhance } = superForm(data.form, {
+		validators: zodClient(schema)
+	});
 	$: if ($message?.redirect) {
 		if (browser) {
 			goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
