@@ -80,7 +80,6 @@
 		if (isFetching) return;
 		isFetching = true;
 		const response = await fetch('/api/database?tableName=' + form?.tableName);
-		console.log('/api/database?table=' + form?.tableName);
 		if (!response.ok) {
 			isFetching = false;
 			throw new Error(`Response status: ${response.status}`);

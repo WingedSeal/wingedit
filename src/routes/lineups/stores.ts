@@ -17,7 +17,11 @@ export const clientMainAgent = () => {
 };
 
 export const serverFavouriteAgents = () => {
-	return { ...readable(new Set<number>()), add: (_: number) => {}, delete: (_: number) => {} };
+	return {
+		...readable(new Set<number>()),
+		add: (_: number) => {},
+		delete: (_: number) => {}
+	};
 };
 
 export const clientFavouriteAgents = () => {
@@ -39,3 +43,9 @@ export const clientFavouriteAgents = () => {
 		}
 	};
 };
+
+export type FavouriteAgentID = ReturnType<
+	typeof clientFavouriteAgents | typeof serverFavouriteAgents
+>;
+
+export const selectedAgent = writable(0);
