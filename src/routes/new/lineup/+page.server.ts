@@ -54,6 +54,7 @@ export const actions = {
 			ThrowTypeID: getThrowTypes()[form.data.throwType].ID,
 			TimeToLand: form.data.timeToLand,
 			GradeID: form.data.grade,
+			SideID: 0, // TODO
 			CreatedBy: null, // TODO
 			FromMapPositionID: form.data.from,
 			ToMapPositionID: form.data.to,

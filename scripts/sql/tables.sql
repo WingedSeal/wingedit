@@ -97,6 +97,13 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    IF NOT EXISTS "Sides" (
+        "ID" TINYINT NOT NULL,
+        "Name" VARCHAR(16) NOT NULL UNIQUE,
+        PRIMARY KEY ("ID")
+    );
+
+CREATE TABLE
     IF NOT EXISTS "Lineups" (
         "ID" INTEGER NOT NULL,
         "AgentID" SMALLINT NOT NULL,
@@ -106,6 +113,7 @@ CREATE TABLE
         "ThrowTypeID" TINYINT NOT NULL,
         "TimeToLand" DECIMAL(5, 2) NOT NULL,
         "GradeID" TINYINT NOT NULL,
+        "SideID" TINYINT NOT NULL,
         "CreatedBy" CHAR(16) NULL,
         "FromMapPositionID" SMALLINT NOT NULL,
         "ToMapPositionID" SMALLINT NOT NULL,
@@ -128,6 +136,7 @@ CREATE TABLE
         CONSTRAINT "FK_Users_CreatedBy" FOREIGN KEY ("CreatedBy") REFERENCES "Users" ("UserID") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "FK_ThrowTypes_ThrowTypeID" FOREIGN KEY ("ThrowTypeID") REFERENCES "ThrowTypes" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "FK_Grades_GradeID" FOREIGN KEY ("GradeID") REFERENCES "Grades" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
+        CONSTRAINT "FK_Sides_SideID" FOREIGN KEY ("SideID") REFERENCES "Sides" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "CON_DrawOverSub" CHECK (
             (
                 "DrawOverSub1X" IS NULL

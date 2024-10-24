@@ -40,6 +40,11 @@ export type Ability = {
 	NameID: string;
 };
 
+export type Side = {
+	ID: number;
+	Name: string;
+};
+
 export type Lineup = {
 	ID?: number;
 	AgentID: number;
@@ -49,6 +54,7 @@ export type Lineup = {
 	ThrowTypeID: number;
 	TimeToLand: number;
 	GradeID: number;
+	SideID: number;
 	CreatedBy: string | null;
 	FromMapPositionID: number;
 	ToMapPositionID: number;
@@ -92,6 +98,9 @@ export type GameInfo = {
 		[mapID: number]: {
 			[mapPositionID: number]: MapPosition;
 		};
+	};
+	sides: {
+		[sideID: number]: Side;
 	};
 };
 

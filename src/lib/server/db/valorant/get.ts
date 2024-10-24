@@ -7,6 +7,7 @@ import type {
 	Grade,
 	Lineup,
 	MapPosition,
+	Side,
 	ThrowType,
 	ValorantMap
 } from '../types';
@@ -85,6 +86,15 @@ export const getMapPositions = () => {
 	return mapPositions;
 };
 
+export const getSides = () => {
+	const rows = db.prepare(`SELECT * FROM "Sides";`).all() as Side[];
+	let sides: { [sideID: number]: Side } = {};
+	rows.forEach((side) => {
+		sides[side.ID] = side;
+	});
+	return sides;
+};
+
 export const getThrowTypes = () => {
 	const rows = db.prepare(`SELECT * FROM "ThrowTypes";`).all() as ThrowType[];
 	let throwTypes: { [throwTypeID: number]: ThrowType } = {};
@@ -101,7 +111,8 @@ export const getGameInfo = (): GameInfo => {
 		abilities: getAbilities(),
 		throw_types: getThrowTypes(),
 		grades: getGrades(),
-		mapPositions: getMapPositions()
+		mapPositions: getMapPositions(),
+		sides: getSides()
 	};
 };
 

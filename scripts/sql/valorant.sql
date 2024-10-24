@@ -168,3 +168,10 @@ VALUES
     (26, 2, 'Shear', 'shear'),
     (26, 3, 'Age Rose', 'age_rose'),
     (26, 4, 'Steel Garden', 'steel_garden');
+
+INSERT INTO
+    "Sides" ("ID", "Name")
+VALUES
+    (0, 'Neutral'),
+    (1, 'Attacker'),
+    (2, 'Defender');
