@@ -1,4 +1,5 @@
-import { readable, writable } from 'svelte/store';
+import { browser } from '$app/environment';
+import { get, readable, writable } from 'svelte/store';
 
 const FAVOURITE_AGENT = 'favourite-agents';
 const MAIN_AGENT = 'main-agent';
@@ -8,23 +9,33 @@ export const serverMainAgent = () => {
 };
 
 export const clientMainAgent = () => {
-	const mainAgent = writable(0);
+	const mainAgent = writable(Number.parseInt(localStorage.getItem(MAIN_AGENT) || '-1'));
 	mainAgent.subscribe((agent) => {
 		localStorage.setItem(MAIN_AGENT, agent.toString());
 	});
-	mainAgent.set(Number.parseInt(localStorage.getItem(MAIN_AGENT) || '-1'));
 	return mainAgent;
 };
 
 export const serverFavouriteAgents = () => {
-	return readable(new Set<number>());
+	return { ...readable(new Set<number>()), add: (_: number) => {}, delete: (_: number) => {} };
 };
 
 export const clientFavouriteAgents = () => {
-	const favouriteAgents = writable(new Set<number>());
+	const favouriteAgents = writable(
+		new Set<number>(JSON.parse(localStorage.getItem(FAVOURITE_AGENT) || '[]'))
+	);
 	favouriteAgents.subscribe((agents) => {
 		localStorage.setItem(FAVOURITE_AGENT, JSON.stringify([...agents]));
 	});
-	favouriteAgents.set(new Set(JSON.parse(localStorage.getItem(FAVOURITE_AGENT) || '[]')));
-	return favouriteAgents;
+	return {
+		...favouriteAgents,
+		add: (value: number) => {
+			favouriteAgents.set(get(favouriteAgents).add(value));
+		},
+		delete: (value: number) => {
+			let agents = get(favouriteAgents);
+			agents.delete(value);
+			favouriteAgents.set(agents);
+		}
+	};
 };

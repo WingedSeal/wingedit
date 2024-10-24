@@ -87,7 +87,7 @@ AGENTS
 		<button
 			class={$favouriteAgents.has(agent.ID) ? ' bg-yellow-100' : ''}
 			on:click={() => {
-				$favouriteAgents.delete(agent.ID);
+				favouriteAgents.delete(agent.ID);
 				getSorted();
 			}}>FAV</button
 		>
@@ -107,7 +107,7 @@ AGENTS
 		>{' '}
 		<button
 			on:click={() => {
-				$favouriteAgents.add(agent.ID);
+				favouriteAgents.add(agent.ID);
 				getSorted();
 			}}>FAV</button
 		>
