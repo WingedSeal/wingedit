@@ -1,4 +1,4 @@
-import { REQUIRE_ALL_IMAGES } from '$env/static/private';
+import { PUBLIC_REQUIRE_ALL_IMAGES } from '$env/static/public';
 import { z, ZodType } from 'zod';
 
 export const inviteSchema = z.object({
@@ -68,7 +68,7 @@ const decimalSchema = z
 	.default(null as unknown as number);
 
 export const getLineupSchema = (_imageSchema: ZodType, _gifSchema: ZodType) => {
-	if (REQUIRE_ALL_IMAGES === 'true') {
+	if (PUBLIC_REQUIRE_ALL_IMAGES === 'true') {
 		return z
 			.object({
 				agent: z.number().int().min(1, 'Please select an agent.'),
