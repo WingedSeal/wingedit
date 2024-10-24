@@ -12,10 +12,12 @@
 	export let data;
 
 	let favouriteAgents = serverFavouriteAgents();
-	$: if (browser) favouriteAgents = clientFavouriteAgents();
-
 	let mainAgent = serverMainAgent();
-	$: if (browser) mainAgent = clientMainAgent();
+	$: if (browser) {
+		favouriteAgents = clientFavouriteAgents();
+		mainAgent = clientMainAgent();
+		getSorted();
+	}
 
 	let chosenMap: number | null = null;
 	let chosenAgent: number | null = $mainAgent;
@@ -29,6 +31,7 @@
 	} else {
 		submitText = 'Please choose a map';
 	}
+
 	let agentSearch = '';
 	let mapSearch = '';
 
