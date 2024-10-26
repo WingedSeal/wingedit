@@ -1,24 +1,35 @@
 <script lang="ts">
 	import type { Agent } from '$lib/server/db/types';
-	import { untrack } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import AgentDisplay from './AgentDisplay.svelte';
-	import { selectedAgent, type FavouriteAgentID } from './stores';
+	import {
+		clientFavouriteAgents,
+		clientMainAgent,
+		selectedAgent,
+		serverFavouriteAgents,
+		serverMainAgent,
+		type FavouriteAgentID
+	} from './stores';
+	import { browser } from '$app/environment';
 
 	interface Props {
-		mainAgentID: number;
-		favouriteAgentIDs: FavouriteAgentID;
 		agents: {
 			[agentID: number]: Agent;
 		};
 	}
 
-	let { mainAgentID, favouriteAgentIDs, agents }: Props = $props();
+	let { agents }: Props = $props();
 	let mainAgent = $state<Agent | null>(null);
 	let favouriteAgents = $state<Agent[]>([]);
 	let otherAgents = $state<Agent[]>([]);
 
-	let agentSearch = $state('');
 	let modeSelect = $state('default');
+	// svelte-ignore non_reactive_update
+	let agentSearch = '';
+	// svelte-ignore non_reactive_update
+	let favouriteAgentIDs: FavouriteAgentID = serverFavouriteAgents();
+	// svelte-ignore non_reactive_update
+	let mainAgentID = serverMainAgent();
 
 	const sort = () => {
 		mainAgent = null;
@@ -26,7 +37,7 @@
 		otherAgents = [];
 		Object.values(agents).forEach((agent) => {
 			if (!agent.Name.toLowerCase().includes(agentSearch.toLowerCase())) return;
-			if (mainAgentID === agent.ID) {
+			if ($mainAgentID === agent.ID) {
 				mainAgent = agent;
 			} else if ($favouriteAgentIDs.has(agent.ID)) {
 				favouriteAgents.push(agent);
@@ -35,18 +46,17 @@
 			}
 		});
 	};
-
-	$effect(() => {
-		agentSearch;
-		untrack(sort);
+	onMount(() => {
+		favouriteAgentIDs = clientFavouriteAgents();
+		mainAgentID = clientMainAgent();
+		sort();
 	});
 </script>
-
-<button onclick={() => sort()}>WAT</button>
 
 <div class="w-full flex flex-row bg-green-500 my-4">
 	<input
 		type="text"
+		oninput={sort}
 		bind:value={agentSearch}
 		class="w-2/3 rounded-lg p-2 mr-2 h-full"
 		placeholder="Search Agent..."
@@ -54,9 +64,7 @@
 	<select
 		class="w-1/3 h-full my-auto rounded-lg mx-auto block"
 		bind:value={modeSelect}
-		onchange={() => {
-			sort();
-		}}
+		onchange={sort}
 	>
 		<option value="default">default</option>
 		<option value="">favourite</option>

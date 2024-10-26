@@ -5,7 +5,7 @@ import { Privilege } from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user)
-		throw redirect(303, `/account/signin?redirectTo=${event.url.pathname.slice(1)}`);
+		throw redirect(303, `/account/signin?redirect=${event.url.pathname.slice(1)}`);
 	if (event.locals.user.privilege < Privilege.Admin) throw redirect(303, '/');
 
 	return {

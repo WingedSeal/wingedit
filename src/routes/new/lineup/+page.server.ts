@@ -24,7 +24,7 @@ const schema = getLineupSchema(
 );
 
 export const load: PageServerLoad = async ({ locals, url }) => {
-	if (!locals.user) throw redirect(303, `/account/signin?redirectTo=${url.pathname.slice(1)}`);
+	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
 	return {
 		form: await superValidate(zod(schema)),

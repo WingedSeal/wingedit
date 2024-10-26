@@ -12,6 +12,7 @@
 		dataType: 'json'
 	});
 	if (!$form.agentID) $form.agentID = data.lastAgentId + 1;
+
 	$effect(() => {
 		$form.abilities.length = abilityCount;
 		for (let i = 0; i < abilityCount; i++) {

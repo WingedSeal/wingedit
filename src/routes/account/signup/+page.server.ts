@@ -13,7 +13,7 @@ import { signupSchema as schema } from '$lib/schema';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
-		redirect(303, '/' + (event.url.searchParams.get('redirectTo') || ''));
+		redirect(303, '/' + (event.url.searchParams.get('redirect') || ''));
 	}
 	return {
 		form: await superValidate<Infer<typeof schema>, { redirect: boolean }>(zod(schema))
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
+	default: async ({ request, cookies, url }) => {
 		const form = await superValidate(request, zod(schema));
 		if (!form.valid) {
 			return fail(400, { form });
@@ -58,6 +58,6 @@ export const actions: Actions = {
 			path: '.',
 			...sessionCookie.attributes
 		});
-		return message(form, { redirect: true });
+		redirect(302, '/' + (url.searchParams.get('redirect') || ''));
 	}
 };

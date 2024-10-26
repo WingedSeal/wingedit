@@ -14,18 +14,6 @@
 	const { form, errors, message, enhance } = superForm(data.form, {
 		validators: zodClient(schema)
 	});
-	$effect(() => {
-		$message?.redirect;
-		untrack(() => {
-			if ($message?.redirect) {
-				if (browser) {
-					goto('/' + ($page.url.searchParams.get('redirect') || ''));
-				} else {
-					redirect(302, '/' + ($page.url.searchParams.get('redirect') || ''));
-				}
-			}
-		});
-	});
 	$form.referralCode = $page.url.searchParams.get('code') || '';
 </script>
 

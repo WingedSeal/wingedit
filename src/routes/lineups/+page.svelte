@@ -12,20 +12,9 @@
 	import { untrack } from 'svelte';
 
 	let { data } = $props();
-
-	let favouriteAgentIDs = $state<FavouriteAgentID>(serverFavouriteAgents());
-	let mainAgentID = $state(serverMainAgent());
-	$effect(() => {
-		browser;
-		untrack(() => {
-			if (browser) {
-				favouriteAgentIDs = clientFavouriteAgents();
-				mainAgentID = clientMainAgent();
-			}
-		});
-	});
 </script>
 
 <div class="max-w-[30%] overflow-y-auto h-[100dvh] bg-purple-500 p-8 flex flex-col">
-	<SelectAgent mainAgentID={$mainAgentID} {favouriteAgentIDs} agents={data.agents} />
+	<SelectAgent agents={data.agents} />
 </div>
+``
