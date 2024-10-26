@@ -83,7 +83,7 @@
 	</div>
 </div>
 <button
-	class="mt-auto bg-yellow-200 mx-auto py-4 px-12"
+	class="mt-auto bg-yellow-200 disabled:bg-yellow-900 mx-auto py-4 px-12"
 	onclick={() => {
 		if ($mainAgentID === $selectedAgent) {
 			$mainAgentID = 0;
@@ -92,8 +92,13 @@
 			favouriteAgentIDs.add($selectedAgent);
 		}
 		sort();
-	}}>Main Agent</button
+	}}
+	disabled={$selectedAgent === 0}
 >
+	{$mainAgentID !== $selectedAgent || $selectedAgent === 0
+		? 'Select Main Agent'
+		: 'Deselect Main Agent'}
+</button>
 
 <style lang="scss">
 	.agent-grid {
