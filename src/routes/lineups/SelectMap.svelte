@@ -23,12 +23,24 @@
 <div class="bg-blue-400 agent-grid overflow-y-scroll mb-2 flex flex-col gap-4 flex-grow">
 	{#each mapsList as map (map.ID)}
 		<button
-			class="aspect-video bg-red-300 w-full {$selectedMap === map.ID ? 'bg-red-700' : 'bg-red-300'}"
+			class="flex rounded-lg aspect-video relative bg-black w-full {$selectedMap === map.ID
+				? 'border-8 border-white'
+				: ''}"
 			onclick={() => {
 				$selectedMap = map.ID;
 			}}
 		>
-			{maps[map.ID].Name}
+			<img
+				class="rounded-lg w-full h-full"
+				src="/api/image/maps/{map.ID}/bg.webp"
+				alt="bg.webp"
+				draggable="false"
+			/>
+			<h2
+				class="absolute bottom-[5%] left-1/2 -translate-x-1/2 text-3xl uppercase font-bold text-white"
+			>
+				{maps[map.ID].Name}
+			</h2>
 		</button>
 	{/each}
 </div>

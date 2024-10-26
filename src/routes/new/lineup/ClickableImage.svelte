@@ -21,5 +21,5 @@
 </script>
 
 <button class="bg-black aspect-video w-full h-full" onmousemove={click}>
-	<img {src} {alt} class="w-full h-full" ondragstart={(e) => e.preventDefault()} />
+	<img {src} {alt} class="w-full h-full" draggable="false" />
 </button>
