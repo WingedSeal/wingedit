@@ -85,8 +85,12 @@
 <button
 	class="mt-auto bg-yellow-200 mx-auto py-4 px-12"
 	onclick={() => {
-		$mainAgentID = $selectedAgent;
-		favouriteAgentIDs.add($selectedAgent);
+		if ($mainAgentID === $selectedAgent) {
+			$mainAgentID = 0;
+		} else {
+			$mainAgentID = $selectedAgent;
+			favouriteAgentIDs.add($selectedAgent);
+		}
 		sort();
 	}}>Main Agent</button
 >
