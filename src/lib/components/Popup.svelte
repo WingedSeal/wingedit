@@ -1,18 +1,24 @@
 <script lang="ts">
 	import '@fortawesome/fontawesome-free/css/all.min.css';
-	export let title: string;
-	export let size_x: number = 80;
-	export let size_y: number = 80;
-	export let is_hidden = false;
+	interface Props {
+		title: string;
+		size_x?: number;
+		size_y?: number;
+		is_hidden?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let { title, size_x = 80, size_y = 80, is_hidden = $bindable(false), children }: Props = $props();
 </script>
 
 {#if !is_hidden}
 	<button
 		class="fixed w-screen h-screen bg-slate-950 top-0 left-0 opacity-80 z-20 appear-animation-80"
-		on:click={() => {
+		onclick={() => {
 			is_hidden = true;
 		}}
-	/>
+		aria-label="close"
+	></button>
 	<div
 		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation"
 		style="width: {size_x}vw; height: {size_y}vh;"
@@ -21,14 +27,15 @@
 			<h1 class="my-auto ml-6 text-xl">{title}</h1>
 			<button
 				class="my-auto ml-auto mr-3 text-xl cursor-pointer"
-				on:click={() => {
+				onclick={() => {
 					is_hidden = true;
 				}}
+				aria-label="close"
 			>
-				<i class="fa-regular fa-circle-xmark" />
+				<i class="fa-regular fa-circle-xmark"></i>
 			</button>
 		</div>
-		<div class="w-full h-[93%] p-2"><slot /></div>
+		<div class="w-full h-[93%] p-2">{@render children?.()}</div>
 	</div>
 {/if}
 

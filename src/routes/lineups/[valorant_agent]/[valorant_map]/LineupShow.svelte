@@ -2,8 +2,12 @@
 	import ElementFit from '$lib/components/ElementFit.svelte';
 	import type { GameInfo, Lineup } from '$lib/server/db/types';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
-	export let lineup: Lineup;
-	export let gameInfo: GameInfo;
+	interface Props {
+		lineup: Lineup;
+		gameInfo: GameInfo;
+	}
+
+	let { lineup, gameInfo }: Props = $props();
 </script>
 
 <ElementFit>

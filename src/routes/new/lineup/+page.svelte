@@ -8,12 +8,12 @@
 	import { getLineupSchema } from '$lib/schema';
 	import { z } from 'zod';
 
-	export let data;
+	let { data } = $props();
 	const schema = getLineupSchema(z.any(), z.any());
 	const { form, errors, enhance, message } = superForm(data.form, {
 		validators: zodClient(schema),
 		taintedMessage: 'Changes you made may not be saved.',
-		validationMethod: 'auto'
+		validationMethod: 'onsubmit'
 	});
 	const onChange = (event: Event) => {
 		let target = event.target! as HTMLSelectElement;
@@ -23,22 +23,21 @@
 		target.selectedIndex = 0;
 		is_hidden = false;
 	};
-	enum OverlayMode {
-		Main,
-		Sub1,
-		Sub2
-	}
-	let is_hidden: boolean = true;
+	type OverlayMode = number;
+	const OverlayModes = {
+		Main: 0,
+		Sub1: 1,
+		Sub2: 2
+	};
+	let is_hidden = $state(true);
 	let descriptionTextArea: HTMLTextAreaElement;
-	let agentAbilities: Ability[];
-	let throwLineup: FileList;
-	let throwGif: FileList;
-	let landSpot: FileList;
-	let throwSpotFirstPerson: FileList;
-	let throwSpotThirdPerson: FileList;
-	let overlayMode = OverlayMode.Main;
-	let sub1: number | null;
-	$: sub1 = $form.sub1X;
+	let agentAbilities = $state<Ability[]>();
+	let throwLineup = $state<FileList>();
+	let throwGif = $state<FileList>();
+	let landSpot = $state<FileList>();
+	let throwSpotFirstPerson = $state<FileList>();
+	let throwSpotThirdPerson = $state<FileList>();
+	let overlayMode = $state<OverlayMode>(OverlayModes.Main);
 </script>
 
 {#if $message}
@@ -55,12 +54,12 @@
 	<select
 		name="agent"
 		bind:value={$form.agent}
-		on:change={() => {
+		onchange={() => {
 			agentAbilities = Object.values(data.game_info.abilities[$form.agent]);
 			$form.ability = 0;
 		}}
 	>
-		<option hidden selected />
+		<option hidden selected></option>
 		{#each Object.values(data.game_info.agents) as agent}
 			<option value={agent.ID}>{agent.Name}</option>
 		{/each}
@@ -71,7 +70,7 @@
 
 	<label for="map">Map</label>
 	<select name="map" bind:value={$form.map}>
-		<option hidden selected />
+		<option hidden selected></option>
 		{#each Object.values(data.game_info.maps) as map}
 			<option value={map.ID}>{map.Name}</option>
 		{/each}
@@ -83,12 +82,12 @@
 	<label for="ability">Ability</label>
 	<select name="ability" bind:value={$form.ability}>
 		{#if agentAbilities}
-			<option hidden selected />
+			<option hidden selected></option>
 			{#each agentAbilities as ability}
 				<option value={ability.AbilityID}>{ability.Name}</option>
 			{/each}
 		{:else}
-			<option selected />
+			<option selected></option>
 		{/if}
 	</select>
 
@@ -103,7 +102,6 @@
 		bind:value={$form.throwLineup}
 		bind:files={throwLineup}
 		accept="image/jpeg, image/png, image/webp"
-		on:change={() => console.log(typeof $form.throwLineup)}
 	/>
 	{#if $errors.throwLineup}
 		<small>{$errors.throwLineup}</small>
@@ -160,7 +158,7 @@
 
 	<label for="grade">Grade</label>
 	<select name="grade" bind:value={$form.grade}>
-		<option hidden selected />
+		<option hidden selected></option>
 		{#each Object.values(data.game_info.grades) as grade}
 			<option value={grade.ID}>{grade.Name}</option>
 		{/each}
@@ -171,7 +169,7 @@
 
 	<label for="throwType">Throw Type</label>
 	<select name="throwType" bind:value={$form.throwType}>
-		<option hidden selected />
+		<option hidden selected></option>
 		{#each Object.values(data.game_info.throw_types) as throw_type}
 			<option value={throw_type.ID}>{throw_type.Name}</option>
 		{/each}
@@ -199,19 +197,19 @@
 	<textarea
 		name="description"
 		id=""
-		on:paste={() => {
+		onpaste={() => {
 			setTimeout(() => {
 				descriptionTextArea.value = descriptionTextArea.value.replaceAll('\n', ' ');
 			});
 		}}
-		on:keydown={(event) => {
+		onkeydown={(event) => {
 			if (event.key === 'Enter') {
 				event.preventDefault();
 			}
 		}}
 		bind:this={descriptionTextArea}
 		bind:value={$form.description}
-	/>
+	></textarea>
 	{#if $errors.description}
 		<small>{$errors.description[0]}</small>
 	{/if}
@@ -301,8 +299,8 @@
 	{/if}
 
 	<label for="from">From:</label>
-	<select name="from" on:change={onChange} bind:value={$form.from}>
-		<option hidden selected />
+	<select name="from" onchange={onChange} bind:value={$form.from}>
+		<option hidden selected></option>
 		{#if data.game_info.mapPositions[$form.map]}
 			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
 				<option value={mapPosition.ID}>{mapPosition.Callout}</option>
@@ -312,8 +310,8 @@
 	</select>
 
 	<label for="to">To:</label>
-	<select name="to" on:change={onChange} bind:value={$form.to}>
-		<option hidden selected />
+	<select name="to" onchange={onChange} bind:value={$form.to}>
+		<option hidden selected></option>
 		{#if data.game_info.mapPositions[$form.map]}
 			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
 				<option value={mapPosition.ID}>{mapPosition.Callout}</option>
@@ -390,7 +388,7 @@
 		type="radio"
 		id="main"
 		name="overlay-mode"
-		value={OverlayMode.Main}
+		value={OverlayModes.Main}
 		bind:group={overlayMode}
 	/>
 	<label for="main">Main</label>
@@ -399,9 +397,9 @@
 		type="radio"
 		id="sub1"
 		name="overlay-mode"
-		value={OverlayMode.Sub1}
+		value={OverlayModes.Sub1}
 		bind:group={overlayMode}
-		on:click={() => {
+		onclick={() => {
 			$form.sub1X ??= $form.mainX;
 			$form.sub1Y ??= $form.mainY;
 			$form.sub2X ??= $form.mainX;
@@ -414,9 +412,9 @@
 		type="radio"
 		id="sub2"
 		name="overlay-mode"
-		value={OverlayMode.Sub2}
+		value={OverlayModes.Sub2}
 		bind:group={overlayMode}
-		on:click={() => {
+		onclick={() => {
 			$form.sub1X ??= $form.mainX;
 			$form.sub1Y ??= $form.mainY;
 			$form.sub2X ??= $form.mainX;
@@ -441,15 +439,15 @@
 			alt={`Preview image of "Throw Lineup"`}
 			onClick={(x, y) => {
 				switch (overlayMode) {
-					case OverlayMode.Main:
+					case OverlayModes.Main:
 						$form.mainX = x;
 						$form.mainY = y;
 						break;
-					case OverlayMode.Sub1:
+					case OverlayModes.Sub1:
 						$form.sub1X = x;
 						$form.sub1Y = y;
 						break;
-					case OverlayMode.Sub2:
+					case OverlayModes.Sub2:
 						$form.sub2X = x;
 						$form.sub2Y = y;
 						break;

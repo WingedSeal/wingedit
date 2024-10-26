@@ -5,22 +5,27 @@
 	import { redirect } from '@sveltejs/kit';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { signupSchema as schema } from '$lib/schema.js';
-	import {} from 'zod';
-	export let data;
+	import { signupSchema as schema } from '$lib/schema';
+	import { untrack } from 'svelte';
+	let { data } = $props();
 	let confirmPassword: HTMLInputElement;
 
-	let confirmPasswordError: string | null = null;
+	let confirmPasswordError = $state<string | null>(null);
 	const { form, errors, message, enhance } = superForm(data.form, {
 		validators: zodClient(schema)
 	});
-	$: if ($message?.redirect) {
-		if (browser) {
-			goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
-		} else {
-			redirect(302, '/' + ($page.url.searchParams.get('redirectTo') || ''));
-		}
-	}
+	$effect(() => {
+		$message?.redirect;
+		untrack(() => {
+			if ($message?.redirect) {
+				if (browser) {
+					goto('/' + ($page.url.searchParams.get('redirect') || ''));
+				} else {
+					redirect(302, '/' + ($page.url.searchParams.get('redirect') || ''));
+				}
+			}
+		});
+	});
 	$form.referralCode = $page.url.searchParams.get('code') || '';
 </script>
 
@@ -29,7 +34,7 @@
 	method="post"
 	class="flex flex-col m-5"
 	use:enhance
-	on:submit={(event) => {
+	onsubmit={(event) => {
 		if (confirmPassword.value != $form.password) {
 			confirmPasswordError = 'Passwords do not match.';
 			event.preventDefault();

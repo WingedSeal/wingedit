@@ -1,19 +1,25 @@
 <script lang="ts">
-	export let widthRatio = 16;
-	export let heightRatio = 9;
+	interface Props {
+		widthRatio?: number;
+		heightRatio?: number;
+		children?: import('svelte').Snippet;
+	}
 
-	let clientWidth: number;
-	let clientHeight: number;
+	let { widthRatio = 16, heightRatio = 9, children }: Props = $props();
 
-	let contentWidth: number;
-	let contentHeight: number;
+	let clientWidth = $state<number>(0);
+	let clientHeight = $state<number>(0);
 
-	$: contentWidth = Math.min(clientWidth, clientHeight * (widthRatio / heightRatio));
-	$: contentHeight = Math.min(clientHeight, clientWidth * (heightRatio / widthRatio));
+	let contentWidth = $derived<number>(
+		Math.min(clientWidth, clientHeight * (widthRatio / heightRatio))
+	);
+	let contentHeight = $derived<number>(
+		Math.min(clientHeight, clientWidth * (heightRatio / widthRatio))
+	);
 </script>
 
 <div class="flex justify-center items-center w-full h-full" bind:clientWidth bind:clientHeight>
 	<div style="width: {contentWidth}px; height: {contentHeight}px">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

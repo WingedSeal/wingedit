@@ -1,9 +1,18 @@
 <script lang="ts">
 	import type { Ability, Agent, GameInfo, Grade, Lineup } from '$lib/server/db/types';
-	export let lineups: Lineup[];
-	export let isPopupHidden: boolean;
-	export let lineupIndex: number;
-	export let gameInfo: GameInfo;
+	interface Props {
+		lineups: Lineup[];
+		isPopupHidden: boolean;
+		lineupIndex: number;
+		gameInfo: GameInfo;
+	}
+
+	let {
+		lineups,
+		isPopupHidden = $bindable(),
+		lineupIndex = $bindable(),
+		gameInfo
+	}: Props = $props();
 
 	type Details = {
 		grade: Grade;
@@ -32,11 +41,12 @@
 		].ability.Name}
 		<button
 			class="w-4 h-4 bg-violet-800"
-			on:click={() => {
+			aria-label="open"
+			onclick={() => {
 				isPopupHidden = !isPopupHidden;
 				lineupIndex = i;
 			}}
-		/>
+		></button>
 	</li>
 {/each}
 ID

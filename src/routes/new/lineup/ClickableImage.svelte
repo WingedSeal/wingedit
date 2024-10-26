@@ -1,7 +1,11 @@
 <script lang="ts">
-	export let onClick = (xPercent: number, yPercent: number) => {};
-	export let src: string;
-	export let alt: string;
+	interface Props {
+		onClick: (xPercent: number, yPercent: number) => void;
+		src: string;
+		alt: string;
+	}
+
+	let { onClick, src, alt }: Props = $props();
 	const round = (num: number) => {
 		return Math.round((num + Number.EPSILON) * 100) / 100;
 	};
@@ -16,6 +20,6 @@
 	};
 </script>
 
-<button class="bg-black aspect-video w-full h-full" on:mousemove={click}>
-	<img {src} {alt} class="w-full h-full" on:dragstart|preventDefault />
+<button class="bg-black aspect-video w-full h-full" onmousemove={click}>
+	<img {src} {alt} class="w-full h-full" ondragstart={(e) => e.preventDefault()} />
 </button>

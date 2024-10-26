@@ -5,19 +5,25 @@
 	import { redirect } from '@sveltejs/kit';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { signinSchema as schema } from '$lib/schema.js';
-	export let data;
+	import { signinSchema as schema } from '$lib/schema';
+	import { untrack } from 'svelte';
+	let { data } = $props();
 
 	const { form, errors, message, enhance } = superForm(data.form, {
 		validators: zodClient(schema)
 	});
-	$: if ($message?.redirect) {
-		if (browser) {
-			goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
-		} else {
-			redirect(302, '/' + ($page.url.searchParams.get('redirectTo') || ''));
-		}
-	}
+	$effect(() => {
+		$message?.redirect;
+		untrack(() => {
+			if ($message?.redirect) {
+				if (browser) {
+					goto('/' + ($page.url.searchParams.get('redirectTo') || ''));
+				} else {
+					redirect(302, '/' + ($page.url.searchParams.get('redirectTo') || ''));
+				}
+			}
+		});
+	});
 </script>
 
 <h1>Sign in</h1>

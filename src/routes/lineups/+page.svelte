@@ -9,15 +9,21 @@
 	} from './stores';
 	import SelectAgent from './SelectAgent.svelte';
 	import { selectedAgent } from './stores';
+	import { untrack } from 'svelte';
 
-	export let data;
+	let { data } = $props();
 
-	let favouriteAgentIDs: FavouriteAgentID = serverFavouriteAgents();
-	let mainAgentID = serverMainAgent();
-	$: if (browser) {
-		favouriteAgentIDs = clientFavouriteAgents();
-		mainAgentID = clientMainAgent();
-	}
+	let favouriteAgentIDs = $state<FavouriteAgentID>(serverFavouriteAgents());
+	let mainAgentID = $state(serverMainAgent());
+	$effect(() => {
+		browser;
+		untrack(() => {
+			if (browser) {
+				favouriteAgentIDs = clientFavouriteAgents();
+				mainAgentID = clientMainAgent();
+			}
+		});
+	});
 </script>
 
 <div class="max-w-[30%] overflow-y-auto h-[100dvh] bg-purple-500 p-8 flex flex-col">

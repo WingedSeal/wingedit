@@ -3,9 +3,13 @@
 	import type { PageData } from './$types';
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
-	export let data: PageData;
-	let isPopupHidden: boolean = true;
-	let lineupIndex = 0;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+	let isPopupHidden = $state(true);
+	let lineupIndex = $state(0);
 </script>
 
 Agent Name: {data.valorant.agent.Name}

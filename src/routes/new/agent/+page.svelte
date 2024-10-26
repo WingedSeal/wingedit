@@ -1,21 +1,23 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { agentSchema as schema } from '$lib/schema.js';
+	import { agentSchema as schema } from '$lib/schema';
 
-	export let data;
+	let { data } = $props();
 	const DEFAULT_ABILITY_COUNT = 4;
-	let abilityCount = DEFAULT_ABILITY_COUNT;
+	let abilityCount = $state(DEFAULT_ABILITY_COUNT);
 	const { form, errors, enhance, message } = superForm(data.form, {
 		validators: zodClient(schema),
 		validationMethod: 'auto',
 		dataType: 'json'
 	});
 	if (!$form.agentID) $form.agentID = data.lastAgentId + 1;
-	$: $form.abilities.length = abilityCount;
-	$: for (let i = 0; i < abilityCount; i++) {
-		$form.abilities[i] ??= {} as any;
-	}
+	$effect(() => {
+		$form.abilities.length = abilityCount;
+		for (let i = 0; i < abilityCount; i++) {
+			$form.abilities[i] ??= {} as any;
+		}
+	});
 </script>
 
 {#if $message}
@@ -35,12 +37,12 @@
 	<label for="agentRole">Agent Role</label>
 	<select name="agentRole" bind:value={$form.agentRole}>
 		{#if data.agentRoles}
-			<option hidden selected />
+			<option hidden selected></option>
 			{#each data.agentRoles as agentRole}
 				<option value={agentRole.RoleID}>{agentRole.Name}</option>
 			{/each}
 		{:else}
-			<option selected />
+			<option selected></option>
 		{/if}
 	</select>
 	{#if $errors.agentRole}
@@ -48,16 +50,14 @@
 	{/if}
 	<label for="ability-count">Ability Count</label>
 	abilityCount = {abilityCount}
-	<button type="button" class="bg-green-300" on:click={() => abilityCount++}>+</button>
+	<button type="button" class="bg-green-300" onclick={() => abilityCount++}>+</button>
 	<button
 		type="button"
 		class="bg-red-300"
-		on:click={() => (abilityCount = Math.max(abilityCount - 1, 0))}>-</button
+		onclick={() => (abilityCount = Math.max(abilityCount - 1, 0))}>-</button
 	>
-	<button
-		type="button"
-		class="bg-purple-300"
-		on:click={() => (abilityCount = DEFAULT_ABILITY_COUNT)}>RESET</button
+	<button type="button" class="bg-purple-300" onclick={() => (abilityCount = DEFAULT_ABILITY_COUNT)}
+		>RESET</button
 	>
 	{#each { length: abilityCount } as _, i}
 		<label for="abilityId">Ability ID: {i}</label>

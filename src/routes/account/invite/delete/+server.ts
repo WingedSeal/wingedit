@@ -8,7 +8,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	}
 	const data = await request.formData();
 	const deleteCode = data.get('code')! as string;
-	console.log(locals.user.privilege);
 	if (locals.user.privilege >= Privilege.Admin) {
 		deleteReferralCode(deleteCode);
 		return json({});

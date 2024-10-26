@@ -1,22 +1,26 @@
 <script lang="ts">
 	import type { Agent } from '$lib/server/db/types';
+	import { untrack } from 'svelte';
 	import AgentDisplay from './AgentDisplay.svelte';
-	import type { FavouriteAgentID } from './stores';
+	import { selectedAgent, type FavouriteAgentID } from './stores';
 
-	export let mainAgentID: number;
-	export let favouriteAgentIDs: FavouriteAgentID;
-	export let agents: {
-		[agentID: number]: Agent;
-	};
-	let mainAgent: Agent | null;
-	let favouriteAgents: Agent[];
-	let otherAgents: Agent[];
+	interface Props {
+		mainAgentID: number;
+		favouriteAgentIDs: FavouriteAgentID;
+		agents: {
+			[agentID: number]: Agent;
+		};
+	}
 
-	let agentSearch: string = '';
+	let { mainAgentID, favouriteAgentIDs, agents }: Props = $props();
+	let mainAgent = $state<Agent | null>(null);
+	let favouriteAgents = $state<Agent[]>([]);
+	let otherAgents = $state<Agent[]>([]);
 
-	let modeSelect: string = 'default';
+	let agentSearch = $state('');
+	let modeSelect = $state('default');
 
-	const sort = (agentSearch: string) => {
+	const sort = () => {
 		mainAgent = null;
 		favouriteAgents = [];
 		otherAgents = [];
@@ -32,8 +36,13 @@
 		});
 	};
 
-	$: sort(agentSearch);
+	$effect(() => {
+		agentSearch;
+		untrack(sort);
+	});
 </script>
+
+<button onclick={() => sort()}>WAT</button>
 
 <div class="w-full flex flex-row bg-green-500 my-4">
 	<input
@@ -45,8 +54,8 @@
 	<select
 		class="w-1/3 h-full my-auto rounded-lg mx-auto block"
 		bind:value={modeSelect}
-		on:change={() => {
-			sort(agentSearch);
+		onchange={() => {
+			sort();
 		}}
 	>
 		<option value="default">default</option>

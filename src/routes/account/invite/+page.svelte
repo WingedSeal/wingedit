@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
 	import { enhance as svelteEnhance } from '$app/forms';
 	import { page } from '$app/stores';
@@ -60,47 +61,14 @@ INVITE
 
 <br />
 <table>
-	<tr>
-		<th> Code </th>
-		<th> Privilege </th>
-		<th></th>
-		<th></th>
-	</tr>
-	{#each data.codes as code}
-		<tr>
-			<td>
-				{code.Code}
-			</td>
-			<td>
-				{data.privileges[code.Privilege]?.RoleName ?? code.Privilege}
-			</td>
-			<td>
-				<form action="?/del" method="post" use:svelteEnhance>
-					<button type="submit" value={code.Code} name="code">
-						<i class="fa-solid fa-trash mx-2" />
-					</button>
-				</form>
-			</td>
-			<td>
-				<button type="button" on:click={() => copyCode(code.Code)}>
-					<i class="fa-solid fa-copy mx-2" />
-				</button>
-			</td>
-		</tr>
-	{/each}
-</table>
-
-<br />
-{#if data.hiddenCodes}
-	HIDDEN CODES
-	<table>
+	<tbody>
 		<tr>
 			<th> Code </th>
 			<th> Privilege </th>
 			<th></th>
 			<th></th>
 		</tr>
-		{#each data.hiddenCodes as code}
+		{#each data.codes as code}
 			<tr>
 				<td>
 					{code.Code}
@@ -110,18 +78,55 @@ INVITE
 				</td>
 				<td>
 					<form action="?/del" method="post" use:svelteEnhance>
-						<button type="submit" value={code.Code} name="code">
-							<i class="fa-solid fa-trash mx-2" />
+						<button type="submit" value={code.Code} name="code" aria-label="delete code">
+							<i class="fa-solid fa-trash mx-2"></i>
 						</button>
 					</form>
 				</td>
 				<td>
-					<button type="button" on:click={() => copyCode(code.Code)}>
-						<i class="fa-solid fa-copy mx-2" />
+					<button type="button" on:click={() => copyCode(code.Code)} aria-label="copy code">
+						<i class="fa-solid fa-copy mx-2"></i>
 					</button>
 				</td>
 			</tr>
 		{/each}
+	</tbody>
+</table>
+
+<br />
+{#if data.hiddenCodes}
+	HIDDEN CODES
+	<table>
+		<tbody>
+			<tr>
+				<th> Code </th>
+				<th> Privilege </th>
+				<th></th>
+				<th></th>
+			</tr>
+			{#each data.hiddenCodes as code}
+				<tr>
+					<td>
+						{code.Code}
+					</td>
+					<td>
+						{data.privileges[code.Privilege]?.RoleName ?? code.Privilege}
+					</td>
+					<td>
+						<form action="?/del" method="post" use:svelteEnhance>
+							<button type="submit" value={code.Code} name="code" aria-label="delete code">
+								<i class="fa-solid fa-trash mx-2"></i>
+							</button>
+						</form>
+					</td>
+					<td>
+						<button type="button" on:click={() => copyCode(code.Code)} aria-label="copy code">
+							<i class="fa-solid fa-copy mx-2"></i>
+						</button>
+					</td>
+				</tr>
+			{/each}
+		</tbody>
 	</table>
 {/if}
 

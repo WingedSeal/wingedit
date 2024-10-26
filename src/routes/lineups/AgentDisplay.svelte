@@ -3,10 +3,19 @@
 	import type { Agent } from '$lib/server/db/types';
 	import { selectedAgent, type FavouriteAgentID } from './stores';
 
-	export let agent: Agent;
-	export let favouriteAgentIDs: FavouriteAgentID;
-	export let isFavourite: boolean = false;
-	export let cantFavourite: boolean = false;
+	interface Props {
+		agent: Agent;
+		favouriteAgentIDs: FavouriteAgentID;
+		isFavourite?: boolean;
+		cantFavourite?: boolean;
+	}
+
+	let {
+		agent,
+		favouriteAgentIDs,
+		isFavourite = $bindable(false),
+		cantFavourite = false
+	}: Props = $props();
 	const selectAgent = () => {
 		$selectedAgent = agent.ID;
 	};
@@ -21,17 +30,25 @@
 </script>
 
 <div class="aspect-square relative">
-	<button class="w-full h-full bg-red-300" on:click={selectAgent}>
+	<button class="w-full h-full bg-red-300" onclick={selectAgent}>
 		{agent.Name}
 	</button>
 	{#if !cantFavourite}
 		{#if isFavourite}
-			<button class="absolute top-0 right-0 aspect-square w-1/3 flex" on:click={unfavourite}>
-				<i class="fa-solid fa-star text-yellow-400 fa-fw text-xl block m-auto" />
+			<button
+				class="absolute top-0 right-0 aspect-square w-1/3 flex"
+				onclick={unfavourite}
+				aria-label="unfavourite"
+			>
+				<i class="fa-solid fa-star text-yellow-400 fa-fw text-xl block m-auto"></i>
 			</button>
 		{:else}
-			<button class="absolute top-0 right-0 aspect-square w-1/3 flex" on:click={favourite}>
-				<i class="fa-regular fa-star text-yellow-400 fa-fw text-xl block m-auto" />
+			<button
+				class="absolute top-0 right-0 aspect-square w-1/3 flex"
+				onclick={favourite}
+				aria-label="favourite"
+			>
+				<i class="fa-regular fa-star text-yellow-400 fa-fw text-xl block m-auto"></i>
 			</button>
 		{/if}
 	{/if}

@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { enhance } from '$app/forms';
@@ -97,7 +98,7 @@
 <form bind:this={formElement} method="post" use:enhance>
 	<label for="tableName">Table:</label>
 	<select name="tableName" on:change={() => formElement.submit()} value={form?.tableName}>
-		<option selected hidden />
+		<option selected hidden></option>
 		{#each data.tables as tableName}
 			<option value={tableName}>{tableName}</option>
 		{/each}
@@ -122,121 +123,126 @@
 {#if form && form.table}
 	{#if form.table.length !== 0}
 		<table>
-			<tr>
-				{#each Object.keys(form.table[0]) as colName}
-					<th>{colName}</th>
-				{/each}
-				<th></th>
-			</tr>
-			{#each form.table as row, rowIndex}
-				<tr
-					class={(query.delete.has(rowIndex) ? 'bg-red-400' : '') +
-						(query.edit.has(rowIndex) ? 'bg-green-300' : '') +
-						(save?.error?.row == rowIndex && !save.error.isAdd ? ' bg-red-900' : '')}
-				>
-					{#each Object.values(row) as colValue, colIndex}
+			<tbody>
+				<tr>
+					{#each Object.keys(form.table[0]) as colName}
+						<th>{colName}</th>
+					{/each}
+					<th></th>
+				</tr>
+				{#each form.table as row, rowIndex}
+					<tr
+						class={(query.delete.has(rowIndex) ? 'bg-red-400' : '') +
+							(query.edit.has(rowIndex) ? 'bg-green-300' : '') +
+							(save?.error?.row == rowIndex && !save.error.isAdd ? ' bg-red-900' : '')}
+					>
+						{#each Object.values(row) as colValue, colIndex}
+							<td>
+								{#if query.edit.has(rowIndex)}
+									<input
+										class="bg-transparent"
+										type="text"
+										value={colValue}
+										id={`${rowIndex}-${colIndex}`}
+									/>
+								{:else}
+									{colValue}
+								{/if}
+							</td>
+						{/each}
 						<td>
-							{#if query.edit.has(rowIndex)}
-								<input
-									class="bg-transparent"
-									type="text"
-									value={colValue}
-									id={`${rowIndex}-${colIndex}`}
-								/>
-							{:else}
+							<button
+								type="button"
+								on:click={() => {
+									save = null;
+									if (query.edit.has(rowIndex)) query.edit.delete(rowIndex);
+									else {
+										query.edit.add(rowIndex);
+										query.delete.delete(rowIndex);
+									}
+									query.edit = query.edit;
+								}}
+								aria-label="edit"
+							>
+								<i class="fa-solid fa-pen-to-square mx-2"></i>
+							</button>
+						</td>
+						<td>
+							<button
+								type="button"
+								on:click={() => {
+									save = null;
+									if (query.delete.has(rowIndex)) query.delete.delete(rowIndex);
+									else {
+										query.delete.add(rowIndex);
+										query.edit.delete(rowIndex);
+									}
+									query.delete = query.delete;
+								}}
+								aria-label="delete"
+							>
+								<i class="fa-solid fa-trash mx-2"></i>
+							</button>
+						</td>
+					</tr>
+				{/each}
+				{#each query.add as newRow, newRowIndex}
+					<tr
+						class={'bg-blue-100' +
+							(save?.error?.row == newRowIndex && save.error.isAdd ? '  bg-red-900' : '')}
+					>
+						{#each newRow as colValue}
+							<td>
 								{colValue}
-							{/if}
-						</td>
-					{/each}
-					<td>
-						<button
-							type="button"
-							on:click={() => {
-								save = null;
-								if (query.edit.has(rowIndex)) query.edit.delete(rowIndex);
-								else {
-									query.edit.add(rowIndex);
-									query.delete.delete(rowIndex);
-								}
-								query.edit = query.edit;
-							}}
-						>
-							<i class="fa-solid fa-pen-to-square mx-2" />
-						</button>
-					</td>
-					<td>
-						<button
-							type="button"
-							on:click={() => {
-								save = null;
-								if (query.delete.has(rowIndex)) query.delete.delete(rowIndex);
-								else {
-									query.delete.add(rowIndex);
-									query.edit.delete(rowIndex);
-								}
-								query.delete = query.delete;
-							}}
-						>
-							<i class="fa-solid fa-trash mx-2" />
-						</button>
-					</td>
-				</tr>
-			{/each}
-			{#each query.add as newRow, newRowIndex}
-				<tr
-					class={'bg-blue-100' +
-						(save?.error?.row == newRowIndex && save.error.isAdd ? '  bg-red-900' : '')}
-				>
-					{#each newRow as colValue}
+							</td>
+						{/each}
 						<td>
-							{colValue}
+							<button
+								type="button"
+								on:click={() => {
+									save = null;
+									Object.keys(form.table[0]).forEach((_, i) => {
+										// @ts-ignore: Assuming element exists and has a value property
+										document.getElementById(`add-${i}`).value = query.add[newRowIndex][i];
+									});
+									query.add.splice(newRowIndex, 1);
+									query.add = query.add;
+								}}
+							>
+								E
+							</button>
 						</td>
-					{/each}
-					<td>
-						<button
-							type="button"
-							on:click={() => {
-								save = null;
-								Object.keys(form.table[0]).forEach((_, i) => {
-									// @ts-ignore: Assuming element exists and has a value property
-									document.getElementById(`add-${i}`).value = query.add[newRowIndex][i];
-								});
-								query.add.splice(newRowIndex, 1);
-								query.add = query.add;
-							}}
-						>
-							E
-						</button>
-					</td>
-					<td>
-						<button
-							type="button"
-							on:click={() => {
-								save = null;
-								query.add.splice(newRowIndex, 1);
-								query.add = query.add;
-							}}
-						>
-							<i class="fa-solid fa-trash mx-2" />
-						</button>
-					</td>
-				</tr>
-			{/each}
-			<tr>
-				{#each Object.keys(form.table[0]) as _, col}
-					<td><input type="text" id={`add-${col}`} /></td>
+						<td>
+							<button
+								type="button"
+								on:click={() => {
+									save = null;
+									query.add.splice(newRowIndex, 1);
+									query.add = query.add;
+								}}
+								aria-label="add"
+							>
+								<i class="fa-solid fa-trash mx-2"></i>
+							</button>
+						</td>
+					</tr>
 				{/each}
-				<td colspan="2"
-					><button
-						type="button"
-						on:click={() => {
-							save = null;
-							addNewRow();
-							query.add = query.add;
-						}}>ADD</button
-					></td
-				>
-			</tr>
+				<tr>
+					{#each Object.keys(form.table[0]) as _, col}
+						<td><input type="text" id={`add-${col}`} /></td>
+					{/each}
+					<td colspan="2"
+						><button
+							type="button"
+							on:click={() => {
+								save = null;
+								addNewRow();
+								query.add = query.add;
+							}}>ADD</button
+						></td
+					>
+				</tr>
+			</tbody>
 		</table>
 		<button on:click={confirm}>Save</button>
 	{:else}
