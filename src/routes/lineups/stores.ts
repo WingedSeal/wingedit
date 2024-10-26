@@ -1,36 +1,23 @@
-import { browser } from '$app/environment';
-import { get, readable, writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
-const FAVOURITE_AGENT = 'favourite-agents';
-const MAIN_AGENT = 'main-agent';
+export const FAVOURITE_AGENT_LOCAL_STORAGE = 'favourite-agents';
+export const MAIN_AGENT_LOCAL_STORAGE = 'main-agent';
 
-export const serverMainAgent = () => {
-	return readable(0);
+export const getMainAgentID = () => {
+	return writable(0);
 };
 
-export const clientMainAgent = () => {
-	const mainAgent = writable(Number.parseInt(localStorage.getItem(MAIN_AGENT) || '-1'));
-	mainAgent.subscribe((agent) => {
-		localStorage.setItem(MAIN_AGENT, agent.toString());
+export const updateMainAgentID = (mainAgentID: ReturnType<typeof getMainAgentID>) => {
+	mainAgentID.set(Number.parseInt(localStorage.getItem(MAIN_AGENT_LOCAL_STORAGE) || '-1'));
+	mainAgentID.subscribe((agent) => {
+		console.log(agent);
+		localStorage.setItem(MAIN_AGENT_LOCAL_STORAGE, agent.toString());
 	});
-	return mainAgent;
 };
 
-export const serverFavouriteAgents = () => {
-	return {
-		...readable(new Set<number>()),
-		add: (_: number) => {},
-		delete: (_: number) => {}
-	};
-};
+export const getFavouriteAgentIDs = () => {
+	const favouriteAgents = writable(new Set<number>());
 
-export const clientFavouriteAgents = () => {
-	const favouriteAgents = writable(
-		new Set<number>(JSON.parse(localStorage.getItem(FAVOURITE_AGENT) || '[]'))
-	);
-	favouriteAgents.subscribe((agents) => {
-		localStorage.setItem(FAVOURITE_AGENT, JSON.stringify([...agents]));
-	});
 	return {
 		...favouriteAgents,
 		add: (value: number) => {
@@ -44,8 +31,14 @@ export const clientFavouriteAgents = () => {
 	};
 };
 
-export type FavouriteAgentID = ReturnType<
-	typeof clientFavouriteAgents | typeof serverFavouriteAgents
->;
+export type FavouriteAgentIDs = ReturnType<typeof getFavouriteAgentIDs>;
 
+export const updateFavouriteAgentIDs = (favouriteAgentIDs: FavouriteAgentIDs) => {
+	favouriteAgentIDs.set(
+		new Set<number>(JSON.parse(localStorage.getItem(FAVOURITE_AGENT_LOCAL_STORAGE) || '[]'))
+	);
+	favouriteAgentIDs.subscribe((agents) => {
+		localStorage.setItem(FAVOURITE_AGENT_LOCAL_STORAGE, JSON.stringify([...agents]));
+	});
+};
 export const selectedAgent = writable(0);

@@ -3,14 +3,14 @@
 	import { onMount, untrack } from 'svelte';
 	import AgentDisplay from './AgentDisplay.svelte';
 	import {
-		clientFavouriteAgents,
-		clientMainAgent,
+		FAVOURITE_AGENT_LOCAL_STORAGE,
+		MAIN_AGENT_LOCAL_STORAGE,
+		getFavouriteAgentIDs,
+		getMainAgentID,
 		selectedAgent,
-		serverFavouriteAgents,
-		serverMainAgent,
-		type FavouriteAgentID
+		updateFavouriteAgentIDs,
+		updateMainAgentID
 	} from './stores';
-	import { browser } from '$app/environment';
 
 	interface Props {
 		agents: {
@@ -26,10 +26,8 @@
 	let modeSelect = $state('default');
 	// svelte-ignore non_reactive_update
 	let agentSearch = '';
-	// svelte-ignore non_reactive_update
-	let favouriteAgentIDs: FavouriteAgentID = serverFavouriteAgents();
-	// svelte-ignore non_reactive_update
-	let mainAgentID = serverMainAgent();
+	let favouriteAgentIDs = getFavouriteAgentIDs();
+	let mainAgentID = getMainAgentID();
 
 	const sort = () => {
 		mainAgent = null;
@@ -47,8 +45,9 @@
 		});
 	};
 	onMount(() => {
-		favouriteAgentIDs = clientFavouriteAgents();
-		mainAgentID = clientMainAgent();
+		updateFavouriteAgentIDs(favouriteAgentIDs);
+		updateMainAgentID(mainAgentID);
+		$selectedAgent = $mainAgentID;
 		sort();
 	});
 </script>
@@ -70,9 +69,9 @@
 		<option value="">favourite</option>
 	</select>
 </div>
-<div class="bg-blue-400 agent-grid">
-	{#if mainAgent && modeSelect}
-		<AgentDisplay agent={mainAgent} {favouriteAgentIDs} cantFavourite />
+<div class="bg-blue-400 agent-grid overflow-y-auto mb-2">
+	{#if mainAgent}
+		<AgentDisplay agent={mainAgent} {favouriteAgentIDs} isMain />
 	{/if}
 	{#each favouriteAgents as agent (agent.ID)}
 		<AgentDisplay {agent} {favouriteAgentIDs} isFavourite />
@@ -83,6 +82,14 @@
 		{/each}
 	{/if}
 </div>
+<button
+	class="mt-auto bg-yellow-200 mx-auto py-4 px-12"
+	onclick={() => {
+		$mainAgentID = $selectedAgent;
+		favouriteAgentIDs.add($selectedAgent);
+		sort();
+	}}>Main Agent</button
+>
 
 <style lang="scss">
 	.agent-grid {
