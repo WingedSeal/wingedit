@@ -58,7 +58,7 @@
 			onclick={starButtonOnClick}
 			aria-label={ariaLabel}
 		>
-			<i class="{startButtonClasses} fa-star text-yellow-400 fa-fw text-xl block m-auto"></i>
+			<i class="{startButtonClasses} fa-star text-amber-600 fa-fw text-xl block m-auto"></i>
 		</button>
 	{/if}
 </div>

@@ -67,18 +67,20 @@
 		<option value="">favourite</option>
 	</select>
 </div>
-<div class="bg-blue-400 agent-grid overflow-y-scroll mb-2 flex-grow">
-	{#if mainAgent}
-		<AgentDisplay agent={mainAgent} {favouriteAgentIDs} isMain />
-	{/if}
-	{#each favouriteAgents as agent (agent.ID)}
-		<AgentDisplay {agent} {favouriteAgentIDs} isFavourite />
-	{/each}
-	{#if modeSelect}
-		{#each otherAgents as agent (agent.ID)}
-			<AgentDisplay {agent} {favouriteAgentIDs} />
+<div class="bg-blue-400 flex overflow-y-scroll mb-2 flex-grow">
+	<div class="bg-blue-200 agent-grid w-full mb-auto">
+		{#if mainAgent}
+			<AgentDisplay agent={mainAgent} {favouriteAgentIDs} isMain />
+		{/if}
+		{#each favouriteAgents as agent (agent.ID)}
+			<AgentDisplay {agent} {favouriteAgentIDs} isFavourite />
 		{/each}
-	{/if}
+		{#if modeSelect}
+			{#each otherAgents as agent (agent.ID)}
+				<AgentDisplay {agent} {favouriteAgentIDs} />
+			{/each}
+		{/if}
+	</div>
 </div>
 <button
 	class="mt-auto bg-yellow-200 mx-auto py-4 px-12"
