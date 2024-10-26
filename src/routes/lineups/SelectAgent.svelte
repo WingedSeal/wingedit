@@ -1,10 +1,8 @@
 <script lang="ts">
 	import type { Agent } from '$lib/server/db/types';
-	import { onMount, untrack } from 'svelte';
+	import { onMount } from 'svelte';
 	import AgentDisplay from './AgentDisplay.svelte';
 	import {
-		FAVOURITE_AGENT_LOCAL_STORAGE,
-		MAIN_AGENT_LOCAL_STORAGE,
 		getFavouriteAgentIDs,
 		getMainAgentID,
 		selectedAgent,
@@ -69,7 +67,7 @@
 		<option value="">favourite</option>
 	</select>
 </div>
-<div class="bg-blue-400 agent-grid overflow-y-auto mb-2">
+<div class="bg-blue-400 agent-grid overflow-y-scroll mb-2 flex-grow">
 	{#if mainAgent}
 		<AgentDisplay agent={mainAgent} {favouriteAgentIDs} isMain />
 	{/if}

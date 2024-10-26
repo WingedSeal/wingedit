@@ -2,7 +2,6 @@
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import type { Agent } from '$lib/server/db/types';
 	import { selectedAgent, type FavouriteAgentIDs } from './stores';
-	import Page from '../+page.svelte';
 
 	interface Props {
 		agent: Agent;

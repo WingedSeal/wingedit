@@ -10,7 +10,6 @@ export const getMainAgentID = () => {
 export const updateMainAgentID = (mainAgentID: ReturnType<typeof getMainAgentID>) => {
 	mainAgentID.set(Number.parseInt(localStorage.getItem(MAIN_AGENT_LOCAL_STORAGE) || '-1'));
 	mainAgentID.subscribe((agent) => {
-		console.log(agent);
 		localStorage.setItem(MAIN_AGENT_LOCAL_STORAGE, agent.toString());
 	});
 };
@@ -42,3 +41,4 @@ export const updateFavouriteAgentIDs = (favouriteAgentIDs: FavouriteAgentIDs) =>
 	});
 };
 export const selectedAgent = writable(0);
+export const selectedMap = writable(0);
