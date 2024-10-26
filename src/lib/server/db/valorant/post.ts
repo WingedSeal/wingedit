@@ -44,12 +44,12 @@ export const addLineup = (lineup: Lineup): number => {
 		.prepare(
 			`
 	INSERT INTO 
-		"Lineups" (AgentID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand, GradeID,
-		CreatedBy, FromMapPositionID, ToMapPositionID, FromX, FromY, ToX, ToY, 
+		"Lineups" (AgentID, AbilityID, MapID, ExtraImageCount, ThrowTypeID, TimeToLand, GradeID, Difficulty,
+		@SideID, CreatedBy, FromMapPositionID, ToMapPositionID, FromX, FromY, ToX, ToY, 
 		DrawOverMainX, DrawOverMainY, DrawOverSub1X, DrawOverSub1Y, DrawOverSub2X, DrawOverSub2Y)
 	VALUES
-		(@AgentID, @AbilityID, @MapID, @ExtraImageCount, @ThrowTypeID, @TimeToLand, @GradeID,
-		@CreatedBy, @FromMapPositionID, @ToMapPositionID, @FromX, @FromY, @ToX, @ToY, 
+		(@AgentID, @AbilityID, @MapID, @ExtraImageCount, @ThrowTypeID, @TimeToLand, @GradeID, @Difficulty,
+		@SideID, @CreatedBy, @FromMapPositionID, @ToMapPositionID, @FromX, @FromY, @ToX, @ToY, 
 		@DrawOverMainX, @DrawOverMainY, @DrawOverSub1X, @DrawOverSub1Y, @DrawOverSub2X, @DrawOverSub2Y);
 	`
 		)

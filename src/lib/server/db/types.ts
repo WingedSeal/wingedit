@@ -54,6 +54,7 @@ export type Lineup = {
 	ThrowTypeID: number;
 	TimeToLand: number;
 	GradeID: number;
+	Difficulty: number;
 	SideID: number;
 	CreatedBy: string | null;
 	FromMapPositionID: number;
