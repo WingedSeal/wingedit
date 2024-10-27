@@ -1,34 +1,38 @@
-<script lang="ts">
-	import '@fortawesome/fontawesome-free/css/all.min.css';
-	interface Props {
-		title: string;
-		size_x?: number;
-		size_y?: number;
-		is_hidden?: boolean;
-		children?: import('svelte').Snippet;
-	}
-
-	let { title, size_x = 80, size_y = 80, is_hidden = $bindable(false), children }: Props = $props();
+<script module>
+	export const isPopupShow = writable(false);
 </script>
 
-{#if !is_hidden}
+<script lang="ts">
+	import '@fortawesome/fontawesome-free/css/all.min.css';
+	import { writable } from 'svelte/store';
+	import { type Snippet } from 'svelte';
+	interface Props {
+		title: string;
+		sizeX?: number;
+		sizeY?: number;
+		children?: Snippet;
+	}
+	let { title, sizeX = 80, sizeY = 80, children }: Props = $props();
+</script>
+
+{#if $isPopupShow}
 	<button
 		class="fixed w-screen h-screen bg-slate-950 top-0 left-0 opacity-80 z-20 appear-animation-80"
 		onclick={() => {
-			is_hidden = true;
+			$isPopupShow = false;
 		}}
 		aria-label="close"
 	></button>
 	<div
 		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation"
-		style="width: {size_x}vw; height: {size_y}vh;"
+		style="width: {sizeX}vw; height: {sizeY}vh;"
 	>
 		<div class="bg-slate-800 w-full h-[7%] rounded-xl text-primary p-1 flex">
 			<h1 class="my-auto ml-6 text-xl">{title}</h1>
 			<button
 				class="my-auto ml-auto mr-3 text-xl cursor-pointer"
 				onclick={() => {
-					is_hidden = true;
+					$isPopupShow = false;
 				}}
 				aria-label="close"
 			>

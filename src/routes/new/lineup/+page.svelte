@@ -3,7 +3,7 @@
 	import type { Ability } from '$lib/server/db/types';
 	import ClickableImage from './ClickableImage.svelte';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
-	import Popup from '$lib/components/Popup.svelte';
+	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { getLineupSchema } from '$lib/schema';
 	import { z } from 'zod';
@@ -21,7 +21,7 @@
 			return;
 		}
 		target.selectedIndex = 0;
-		is_hidden = false;
+		$isPopupShow = true;
 	};
 	type OverlayMode = number;
 	const OverlayModes = {
@@ -29,7 +29,6 @@
 		Sub1: 1,
 		Sub2: 2
 	};
-	let is_hidden = $state(true);
 	let descriptionTextArea: HTMLTextAreaElement;
 	let agentAbilities = $state<Ability[]>();
 	let throwLineup = $state<FileList>();
@@ -461,7 +460,7 @@
 	<img src={`/api/image/maps/${$form.map}/minimap.webp`} alt="minimap" />
 {/if}
 
-<Popup bind:is_hidden title="TITLE">
+<Popup title="TITLE">
 	<form action="?/addMapPosition" method="post">
 		<label for="callout">Callout:</label>
 		<input type="text" name="callout" />

@@ -51,14 +51,12 @@
 		</div>
 		<div class="relative">
 			<div
-				class="grid grid-cols-1 grid-rows-3 w-[80%] absolute right-0 h-full justify-center
+				class="grid grid-cols-1 grid-rows-4 w-[80%] absolute right-0 h-full justify-center
                 uppercase text-3xl text-primary font-bold content-center tracking-widest"
 			>
-				<!-- <div class="flex"><h2 class="my-auto">normal throw</h2></div>
-                <div class="flex"><h2 class="my-auto">grade: S</h2></div>
-                <div class="flex"><h2 class="my-auto">description</h2></div> -->
 				<h2>{gameInfo.throw_types[lineup.ThrowTypeID].Name}</h2>
 				<h2>grade: {gameInfo.grades[lineup.GradeID].Name}</h2>
+				<h2>difficulty: {gameInfo.grades[lineup.Difficulty].Name}</h2>
 				<h2>time: {lineup.TimeToLand}s</h2>
 			</div>
 		</div>

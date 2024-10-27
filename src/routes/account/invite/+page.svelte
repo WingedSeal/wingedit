@@ -61,13 +61,15 @@ INVITE
 
 <br />
 <table>
-	<tbody>
+	<thead>
 		<tr>
 			<th> Code </th>
 			<th> Privilege </th>
 			<th></th>
 			<th></th>
 		</tr>
+	</thead>
+	<tbody>
 		{#each data.codes as code}
 			<tr>
 				<td>
@@ -97,13 +99,15 @@ INVITE
 {#if data.hiddenCodes}
 	HIDDEN CODES
 	<table>
-		<tbody>
+		<thead>
 			<tr>
-				<th> Code </th>
-				<th> Privilege </th>
+				<th>Code</th>
+				<th>Privilege</th>
 				<th></th>
 				<th></th>
 			</tr>
+		</thead>
+		<tbody>
 			{#each data.hiddenCodes as code}
 				<tr>
 					<td>

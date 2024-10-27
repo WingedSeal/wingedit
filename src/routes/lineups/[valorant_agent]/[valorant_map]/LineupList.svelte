@@ -1,52 +1,92 @@
 <script lang="ts">
 	import type { Ability, Agent, GameInfo, Grade, Lineup } from '$lib/server/db/types';
+	import { isPopupShow } from '$lib/components/Popup.svelte';
+	import type { Writable } from 'svelte/store';
 	interface Props {
 		lineups: Lineup[];
-		isPopupHidden: boolean;
 		lineupIndex: number;
 		gameInfo: GameInfo;
 	}
 
-	let {
-		lineups,
-		isPopupHidden = $bindable(),
-		lineupIndex = $bindable(),
-		gameInfo
-	}: Props = $props();
+	let { lineups, lineupIndex = $bindable(), gameInfo }: Props = $props();
 
-	type Details = {
-		grade: Grade;
-		ability: Ability;
-		agent: Agent;
-	};
-
-	const getDetails = (lineup: Lineup): Details => {
+	const getDetails = (lineup: Lineup) => {
 		return {
-			grade: gameInfo.grades[lineup.GradeID],
-			ability: gameInfo.abilities[lineup.AgentID][lineup.AbilityID],
-			agent: gameInfo.agents[lineup.AgentID]
+			ability: gameInfo.abilities[lineup.AgentID][lineup.AbilityID].Name,
+			grade: gameInfo.grades[lineup.GradeID].Name,
+			side: gameInfo.sides[lineup.SideID].Name,
+			from: gameInfo.mapPositions[lineup.MapID][lineup.FromMapPositionID].Callout,
+			to: gameInfo.mapPositions[lineup.MapID][lineup.ToMapPositionID].Callout,
+			timeToLand: lineup.TimeToLand,
+			difficulty: gameInfo.grades[lineup.Difficulty].Name
 		};
 	};
 
-	const details = lineups.map((lineup) => {
-		return getDetails(lineup);
-	});
+	const details = $derived(
+		lineups.map((lineup) => {
+			return getDetails(lineup);
+		})
+	);
 </script>
 
-{#each lineups as lineup, i}
-	<li>
-		{i + 1}.{')'}
-		ID: {lineup.ID}, grade: {details[i].grade.Name}, agent: {details[i].agent.Name}, ability: {details[
-			i
-		].ability.Name}
-		<button
-			class="w-4 h-4 bg-violet-800"
-			aria-label="open"
-			onclick={() => {
-				isPopupHidden = !isPopupHidden;
-				lineupIndex = i;
-			}}
-		></button>
-	</li>
-{/each}
-ID
+<table>
+	<thead>
+		<tr>
+			<th>Ability</th>
+			<th>Grade</th>
+			<th>Side</th>
+			<th>From</th>
+			<th>To</th>
+			<th>Time to land</th>
+			<th>Difficulty</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{#each details as detail, i}
+			<tr>
+				<td>
+					{detail.ability}
+				</td>
+				<td>
+					{detail.grade}
+				</td>
+				<td>
+					{detail.side}
+				</td>
+				<td>
+					{detail.from}
+				</td>
+				<td>
+					{detail.to}
+				</td>
+				<td>
+					{detail.timeToLand}s
+				</td>
+				<td>
+					{detail.difficulty}
+				</td>
+				<td>
+					<button
+						class="w-6 h-6 rounded-md bg-purple-300"
+						aria-label="open lineup"
+						onclick={() => {
+							lineupIndex = i;
+							$isPopupShow = true;
+						}}
+					>
+					</button>
+				</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
+
+<style lang="css">
+	table,
+	th,
+	td {
+		border: 1px solid;
+		padding: 1rem;
+	}
+</style>

@@ -123,13 +123,15 @@
 {#if form && form.table}
 	{#if form.table.length !== 0}
 		<table>
-			<tbody>
+			<thead>
 				<tr>
 					{#each Object.keys(form.table[0]) as colName}
 						<th>{colName}</th>
 					{/each}
 					<th></th>
 				</tr>
+			</thead>
+			<tbody>
 				{#each form.table as row, rowIndex}
 					<tr
 						class={(query.delete.has(rowIndex) ? 'bg-red-400' : '') +
