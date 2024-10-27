@@ -119,7 +119,6 @@ export const getGameInfo = (): GameInfo => {
 	return {
 		agents: getAgents(),
 		maps: getMaps(),
-		abilities: getAbilities(),
 		throw_types: getThrowTypes(),
 		grades: getGrades(),
 		mapPositions: getMapPositions(),

@@ -1,5 +1,5 @@
 import { IMAGES_PATH } from '$env/static/private';
-import { addLineup, getGameInfo, getThrowTypes } from '$lib/server/db/valorant';
+import { addLineup, getAbilities, getGameInfo, getThrowTypes } from '$lib/server/db/valorant';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
@@ -28,7 +28,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
 	return {
 		form: await superValidate(zod(schema)),
-		gameInfo: getGameInfo()
+		gameInfo: getGameInfo(),
+		abilities: getAbilities()
 	};
 };
 

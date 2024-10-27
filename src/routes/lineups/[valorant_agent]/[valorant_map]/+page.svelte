@@ -34,7 +34,12 @@
 	</section>
 	<section class="h-dvh bg-slate-200 flex flex-col p-16 snap-center">
 		<div class="flex flex-col overflow-auto max-h-full p-4">
-			<LineupList lineups={lineupList} gameInfo={data.gameInfo} bind:lineupIndex />
+			<LineupList
+				lineups={lineupList}
+				gameInfo={data.gameInfo}
+				abilities={data.abilities}
+				bind:lineupIndex
+			/>
 		</div>
 	</section>
 </main>

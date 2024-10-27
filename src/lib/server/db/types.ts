@@ -85,11 +85,6 @@ export type GameInfo = {
 	maps: {
 		[mapID: number]: ValorantMap;
 	};
-	abilities: {
-		[agentID: number]: {
-			[abilityID: number]: Ability;
-		};
-	};
 	throw_types: {
 		[throwTypeID: number]: ThrowType;
 	};

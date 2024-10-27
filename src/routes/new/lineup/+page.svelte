@@ -54,7 +54,7 @@
 		name="agent"
 		bind:value={$form.agent}
 		onchange={() => {
-			agentAbilities = Object.values(data.gameInfo.abilities[$form.agent]);
+			agentAbilities = Object.values(data.abilities[$form.agent]);
 			$form.ability = 0;
 		}}
 	>

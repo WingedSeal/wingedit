@@ -2,17 +2,19 @@
 	import type { Ability, Agent, GameInfo, Grade, Lineup } from '$lib/server/db/types';
 	import { isPopupShow } from '$lib/components/Popup.svelte';
 	import type { Writable } from 'svelte/store';
+
 	interface Props {
 		lineups: Lineup[];
 		lineupIndex: number;
 		gameInfo: GameInfo;
+		abilities: { [abilityID: number]: Ability };
 	}
 
-	let { lineups, lineupIndex = $bindable(), gameInfo }: Props = $props();
+	let { lineups, lineupIndex = $bindable(), gameInfo, abilities }: Props = $props();
 
 	const getDetails = (lineup: Lineup) => {
 		return {
-			ability: gameInfo.abilities[lineup.AgentID][lineup.AbilityID].Name,
+			ability: abilities[lineup.AbilityID].Name,
 			grade: gameInfo.grades[lineup.GradeID].Name,
 			side: gameInfo.sides[lineup.SideID].Name,
 			from: gameInfo.mapPositions[lineup.MapID][lineup.FromMapPositionID].Callout,
