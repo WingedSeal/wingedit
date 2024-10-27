@@ -25,7 +25,8 @@ CREATE TABLE
         "FromUserID" CHAR(16),
         "Privilege" TINYINT NOT NULL,
         PRIMARY KEY ("Code"),
-        CONSTRAINT "FK_Users_UserID" FOREIGN KEY ("FromUserID") REFERENCES "Users" ("UserID") ON DELETE CASCADE ON UPDATE RESTRICT
+        CONSTRAINT "FK_Users_UserID" FOREIGN KEY ("FromUserID") REFERENCES "Users" ("UserID") ON DELETE CASCADE ON UPDATE RESTRICT,
+        CONSTRAINT "FK_PrivilegeRoles_Privilege" FOREIGN KEY ("Privilege") REFERENCES "PrivilegeRoles" ("Privilege") ON DELETE RESTRICT ON UPDATE RESTRICT
     );
 
 CREATE TABLE
@@ -105,7 +106,7 @@ CREATE TABLE
 
 CREATE TABLE
     IF NOT EXISTS "Lineups" (
-        "ID" INTEGER NOT NULL,
+        "ID" INTEGER NOT NULL, -- AUTO_INCREMENT
         "AgentID" SMALLINT NOT NULL,
         "AbilityID" SMALLINT NOT NULL,
         "MapID" TINYINT NOT NULL,

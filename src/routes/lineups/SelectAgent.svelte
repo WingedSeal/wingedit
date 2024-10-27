@@ -104,7 +104,7 @@
 	.agent-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, 6rem);
-		justify-content: space-between;
+		justify-content: space-around;
 		grid-gap: 1rem;
 	}
 </style>
