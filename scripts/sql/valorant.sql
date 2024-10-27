@@ -171,7 +171,7 @@ VALUES
     (25, 4, 'Not Dead Yet', 'not_dead_yet'),
     (26, 1, 'Razorvine', 'razorvine'),
     (26, 2, 'Shear', 'shear'),
-    (26, 3, 'Age Rose', 'age_rose'),
+    (26, 3, 'Arc Rose', 'arc_rose'),
     (26, 4, 'Steel Garden', 'steel_garden');
 
 INSERT INTO
