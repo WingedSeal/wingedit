@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
 	return {
 		form: await superValidate(zod(schema)),
-		game_info: getGameInfo()
+		gameInfo: getGameInfo()
 	};
 };
 

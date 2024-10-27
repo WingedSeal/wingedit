@@ -54,12 +54,12 @@
 		name="agent"
 		bind:value={$form.agent}
 		onchange={() => {
-			agentAbilities = Object.values(data.game_info.abilities[$form.agent]);
+			agentAbilities = Object.values(data.gameInfo.abilities[$form.agent]);
 			$form.ability = 0;
 		}}
 	>
 		<option hidden selected></option>
-		{#each Object.values(data.game_info.agents) as agent}
+		{#each Object.values(data.gameInfo.agents) as agent}
 			<option value={agent.ID}>{agent.Name}</option>
 		{/each}
 	</select>
@@ -70,7 +70,7 @@
 	<label for="map">Map</label>
 	<select name="map" bind:value={$form.map}>
 		<option hidden selected></option>
-		{#each Object.values(data.game_info.maps) as map}
+		{#each Object.values(data.gameInfo.maps) as map}
 			<option value={map.ID}>{map.Name}</option>
 		{/each}
 	</select>
@@ -158,7 +158,7 @@
 	<label for="grade">Grade</label>
 	<select name="grade" bind:value={$form.grade}>
 		<option hidden selected></option>
-		{#each Object.values(data.game_info.grades) as grade}
+		{#each Object.values(data.gameInfo.grades) as grade}
 			<option value={grade.ID}>{grade.Name}</option>
 		{/each}
 	</select>
@@ -169,7 +169,7 @@
 	<label for="throwType">Throw Type</label>
 	<select name="throwType" bind:value={$form.throwType}>
 		<option hidden selected></option>
-		{#each Object.values(data.game_info.throw_types) as throw_type}
+		{#each Object.values(data.gameInfo.throw_types) as throw_type}
 			<option value={throw_type.ID}>{throw_type.Name}</option>
 		{/each}
 	</select>
@@ -300,8 +300,8 @@
 	<label for="from">From:</label>
 	<select name="from" onchange={onChange} bind:value={$form.from}>
 		<option hidden selected></option>
-		{#if data.game_info.mapPositions[$form.map]}
-			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
+		{#if data.gameInfo.mapPositions[$form.map]}
+			{#each Object.values(data.gameInfo.mapPositions[$form.map]) as mapPosition}
 				<option value={mapPosition.ID}>{mapPosition.Callout}</option>
 			{/each}
 		{/if}
@@ -311,8 +311,8 @@
 	<label for="to">To:</label>
 	<select name="to" onchange={onChange} bind:value={$form.to}>
 		<option hidden selected></option>
-		{#if data.game_info.mapPositions[$form.map]}
-			{#each Object.values(data.game_info.mapPositions[$form.map]) as mapPosition}
+		{#if data.gameInfo.mapPositions[$form.map]}
+			{#each Object.values(data.gameInfo.mapPositions[$form.map]) as mapPosition}
 				<option value={mapPosition.ID}>{mapPosition.Callout}</option>
 			{/each}
 		{/if}

@@ -8,12 +8,12 @@ export const load = ({ params }) => {
 	let map: ValorantMap | undefined;
 	Object.values(getAgents()).forEach((_agent) => {
 		if (_agent.Name.toLowerCase() === params.valorant_agent) {
-			agent = _agent;
+			agent = _agent; // TODO: Search with query
 		}
 	});
 	Object.values(getMaps()).forEach((_map) => {
 		if (_map.Name.toLowerCase() === params.valorant_map) {
-			map = _map;
+			map = _map; // TODO: Search with query
 		}
 	});
 	if (!agent) {
