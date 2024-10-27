@@ -78,7 +78,11 @@ export const getAgentAbilities = (agentID: number) => {
 	const rows = db
 		.prepare(`SELECT * FROM "Abilities" WHERE "AgentID" = @agentID;`)
 		.all({ agentID }) as Ability[];
-	return rows;
+	let abilities: { [abilityID: number]: Ability } = {};
+	rows.forEach((ability) => {
+		abilities[ability.AbilityID] = ability;
+	});
+	return abilities;
 };
 
 export const getMapPositions = () => {

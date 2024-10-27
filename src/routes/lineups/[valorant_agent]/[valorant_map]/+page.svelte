@@ -23,7 +23,7 @@
 				style="background-image: url('/api/image/agents/{data.valorant.agent.ID}/full.webp');"
 			></div>
 			<div class="bg-blue-200 min-w-[15%] max-w-full mr-auto mb-auto mt-12 ml-12 z-10">
-				<Abilities abilities={data.abilities} bind:selectedAbilityID />
+				<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
 			</div>
 			<div class="bg-blue-400 h-[10%] w-96 ml-12 mt-4 z-10"></div>
 			<div class="bg-blue-400 h-[10%] w-[48rem] ml-12 mt-4 mb-4 z-10"></div>
