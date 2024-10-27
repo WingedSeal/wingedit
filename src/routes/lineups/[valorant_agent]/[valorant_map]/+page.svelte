@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Popup from '$lib/components/Popup.svelte';
 	import type { PageData } from './$types';
+	import Abilities from './Abilities.svelte';
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
 	interface Props {
@@ -20,9 +21,11 @@
 				class="absolute right-0 bottom-0 h-full bg-yellow-100 aspect-[2/3] bg-no-repeat bg-cover bg-center"
 				style="background-image: url('/api/image/agents/{data.valorant.agent.ID}/full.webp');"
 			></div>
-			<div class="bg-blue-200 h-2/3 min-w-[15%] max-w-[30%] mt-12 ml-12 z-10"></div>
+			<div class="bg-blue-200 min-w-[15%] max-w-full mr-auto mb-auto mt-12 ml-12 z-10">
+				<Abilities abilities={data.abilities} />
+			</div>
 			<div class="bg-blue-400 h-[10%] w-96 ml-12 mt-4 z-10"></div>
-			<div class="bg-blue-400 h-[10%] w-[48rem] ml-12 mt-4 mb-2 z-10"></div>
+			<div class="bg-blue-400 h-[10%] w-[48rem] ml-12 mt-4 mb-4 z-10"></div>
 		</div>
 		<div class="bg-slate-500 h-full">
 			<img
