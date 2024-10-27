@@ -3,13 +3,21 @@
 
 	type Props = {
 		abilities: Ability[];
+		selectedAbilityID: number;
 	};
-	let { abilities }: Props = $props();
+	let { abilities, selectedAbilityID = $bindable() }: Props = $props();
 </script>
 
 <div class="flex flex-col gap-4">
 	{#each abilities as ability}
-		<button class="flex flex-row bg-purple-500 p-4">
+		<button
+			class="flex flex-row bg-purple-500 p-4 {selectedAbilityID === ability.AbilityID
+				? 'translate-x-12'
+				: ''}"
+			onclick={() => {
+				selectedAbilityID = ability.AbilityID;
+			}}
+		>
 			<img
 				class="w-24 h-24"
 				src="/api/image/agents/{ability.AgentID}/abilities/{ability.AbilityID}.webp"

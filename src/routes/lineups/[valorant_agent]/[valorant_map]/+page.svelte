@@ -11,6 +11,7 @@
 	let { data }: Props = $props();
 	let lineupIndex = $state(0);
 	let lineupList = $derived(Object.values(data.lineups).flat());
+	let selectedAbilityID = $state(0);
 	let lineup = $derived(lineupList[lineupIndex]);
 </script>
 
