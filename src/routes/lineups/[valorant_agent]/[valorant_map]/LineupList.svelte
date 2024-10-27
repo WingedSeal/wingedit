@@ -14,6 +14,7 @@
 
 	const getDetails = (lineup: Lineup) => {
 		return {
+			abilityNameID: abilities[lineup.AbilityID].NameID,
 			ability: abilities[lineup.AbilityID].Name,
 			grade: gameInfo.grades[lineup.GradeID].Name,
 			side: gameInfo.sides[lineup.SideID].Name,
@@ -48,6 +49,11 @@
 		{#each details as detail, i}
 			<tr>
 				<td>
+					<img
+						class="inline h-4 -translate-y-1 bg-slate-800 rounded-md"
+						src="/api/image/agents/{lineups[i].AgentID}/abilities/{lineups[i].AbilityID}.webp"
+						alt={detail.abilityNameID}
+					/>
 					{detail.ability}
 				</td>
 				<td>
