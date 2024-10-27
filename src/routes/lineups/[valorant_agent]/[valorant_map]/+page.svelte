@@ -28,7 +28,7 @@
 			<div class="bg-blue-400 h-[10%] w-96 ml-12 mt-4 z-10"></div>
 			<div class="bg-blue-400 h-[10%] w-[48rem] ml-12 mt-4 mb-4 z-10"></div>
 		</div>
-		<div class="bg-slate-500 h-full">
+		<div class="bg-slate-500 h-full p-1">
 			<img
 				src="/api/image/maps/{data.valorant.map.ID}/minimap.webp"
 				class="h-full"
