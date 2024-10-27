@@ -25,7 +25,7 @@ VALUES
     (23, 'Deadlock', 4),
     (24, 'Iso', 2),
     (25, 'Clove', 1),
-    (26, 'Vsye', 4);
+    (26, 'Vyse', 4);
 
 INSERT INTO
     "AgentRoles" ("RoleID", "Name")
