@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex">
-	<div class="max-w-[30%] h-[100dvh] bg-purple-500 p-8 flex flex-col">
+	<div class="max-w-[30%] h-dvh bg-purple-500 p-8 flex flex-col">
 		<SelectAgent agents={data.agents} />
 	</div>
 	<div class="flex-grow flex flex-col relative">
@@ -31,7 +31,7 @@
 		</button>
 	</div>
 
-	<div class="max-w-[20%] w-80 h-[100dvh] bg-purple-500 p-8 flex flex-col">
+	<div class="max-w-[20%] w-80 h-dvh bg-purple-500 p-8 flex flex-col">
 		<SelectMap maps={data.maps} />
 	</div>
 	``

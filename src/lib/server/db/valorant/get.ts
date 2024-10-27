@@ -116,7 +116,7 @@ export const getGameInfo = (): GameInfo => {
 	};
 };
 
-export const getLineups = (agentID: number, mapID: number): Lineup[] => {
+export const getLineups = (agentID: number, mapID: number): { [abilityID: number]: Lineup[] } => {
 	const rows = db
 		.prepare(
 			`
@@ -130,7 +130,14 @@ export const getLineups = (agentID: number, mapID: number): Lineup[] => {
 	`
 		)
 		.all({ agentID, mapID }) as Lineup[];
-	return rows;
+	let lineups: { [abilityID: number]: Lineup[] } = {};
+	rows.forEach((lineup) => {
+		if (!lineups[lineup.AbilityID]) {
+			lineups[lineup.AbilityID] = [];
+		}
+		lineups[lineup.AbilityID].push(lineup);
+	});
+	return lineups;
 };
 
 export const getAllLineups = () => {
