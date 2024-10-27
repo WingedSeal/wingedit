@@ -37,7 +37,7 @@
 				draggable="false"
 			/>
 			<h2
-				class="absolute bottom-[5%] left-1/2 -translate-x-1/2 text-3xl uppercase font-bold text-white"
+				class="absolute bottom-[5%] left-1/2 -translate-x-1/2 text-3xl uppercase font-bold text-slate-100"
 			>
 				{maps[map.ID].Name}
 			</h2>

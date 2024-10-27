@@ -49,7 +49,7 @@
 
 <div class="aspect-square relative">
 	<button class="w-full h-full {selectButtonClasses} {mainAgentClasses}" onclick={selectAgent}>
-		{agent.Name}
+		<img src="/api/image/agents/{agent.ID}/icon.webp" alt={agent.Name} />
 	</button>
 
 	{#if !isMain}

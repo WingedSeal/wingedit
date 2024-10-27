@@ -18,8 +18,20 @@
 				? `background-image: url("/api/image/maps/${$selectedMap}/bg.webp");`
 				: `background-image: url("/api/image/maps/default-bg.webp");`}
 		></div>
+		{#if $selectedAgent}
+			<!-- <h2
+				class="uppercase text-[10rem] text-slate-100 font-bold top-1/4 left-1/2 -translate-x-1/2 absolute z-10"
+			>
+				{data.agents[$selectedAgent].Name}
+			</h2> -->
+			<img
+				class="absolute h-full left-1/2 -translate-x-1/2"
+				src="/api/image/agents/{$selectedAgent}/full.webp"
+				alt={data.agents[$selectedAgent].Name}
+			/>
+		{/if}
 		<button
-			class="bg-green-900 enabled:bg-green-300 mt-auto mx-auto mb-4 py-4 px-16"
+			class="bg-green-900 enabled:bg-green-300 mt-auto mx-auto mb-4 py-4 px-16 z-10"
 			disabled={!$selectedAgent || !$selectedMap}
 			onclick={() => {
 				goto(
