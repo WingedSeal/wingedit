@@ -14,7 +14,8 @@ export type AgentRoles = {
 export type Grade = {
 	ID: number;
 	Name: string;
-	Description: number;
+	GradeDescription: number;
+	DifficultyDescription: number;
 };
 
 export type AgentRole = {

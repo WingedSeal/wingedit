@@ -64,7 +64,8 @@ CREATE TABLE
     IF NOT EXISTS "Grades" (
         "ID" TINYINT NOT NULL,
         "Name" CHAR(1) NOT NULL UNIQUE,
-        "Description" VARCHAR(255) NOT NULL,
+        "GradeDescription" VARCHAR(255) NOT NULL,
+        "DifficultyDescription" VARCHAR(255) NOT NULL,
         PRIMARY KEY ("ID")
     );
 

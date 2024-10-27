@@ -36,12 +36,17 @@ VALUES
     (4, 'Sentinel');
 
 INSERT INTO
-    "Grades" ("ID", "Name", "Description")
+    "Grades" (
+        "ID",
+        "Name",
+        "GradeDescription",
+        "DifficultyDescription"
+    )
 VALUES
-    (1, 'S', 'DESC-S'),
-    (2, 'A', 'DESC-A'),
-    (3, 'B', 'DESC-B'),
-    (4, 'C', 'DESC-C');
+    (1, 'S', 'DESC-S', 'DESC-S'),
+    (2, 'A', 'DESC-A', 'DESC-A'),
+    (3, 'B', 'DESC-B', 'DESC-C'),
+    (4, 'C', 'DESC-C', 'DESC-D');
 
 INSERT INTO
     "ThrowTypes" ("ID", "Name", "Description")
