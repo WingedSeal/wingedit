@@ -32,8 +32,8 @@
 			/>
 		</div>
 	</section>
-	<section class="min-h-dvh bg-slate-200 flex flex-col p-20 snap-center">
-		<div class="flex flex-col overflow-x-auto">
+	<section class="h-dvh bg-slate-200 flex flex-col p-16 snap-center">
+		<div class="flex flex-col overflow-auto max-h-full p-4">
 			<LineupList lineups={lineupList} gameInfo={data.gameInfo} bind:lineupIndex />
 		</div>
 	</section>
