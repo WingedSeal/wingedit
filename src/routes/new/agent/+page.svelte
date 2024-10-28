@@ -2,23 +2,26 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { agentSchema as schema } from '$lib/schema';
+	import { writable } from 'svelte/store';
 
 	let { data } = $props();
-	const DEFAULT_ABILITY_COUNT = 4;
-	let abilityCount = $state(DEFAULT_ABILITY_COUNT);
 	const { form, errors, enhance, message } = superForm(data.form, {
 		validators: zodClient(schema),
 		validationMethod: 'auto',
 		dataType: 'json'
 	});
-	if (!$form.agentID) $form.agentID = data.lastAgentId + 1;
-
-	$effect(() => {
-		$form.abilities.length = abilityCount;
-		for (let i = 0; i < abilityCount; i++) {
+	const DEFAULT_ABILITY_COUNT = 4;
+	const updateFormAbilities = (_abilityCount: number) => {
+		$form.abilities.length = _abilityCount;
+		for (let i = 0; i < _abilityCount; i++) {
 			$form.abilities[i] ??= { abilityName: '', abilityNameID: '' };
 		}
-	});
+	};
+	updateFormAbilities(DEFAULT_ABILITY_COUNT);
+	const abilityCount = writable(DEFAULT_ABILITY_COUNT);
+	abilityCount.subscribe(updateFormAbilities);
+
+	if (!$form.agentID) $form.agentID = data.lastAgentId + 1;
 </script>
 
 {#if $message}
@@ -50,17 +53,21 @@
 		<small>{$errors.agentRole[0]}</small>
 	{/if}
 	<label for="ability-count">Ability Count</label>
-	abilityCount = {abilityCount}
-	<button type="button" class="bg-green-300" onclick={() => abilityCount++}>+</button>
+	abilityCount = {$abilityCount}
+	<button type="button" class="bg-green-300" onclick={() => $abilityCount++}>+</button>
 	<button
 		type="button"
 		class="bg-red-300"
-		onclick={() => (abilityCount = Math.max(abilityCount - 1, 0))}>-</button
+		onclick={() => {
+			$abilityCount = Math.max($abilityCount - 1, 0);
+		}}>-</button
 	>
-	<button type="button" class="bg-purple-300" onclick={() => (abilityCount = DEFAULT_ABILITY_COUNT)}
-		>RESET</button
+	<button
+		type="button"
+		class="bg-purple-300"
+		onclick={() => ($abilityCount = DEFAULT_ABILITY_COUNT)}>RESET</button
 	>
-	{#each { length: abilityCount } as _, i}
+	{#each { length: $abilityCount } as _, i}
 		<label for="abilityId">Ability ID: {i}</label>
 		<label for={`abilities[${i}].abilityName`}>Ability Name</label>
 		<input
