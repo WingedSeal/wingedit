@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex">
-	<div class="max-w-[30%] min-w-[20%] h-dvh bg-purple-500 p-8 flex flex-col">
+	<div class="max-w-[30%] min-w-[22%] h-dvh bg-purple-500 p-8 flex flex-col">
 		<SelectAgent agents={data.agents} />
 	</div>
 	<div class="flex-grow flex flex-col relative">
