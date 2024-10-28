@@ -8,7 +8,7 @@
 	let { abilities, selectedAbilityID = $bindable() }: Props = $props();
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 z-10">
 	{#each abilities as ability}
 		<button
 			class="flex flex-row bg-purple-500 p-4 {selectedAbilityID === ability.AbilityID
