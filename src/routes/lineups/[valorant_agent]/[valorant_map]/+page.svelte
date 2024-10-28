@@ -4,6 +4,7 @@
 	import Abilities from './Abilities.svelte';
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
+	import LoadingScreen, { isLoaded } from '$lib/components/LoadingScreen.svelte';
 	interface Props {
 		data: PageData;
 	}
@@ -13,8 +14,10 @@
 	let lineupList = $derived(Object.values(data.lineups).flat());
 	let selectedAbilityID = $state(0);
 	let lineup = $derived(lineupList[lineupIndex]);
+	$isLoaded = false;
 </script>
 
+<LoadingScreen />
 <main class="snap-mandatory snap-y h-dvh overflow-y-auto">
 	<section class="h-dvh bg-slate-200 flex snap-center">
 		<div class="bg-green-300 flex-grow flex flex-col relative h-full">
@@ -33,6 +36,9 @@
 				src="/api/image/maps/{data.valorant.map.ID}/minimap.webp"
 				class="h-full"
 				alt="minimap.webp"
+				onload={() => {
+					$isLoaded = true;
+				}}
 			/>
 		</div>
 	</section>
