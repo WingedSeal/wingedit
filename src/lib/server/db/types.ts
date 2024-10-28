@@ -131,6 +131,6 @@ export type PrivilegeRole = {
 export type UserInfo = Omit<LuciaUser, 'id'>;
 
 export const toUserInfo = (user: LuciaUser): UserInfo => {
-	const { id, ...attributes } = user;
+	const { id: _, ...attributes } = user;
 	return { ...attributes };
 };

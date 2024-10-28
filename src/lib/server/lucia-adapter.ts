@@ -25,15 +25,15 @@ class BetterSqlite3Controller implements Controller {
 		this.db = db;
 	}
 
-	public async get<T>(sql: string, args: any[]): Promise<T | null> {
+	public async get<T>(sql: string, args: unknown[]): Promise<T | null> {
 		return this.db.prepare(sql).get(...args) as T | null;
 	}
 
-	public async getAll<T>(sql: string, args: any[]): Promise<T[]> {
+	public async getAll<T>(sql: string, args: unknown[]): Promise<T[]> {
 		return this.db.prepare(sql).all(...args) as T[];
 	}
 
-	public async execute(sql: string, args: any[]): Promise<void> {
+	public async execute(sql: string, args: unknown[]): Promise<void> {
 		this.db.prepare(sql).run(...args);
 	}
 }
@@ -144,9 +144,9 @@ export interface TableNames {
 }
 
 export interface Controller {
-	execute(sql: string, args: any[]): Promise<void>;
-	get<T>(sql: string, args: any[]): Promise<T | null>;
-	getAll<T>(sql: string, args: any[]): Promise<T[]>;
+	execute(sql: string, args: unknown[]): Promise<void>;
+	get<T>(sql: string, args: unknown[]): Promise<T | null>;
+	getAll<T>(sql: string, args: unknown[]): Promise<T[]>;
 }
 
 interface SessionSchema extends RegisteredDatabaseSessionAttributes {

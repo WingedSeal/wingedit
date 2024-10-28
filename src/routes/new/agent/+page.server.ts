@@ -1,10 +1,9 @@
 import { addAbility, addAgent, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
-import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import type { Ability, Agent } from '$lib/server/db/types';
+import type { Agent } from '$lib/server/db/types';
 import { Privilege } from '$lib/server/auth';
 import { agentSchema as schema } from '$lib/schema';
 
@@ -26,7 +25,7 @@ export const actions: Actions = {
 		if (locals.user.privilege < Privilege.Moderator) {
 			return error(403, 'Not enough privilege');
 		}
-		let form = await superValidate(request, zod(schema));
+		const form = await superValidate(request, zod(schema));
 		if (!form.valid) {
 			return fail(400, { form });
 		}

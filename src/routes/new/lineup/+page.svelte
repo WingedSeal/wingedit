@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SuperDebug, { superForm } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import type { Ability } from '$lib/server/db/types';
 	import ClickableImage from './ClickableImage.svelte';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';

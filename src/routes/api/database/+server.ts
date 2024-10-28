@@ -1,9 +1,9 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { executeQuery, getTable } from '$lib/server/db/admin';
-import { lucia, Privilege } from '$lib/server/auth';
+import { Privilege } from '$lib/server/auth';
 
-const intoStringLiteral = (value: any) => {
+const intoStringLiteral = (value: unknown) => {
 	if (typeof value !== 'string') {
 		const str = JSON.stringify(value);
 		return str;

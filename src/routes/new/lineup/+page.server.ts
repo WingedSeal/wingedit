@@ -5,7 +5,6 @@ import path from 'path';
 import type { PageServerLoad } from './$types';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
 import type { Lineup } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
 import { Privilege } from '$lib/server/auth';
@@ -90,7 +89,7 @@ export const actions = {
 
 		return message(form, 'Sucess');
 	},
-	addMapPosition: async ({ request }) => {
+	addMapPosition: async () => {
 		console.log('WIP');
 	}
 };

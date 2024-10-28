@@ -1,16 +1,10 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { redirect } from '@sveltejs/kit';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { signupSchema as schema } from '$lib/schema';
-	import { untrack } from 'svelte';
 	let { data } = $props();
-	let confirmPassword: HTMLInputElement;
 
-	let confirmPasswordError = $state<string | null>(null);
 	const { form, errors, message, enhance } = superForm(data.form, {
 		validators: zodClient(schema)
 	});
@@ -18,17 +12,7 @@
 </script>
 
 <h1>Sign up</h1>
-<form
-	method="post"
-	class="flex flex-col m-5"
-	use:enhance
-	onsubmit={(event) => {
-		if (confirmPassword.value != $form.password) {
-			confirmPasswordError = 'Passwords do not match.';
-			event.preventDefault();
-		}
-	}}
->
+<form method="post" class="flex flex-col m-5" use:enhance>
 	<label for="username">Username</label>
 	<input name="username" id="username" bind:value={$form.username} />
 	{#if $errors.username}

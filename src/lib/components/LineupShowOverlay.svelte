@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
-
 	interface Props {
 		DrawOverMainX: number;
 		DrawOverMainY: number;

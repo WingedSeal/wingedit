@@ -23,7 +23,7 @@ export const getFavouriteAgentIDs = () => {
 			favouriteAgents.set(get(favouriteAgents).add(value));
 		},
 		delete: (value: number) => {
-			let agents = get(favouriteAgents);
+			const agents = get(favouriteAgents);
 			agents.delete(value);
 			favouriteAgents.set(agents);
 		}

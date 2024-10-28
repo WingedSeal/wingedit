@@ -16,7 +16,7 @@
 	$effect(() => {
 		$form.abilities.length = abilityCount;
 		for (let i = 0; i < abilityCount; i++) {
-			$form.abilities[i] ??= {} as any;
+			$form.abilities[i] ??= { abilityName: '', abilityNameID: '' };
 		}
 	});
 </script>

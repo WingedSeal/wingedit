@@ -12,7 +12,6 @@ import {
 import type { ReferralCode } from '$lib/server/db/types';
 import { fail, message, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
 import { Privilege } from '$lib/server/auth';
 import { inviteSchema as schema } from '$lib/schema';
 

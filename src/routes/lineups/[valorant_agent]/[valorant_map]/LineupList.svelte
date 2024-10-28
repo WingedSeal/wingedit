@@ -1,7 +1,6 @@
 <script lang="ts">
-	import type { Ability, Agent, GameInfo, Grade, Lineup } from '$lib/server/db/types';
+	import type { Ability, GameInfo, Lineup } from '$lib/server/db/types';
 	import { isPopupShow } from '$lib/components/Popup.svelte';
-	import type { Writable } from 'svelte/store';
 
 	interface Props {
 		lineups: Lineup[];

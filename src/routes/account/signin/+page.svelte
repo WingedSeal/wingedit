@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { redirect } from '@sveltejs/kit';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { signinSchema as schema } from '$lib/schema';
-	import { untrack } from 'svelte';
 	let { data } = $props();
 
 	const { form, errors, message, enhance } = superForm(data.form, {

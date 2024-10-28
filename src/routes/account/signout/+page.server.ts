@@ -1,4 +1,4 @@
-import { error, fail, redirect, type Cookies } from '@sveltejs/kit';
+import { fail, redirect, type Cookies } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { lucia } from '$lib/server/auth';
 

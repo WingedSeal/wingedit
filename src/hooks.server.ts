@@ -11,12 +11,12 @@ if (PUBLIC_REQUIRE_ALL_IMAGES !== 'true' && PUBLIC_REQUIRE_ALL_IMAGES !== 'false
 	throw Error('REQUIRE_ALL_IMAGES is neither true nor false');
 }
 
-const simulateLatency = (ms: number) => {
+const _simulateLatency = (ms: number) => {
 	return new Promise((res) => setTimeout(res, ms));
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-	// await simulateLatency(1000);
+	// await _simulateLatency(1000);
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
 	if (!sessionId) {
 		event.locals.user = null;

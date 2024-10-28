@@ -19,7 +19,7 @@
 	const getPK = (row: number): PK => {
 		if (!form || !form.primaryKeys) throw Error('form is null');
 		return form.primaryKeys.map((key) => {
-			return form.table[row][key];
+			return form.table[row][key] as number;
 		});
 	};
 	const getDatabaseObject = (row: number): DatabaseObject => {
@@ -59,7 +59,7 @@
 			body: JSON.stringify({
 				tableName: form!.tableName,
 				primaryKeys: form!.primaryKeys!,
-				columnNames: Object.keys(form?.table[0]),
+				columnNames: Object.keys(form!.table[0]),
 				query: {
 					delete: [...query.delete].map((row) => [getPK(row), row]),
 					add: query.add,
@@ -136,7 +136,7 @@
 					<tr
 						class={(query.delete.has(rowIndex) ? 'bg-red-400' : '') +
 							(query.edit.has(rowIndex) ? 'bg-green-300' : '') +
-							(save?.error?.row == rowIndex && !save.error.isAdd ? ' bg-red-900' : '')}
+							(save?.error?.row === rowIndex && !save.error.isAdd ? ' bg-red-900' : '')}
 					>
 						{#each Object.values(row) as colValue, colIndex}
 							<td>
@@ -191,7 +191,7 @@
 				{#each query.add as newRow, newRowIndex}
 					<tr
 						class={'bg-blue-100' +
-							(save?.error?.row == newRowIndex && save.error.isAdd ? '  bg-red-900' : '')}
+							(save?.error?.row === newRowIndex && save.error.isAdd ? '  bg-red-900' : '')}
 					>
 						{#each newRow as colValue}
 							<td>
@@ -204,8 +204,8 @@
 								on:click={() => {
 									save = null;
 									Object.keys(form.table[0]).forEach((_, i) => {
-										// @ts-ignore: Assuming element exists and has a value property
-										document.getElementById(`add-${i}`).value = query.add[newRowIndex][i];
+										(document.getElementById(`add-${i}`) as HTMLInputElement).value =
+											query.add[newRowIndex][i];
 									});
 									query.add.splice(newRowIndex, 1);
 									query.add = query.add;

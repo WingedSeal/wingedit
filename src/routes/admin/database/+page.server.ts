@@ -3,7 +3,7 @@ import { getTables, getTable, getPrimaryKeys } from '$lib/server/db/admin';
 import { error, fail } from '@sveltejs/kit';
 import { Privilege } from '$lib/server/auth';
 
-export const load: PageServerLoad = async (event) => {
+export const load: PageServerLoad = async () => {
 	return {
 		tables: getTables()
 	};

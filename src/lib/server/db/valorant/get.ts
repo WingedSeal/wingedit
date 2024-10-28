@@ -14,7 +14,7 @@ import type {
 
 export const getAgents = () => {
 	const rows = db.prepare(`SELECT * FROM "Agents";`).all() as Agent[];
-	let agents: { [agentID: number]: Agent } = {};
+	const agents: { [agentID: number]: Agent } = {};
 	rows.forEach((agent) => {
 		agents[agent.ID] = agent;
 	});
@@ -45,7 +45,7 @@ export const getAgentRoles = () => {
 
 export const getMaps = () => {
 	const rows = db.prepare(`SELECT * FROM "Maps";`).all() as ValorantMap[];
-	let maps: { [mapID: number]: ValorantMap } = {};
+	const maps: { [mapID: number]: ValorantMap } = {};
 	rows.forEach((map) => {
 		maps[map.ID] = map;
 	});
@@ -54,7 +54,7 @@ export const getMaps = () => {
 
 export const getGrades = () => {
 	const rows = db.prepare(`SELECT * FROM "Grades";`).all() as Grade[];
-	let grades: { [gradeID: number]: Grade } = {};
+	const grades: { [gradeID: number]: Grade } = {};
 	rows.forEach((grade) => {
 		grades[grade.ID] = grade;
 	});
@@ -64,7 +64,7 @@ export const getGrades = () => {
 
 export const getAbilities = () => {
 	const rows = db.prepare(`SELECT * FROM "Abilities";`).all() as Ability[];
-	let abilities: { [agentID: number]: { [abilityID: number]: Ability } } = {};
+	const abilities: { [agentID: number]: { [abilityID: number]: Ability } } = {};
 	rows.forEach((ability) => {
 		if (!abilities[ability.AgentID]) {
 			abilities[ability.AgentID] = {};
@@ -78,7 +78,7 @@ export const getAgentAbilities = (agentID: number) => {
 	const rows = db
 		.prepare(`SELECT * FROM "Abilities" WHERE "AgentID" = @agentID;`)
 		.all({ agentID }) as Ability[];
-	let abilities: { [abilityID: number]: Ability } = {};
+	const abilities: { [abilityID: number]: Ability } = {};
 	rows.forEach((ability) => {
 		abilities[ability.AbilityID] = ability;
 	});
@@ -87,7 +87,7 @@ export const getAgentAbilities = (agentID: number) => {
 
 export const getMapPositions = () => {
 	const rows = db.prepare(`SELECT * FROM "MapPositions";`).all() as MapPosition[];
-	let mapPositions: { [mapID: number]: { [mapPositionID: number]: MapPosition } } = {};
+	const mapPositions: { [mapID: number]: { [mapPositionID: number]: MapPosition } } = {};
 	rows.forEach((mapPosition) => {
 		if (!mapPositions[mapPosition.MapID]) {
 			mapPositions[mapPosition.MapID] = {};
@@ -99,7 +99,7 @@ export const getMapPositions = () => {
 
 export const getSides = () => {
 	const rows = db.prepare(`SELECT * FROM "Sides";`).all() as Side[];
-	let sides: { [sideID: number]: Side } = {};
+	const sides: { [sideID: number]: Side } = {};
 	rows.forEach((side) => {
 		sides[side.ID] = side;
 	});
@@ -108,7 +108,7 @@ export const getSides = () => {
 
 export const getThrowTypes = () => {
 	const rows = db.prepare(`SELECT * FROM "ThrowTypes";`).all() as ThrowType[];
-	let throwTypes: { [throwTypeID: number]: ThrowType } = {};
+	const throwTypes: { [throwTypeID: number]: ThrowType } = {};
 	rows.forEach((throwType) => {
 		throwTypes[throwType.ID] = throwType;
 	});
@@ -140,7 +140,7 @@ export const getLineups = (agentID: number, mapID: number): { [abilityID: number
 	`
 		)
 		.all({ agentID, mapID }) as Lineup[];
-	let lineups: { [abilityID: number]: Lineup[] } = {};
+	const lineups: { [abilityID: number]: Lineup[] } = {};
 	rows.forEach((lineup) => {
 		if (!lineups[lineup.AbilityID]) {
 			lineups[lineup.AbilityID] = [];

@@ -2,7 +2,7 @@ import { lucia } from '$lib/server/auth';
 import { verify } from 'argon2';
 import type { Actions, PageServerLoad } from './$types';
 import { getUser } from '$lib/server/db/auth';
-import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
+import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from '@sveltejs/kit';
 import { signinSchema as schema } from '$lib/schema';

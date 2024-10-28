@@ -94,7 +94,7 @@ WHERE
 
 export const getPrivileges = () => {
 	const rows = db.prepare(`SELECT * FROM "PrivilegeRoles";`).all() as PrivilegeRole[];
-	let privileges: { [privilege: string]: PrivilegeRole } = {};
+	const privileges: { [privilege: string]: PrivilegeRole } = {};
 	rows.forEach((privilege) => {
 		privileges[privilege.Privilege] = privilege;
 	});
