@@ -22,10 +22,8 @@
 				class="absolute right-0 bottom-0 h-full bg-yellow-100 aspect-[2/3] bg-no-repeat bg-cover bg-center"
 				style="background-image: url('/api/image/agents/{data.valorant.agent.ID}/full.webp');"
 			></div>
-			<div class="bg-blue-200 min-w-[15%] max-w-full max-h-[70%] mr-auto mb-auto mt-12 ml-12">
-				<div class="h-full w-full overflow-y-auto" dir="rtl">
-					<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
-				</div>
+			<div class="bg-blue-200 min-w-[15%] max-w-full mr-auto mb-auto mt-12 ml-12 z-10">
+				<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
 			</div>
 			<div class="bg-blue-400 h-[10%] w-96 ml-12 mt-4 z-10"></div>
 			<div class="bg-blue-400 h-[10%] w-[48rem] ml-12 mt-4 mb-4 z-10"></div>
