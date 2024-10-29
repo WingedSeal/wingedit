@@ -5,6 +5,7 @@
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
 	import LoadingScreen, { isLoaded } from '$lib/components/LoadingScreen.svelte';
+	import RenderLine from './RenderLine.svelte';
 	interface Props {
 		data: PageData;
 	}
@@ -31,10 +32,13 @@
 			<div class="bg-blue-400 h-[10%] w-96 ml-12 mt-4 z-10"></div>
 			<div class="bg-blue-400 h-[10%] w-[48rem] ml-12 mt-4 mb-4 z-10"></div>
 		</div>
-		<div class="bg-slate-500 h-full p-1">
+		<div class="bg-slate-500 h-full p-1 relative">
+			<div class="absolute w-full h-full top-0 left-0 p-[inherit]">
+				<RenderLine lineup={lineupList[0]} />
+			</div>
 			<img
 				src="/api/image/maps/{data.valorant.map.ID}/minimap.webp"
-				class="h-full"
+				class="h-full min-w-max"
 				alt="minimap.webp"
 				onload={() => {
 					$isLoaded = true;
