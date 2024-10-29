@@ -10,7 +10,7 @@ CREATE TABLE
     IF NOT EXISTS "Users" (
         "UserID" CHAR(16) NOT NULL,
         "Username" VARCHAR(32) NOT NULL UNIQUE,
-        "HashedPassword" CHAR(32) NOT NULL,
+        "HashedPassword" CHAR(97) NOT NULL,
         "Privilege" TINYINT NOT NULL,
         "ReferredByUserID" CHAR(16),
         "CreationTimestamp" INTEGER NOT NULL,
