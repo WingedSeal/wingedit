@@ -64,7 +64,9 @@
 	<div
 		class="aspect-square absolute bg-transparent -translate-x-1/2 translate-y-1/2
 					rounded-[50%] border-solid border-red-600"
-		style={`height: ${mainSizePercent}%; left: ${DrawOverMainX}%; bottom: ${DrawOverMainY}%; border-width: ${clientHeight * 0.005 * SIZE_MULTIPLIER}px;`}
+		style="height: {mainSizePercent}%; left: {DrawOverMainX}%; bottom: {DrawOverMainY}%; border-width: {clientHeight *
+			0.005 *
+			SIZE_MULTIPLIER}px;"
 	></div>
 	{#if sub1 && sub2}
 		<div
