@@ -14,7 +14,7 @@
 	let lineupIndex = $state(0);
 	let lineupList = $derived(Object.values(data.lineups).flat());
 	let selectedAbilityID = $state(0);
-	let lineup = $derived(lineupList[lineupIndex]);
+	let selectedLineup = $derived(lineupList[lineupIndex]);
 	$isLoaded = false;
 </script>
 
@@ -34,7 +34,9 @@
 		</div>
 		<div class="bg-slate-500 h-full p-1 relative">
 			<div class="absolute w-full h-full top-0 left-0 p-[inherit]">
-				<RenderLine lineup={lineupList[0]} />
+				{#each lineupList as lineup}
+					<RenderLine {lineup} />
+				{/each}
 			</div>
 			<img
 				src="/api/image/maps/{data.valorant.map.ID}/minimap.webp"
@@ -58,12 +60,14 @@
 	</section>
 </main>
 
-{#if lineup}
+{#if selectedLineup}
 	<Popup
-		title="{data.gameInfo.sides[lineup.SideID].Name}: {data.gameInfo.mapPositions[lineup.MapID][
-			lineup.FromMapPositionID
-		].Callout} to {data.gameInfo.mapPositions[lineup.MapID][lineup.ToMapPositionID].Callout}"
+		title="{data.gameInfo.sides[selectedLineup.SideID].Name}: {data.gameInfo.mapPositions[
+			selectedLineup.MapID
+		][selectedLineup.FromMapPositionID].Callout} to {data.gameInfo.mapPositions[
+			selectedLineup.MapID
+		][selectedLineup.ToMapPositionID].Callout}"
 	>
-		<LineupShow {lineup} gameInfo={data.gameInfo} />
+		<LineupShow lineup={selectedLineup} gameInfo={data.gameInfo} />
 	</Popup>
 {/if}
