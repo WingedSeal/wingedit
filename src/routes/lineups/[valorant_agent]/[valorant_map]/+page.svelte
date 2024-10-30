@@ -6,14 +6,13 @@
 	import LineupShow from './LineupShow.svelte';
 	import LoadingScreen, { isLoaded } from '$lib/components/LoadingScreen.svelte';
 	import RenderLine from './RenderLine.svelte';
-	import ClickableImage from '../../../new/lineup/ClickableImage.svelte';
 	interface Props {
 		data: PageData;
 	}
 
 	let { data }: Props = $props();
 	let lineupIndex = $state(0);
-	let lineupList = $state(Object.values(data.lineups).flat());
+	let lineupList = Object.values(data.lineups).flat();
 	let selectedAbilityID = $state(0);
 	let selectedLineup = $derived(lineupList[lineupIndex]);
 	$isLoaded = false;
@@ -21,16 +20,7 @@
 
 <LoadingScreen />
 <main class="snap-mandatory snap-y h-dvh overflow-y-auto">
-	<div class="fixed z-50">
-		<ClickableImage
-			src="/api/image/maps/{data.valorant.map.ID}/minimap.webp"
-			alt=""
-			onClick={(x, y) => {
-				lineupList[0].FromX = x;
-				lineupList[0].FromY = y;
-			}}
-		/>
-	</div>
+	<div class="fixed z-50"></div>
 	<section class="h-dvh bg-slate-200 flex snap-center">
 		<div class="bg-green-300 flex-grow flex flex-col relative h-full">
 			<div
