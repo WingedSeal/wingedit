@@ -1,5 +1,4 @@
 <script lang="ts">
-	import ElementFit from '$lib/components/ElementFit.svelte';
 	import type { GameInfo, Lineup } from '$lib/server/db/types';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	interface Props {
@@ -10,8 +9,10 @@
 	let { lineup, gameInfo }: Props = $props();
 </script>
 
-<ElementFit>
-	<div class="grid grid-cols-3 grid-rows-3 aspect-video gap-6 -translate-x-[3.3333%] m-auto">
+<div class="flex w-full h-full">
+	<div
+		class="grid grid-cols-3 grid-rows-3 aspect-video gap-6 -translate-x-[3.3333%] m-auto max-h-full max-w-full object-fit"
+	>
 		<div class="col-span-2 row-span-2 relative">
 			<div class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute">
 				<LineupShowOverlay
@@ -75,4 +76,4 @@
 			/>
 		</div>
 	</div>
-</ElementFit>
+</div>
