@@ -16,6 +16,7 @@ export type Grade = {
 	Name: string;
 	GradeDescription: number;
 	DifficultyDescription: number;
+	Color: string;
 };
 
 export type AgentRole = {

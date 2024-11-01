@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { Lineup } from '$lib/server/db/types';
+	import type { Grade, Lineup } from '$lib/server/db/types';
 	import ClickableImage from '../../../new/lineup/ClickableImage.svelte';
 
 	type Props = {
 		lineup: Lineup;
+		grades: { [gradeID: number]: Grade };
 	};
 	let clientHeight = $state(0);
 	let clientWidth = $state(0);
@@ -11,7 +12,7 @@
 	const abilityRadius = 2;
 	const lineWidth = 0.4;
 
-	const { lineup }: Props = $props();
+	const { lineup, grades }: Props = $props();
 
 	const { from, to } = $derived.by(() => {
 		let from = [(lineup.FromX * clientWidth) / 100, ((100 - lineup.FromY) * clientHeight) / 100];
@@ -30,14 +31,6 @@
 		to[1] += (dy * radiusTo) / length;
 		return { from, to };
 	});
-	const gradeColors: { [gradeID: number]: string } = {
-		// todo: move to db
-		1: 'yellow',
-		2: 'purple',
-		3: 'blue',
-		4: 'green',
-		5: 'white'
-	};
 </script>
 
 <div class="h-full w-full pointer-events-none relative" bind:clientWidth bind:clientHeight>
@@ -62,7 +55,7 @@
 	/>
 	<svg
 		class="h-full w-full absolute"
-		style="stroke: {gradeColors[lineup.GradeID]}; stroke-width: {(clientHeight * lineWidth) / 100}"
+		style="stroke: {grades[lineup.GradeID].Color}; stroke-width: {(clientHeight * lineWidth) / 100}"
 	>
 		<polyline points={`${from} ${to}`}></polyline>
 	</svg>

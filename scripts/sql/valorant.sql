@@ -40,13 +40,14 @@ INSERT INTO
         "ID",
         "Name",
         "GradeDescription",
-        "DifficultyDescription"
+        "DifficultyDescription",
+        "Color"
     )
 VALUES
-    (1, 'S', 'DESC-S', 'DESC-S'),
-    (2, 'A', 'DESC-A', 'DESC-A'),
-    (3, 'B', 'DESC-B', 'DESC-C'),
-    (4, 'C', 'DESC-C', 'DESC-D');
+    (1, 'S', 'DESC-S', 'DESC-S', 'yellow'),
+    (2, 'A', 'DESC-A', 'DESC-A', 'purple'),
+    (3, 'B', 'DESC-B', 'DESC-C', 'blue'),
+    (4, 'C', 'DESC-C', 'DESC-D', 'green');
 
 INSERT INTO
     "ThrowTypes" ("ID", "Name", "Description")

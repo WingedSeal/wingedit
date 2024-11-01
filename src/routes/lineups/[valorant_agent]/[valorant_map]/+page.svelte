@@ -36,7 +36,7 @@
 		<div class="bg-slate-500 h-full p-1 relative">
 			<div class="absolute w-full h-full top-0 left-0 p-[inherit]">
 				{#each lineupList as lineup}
-					<RenderLine {lineup} />
+					<RenderLine {lineup} grades={data.gameInfo.grades} />
 				{/each}
 			</div>
 			<img
