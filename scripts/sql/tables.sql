@@ -66,7 +66,7 @@ CREATE TABLE
         "Name" CHAR(1) NOT NULL UNIQUE,
         "GradeDescription" VARCHAR(255) NOT NULL,
         "DifficultyDescription" VARCHAR(255) NOT NULL,
-        "Color" VARCHAR(16) NOT NULL,
+        "Color" CHAR(7) NOT NULL,
         PRIMARY KEY ("ID")
     );
 
