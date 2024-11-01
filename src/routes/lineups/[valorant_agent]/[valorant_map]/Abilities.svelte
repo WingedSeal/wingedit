@@ -3,7 +3,7 @@
 
 	type Props = {
 		abilities: Ability[];
-		selectedAbilityID: number;
+		selectedAbilityID: number | null;
 	};
 	let { abilities, selectedAbilityID = $bindable() }: Props = $props();
 </script>

@@ -6,14 +6,27 @@
 	import LineupShow from './LineupShow.svelte';
 	import LoadingScreen, { isLoaded } from '$lib/components/LoadingScreen.svelte';
 	import RenderLine from './RenderLine.svelte';
+	import Grades from './Grades.svelte';
+	import { writable, type Writable } from 'svelte/store';
+	import Sides from './Sides.svelte';
 	interface Props {
 		data: PageData;
 	}
 
 	let { data }: Props = $props();
 	let lineupIndex = $state(0);
-	let lineupList = Object.values(data.lineups).flat();
-	let selectedAbilityID = $state(0);
+	let allLineupList = Object.values(data.lineups).flat();
+	let selectedAbilityID = $state<number | null>(null);
+	let filterdOutGradeIDs: Writable<Set<number>> = $state(writable(new Set()));
+	let filterdOutSideIDs: Writable<Set<number>> = $state(writable(new Set()));
+	let lineupList = $derived(
+		allLineupList.filter(
+			(lineup) =>
+				selectedAbilityID === lineup.AbilityID &&
+				!$filterdOutGradeIDs.has(lineup.GradeID) &&
+				!$filterdOutSideIDs.has(lineup.SideID)
+		)
+	);
 	let selectedLineup = $derived(lineupList[lineupIndex]);
 	$isLoaded = false;
 </script>
@@ -30,8 +43,12 @@
 			<div class="bg-blue-200 min-w-[15%] max-w-full max-h-[80%] mr-auto mb-auto mt-12 ml-12 z-10">
 				<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
 			</div>
-			<div class="bg-blue-400 h-[10%] w-96 ml-12 mt-4 z-10"></div>
-			<div class="bg-blue-400 h-[10%] w-[48rem] ml-12 mt-4 mb-4 z-10"></div>
+			<div class="bg-blue-400 max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10">
+				<Sides sides={Object.values(data.gameInfo.sides)} bind:filterdOutSideIDs />
+			</div>
+			<div class="bg-blue-400 max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10 mb-6">
+				<Grades grades={Object.values(data.gameInfo.grades)} bind:filterdOutGradeIDs />
+			</div>
 		</div>
 		<div class="bg-slate-500 h-full p-1 relative">
 			<div class="absolute w-full h-full top-0 left-0 p-[inherit]">
