@@ -33,7 +33,6 @@
 
 <LoadingScreen />
 <main class="snap-mandatory snap-y h-dvh overflow-y-auto">
-	<div class="fixed z-50"></div>
 	<section class="h-dvh bg-slate-200 flex snap-center">
 		<div class="bg-green-300 flex-grow flex flex-col relative h-full">
 			<div

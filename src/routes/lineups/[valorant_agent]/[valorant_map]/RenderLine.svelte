@@ -31,11 +31,15 @@
 		to[1] += (dy * radiusTo) / length;
 		return { from, to };
 	});
+
+	const onClick = () => {};
 </script>
 
 <div class="h-full w-full pointer-events-none relative" bind:clientWidth bind:clientHeight>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<img
-		class="aspect-square absolute -translate-x-1/2 translate-y-1/2
+		class="aspect-square absolute -translate-x-1/2 translate-y-1/2 cursor-pointer pointer-events-auto
 					rounded-md border-solid agent"
 		style="height: {agentRadius *
 			2}%; left: {lineup.FromX}%; bottom: {lineup.FromY}%; border-width: {(clientHeight *
@@ -43,21 +47,30 @@
 			100}px;"
 		src="/api/image/agents/{lineup.AgentID}/icon.webp"
 		alt="Agent {lineup.AgentID}"
+		onclick={onClick}
 	/>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<img
-		class="aspect-square absolute -translate-x-1/2 translate-y-1/2
+		class="aspect-square absolute -translate-x-1/2 translate-y-1/2 cursor-pointer pointer-events-auto
 					rounded-[50%] border-solid bg-slate-900 border-slate-700 border-[1rem]"
 		style="height: {abilityRadius *
 			2}%; left: {lineup.ToX}%; bottom: {lineup.ToY}%; border-width: {(clientHeight * lineWidth) /
 			100}px;"
 		src="/api/image/agents/{lineup.AgentID}/abilities/{lineup.AbilityID}.webp"
 		alt="Ability {lineup.AbilityID}"
+		onclick={onClick}
 	/>
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<svg
-		class="h-full w-full absolute"
-		style="stroke: {grades[lineup.GradeID].Color}; stroke-width: {(clientHeight * lineWidth) / 100}"
+		class="h-full w-full absolute cursor-pointer focus:outline-none"
+		style="stroke: {grades[lineup.GradeID].Color}; stroke-width: {(clientHeight * lineWidth) /
+			100};"
+		onclick={onClick}
+		role="button"
+		tabindex="-1"
 	>
-		<polyline points={`${from} ${to}`}></polyline>
+		<polyline points={`${from} ${to}`} style="pointer-events: stroke;"></polyline>
 	</svg>
 </div>
 
