@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { isPopupShow } from '$lib/components/Popup.svelte';
 	import type { Grade, Lineup } from '$lib/server/db/types';
-	import ClickableImage from '../../../new/lineup/ClickableImage.svelte';
 
 	type Props = {
 		lineup: Lineup;
+		lineupIndex: number;
+		index: number;
 		grades: { [gradeID: number]: Grade };
 	};
 	let clientHeight = $state(0);
@@ -12,7 +14,7 @@
 	const abilityRadius = 2;
 	const lineWidth = 0.4;
 
-	const { lineup, grades }: Props = $props();
+	let { lineup, grades, lineupIndex = $bindable(), index }: Props = $props();
 
 	const { from, to } = $derived.by(() => {
 		let from = [(lineup.FromX * clientWidth) / 100, ((100 - lineup.FromY) * clientHeight) / 100];
@@ -32,7 +34,10 @@
 		return { from, to };
 	});
 
-	const onClick = () => {};
+	const onClick = () => {
+		lineupIndex = index;
+		$isPopupShow = true;
+	};
 </script>
 
 <div class="h-full w-full pointer-events-none relative" bind:clientWidth bind:clientHeight>
