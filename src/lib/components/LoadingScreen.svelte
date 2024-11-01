@@ -1,26 +1,16 @@
 <script module lang="ts">
 	import { writable } from 'svelte/store';
+	import { fade } from 'svelte/transition';
+	import { circIn } from 'svelte/easing';
 
 	export const isLoaded = writable(false);
 </script>
 
 <script lang="ts">
-	let isRender = $state(true);
-	isLoaded.subscribe((loaded) => {
-		if (loaded) {
-			setTimeout(() => {
-				isRender = false;
-			}, 300);
-		}
-	});
 </script>
 
-{#if isRender}
-	<div
-		class="transition-opacity ease-in duration-300 relative z-50 {$isLoaded
-			? 'opacity-0'
-			: 'opacity-100'}"
-	>
+{#if !$isLoaded}
+	<div transition:fade={{ delay: 0, duration: 300, easing: circIn }} class="relative z-50">
 		<div class="w-screen h-screen fixed bg-slate-900 flex loading-screen">
 			<div id="wrapper" class="scale-[1.2] md:scale-[2.1] m-auto absolute">
 				<div class="profile-main-loader">
