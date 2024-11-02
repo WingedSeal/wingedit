@@ -1,9 +1,10 @@
-<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { enhance } from '$app/forms';
-	export let data;
-	export let form;
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	let { form, data } = $props();
 	let formElement: HTMLFormElement;
 	type PK = number[];
 	type DatabaseObject = string[];
@@ -16,6 +17,7 @@
 		add: [],
 		edit: new Set()
 	};
+	const tableParam = 'table';
 	const getPK = (row: number): PK => {
 		if (!form || !form.primaryKeys) throw Error('form is null');
 		return form.primaryKeys.map((key) => {
@@ -30,6 +32,7 @@
 			return input.value;
 		});
 	};
+
 	const addNewRow = () => {
 		if (!form) throw Error('form is null');
 		let isSomething = false;
@@ -43,7 +46,7 @@
 		});
 		if (isSomething) query.add.push(newRow);
 	};
-	let save: {
+	let save = $state<{
 		error?: {
 			code: string;
 			why: string;
@@ -52,7 +55,7 @@
 			row: number;
 		};
 		success?: boolean;
-	} | null = null;
+	} | null>(null);
 	const confirm = async () => {
 		const response = await fetch('/api/database', {
 			method: 'POST',
@@ -72,11 +75,11 @@
 		});
 		save = await response.json();
 		if (save!.success) {
-			formElement.submit();
+			formElement.requestSubmit();
 		}
 	};
-	let isFetching = false;
-	let tableSQL: string = '';
+	let isFetching = $state(false);
+	let tableSQL = $state('');
 	const fetchSQL = async () => {
 		if (isFetching) return;
 		isFetching = true;
@@ -88,6 +91,7 @@
 		tableSQL = await response.json();
 		isFetching = false;
 	};
+	onMount(() => formElement.requestSubmit());
 </script>
 
 {#if save && save.error}
@@ -95,9 +99,26 @@
 	<p class="text-red-500">{save.error?.where}</p>
 	<p class="text-red-500">{save.error?.why}</p>
 {/if}
-<form bind:this={formElement} method="post" use:enhance>
+<form
+	bind:this={formElement}
+	method="post"
+	use:enhance={() => {
+		return async ({ update }) => {
+			update({ reset: false });
+		};
+	}}
+>
 	<label for="tableName">Table:</label>
-	<select name="tableName" on:change={() => formElement.submit()} value={form?.tableName}>
+	<select
+		name="tableName"
+		onchange={(event) => {
+			let query = new URLSearchParams($page.url.searchParams.toString());
+			query.set(tableParam, (event.target as HTMLSelectElement).value);
+			goto(`?${query.toString()}`);
+			formElement.requestSubmit();
+		}}
+		value={form?.tableName ?? $page.url.searchParams.get(tableParam)}
+	>
 		<option selected hidden></option>
 		{#each data.tables as tableName}
 			<option value={tableName}>{tableName}</option>
@@ -105,10 +126,10 @@
 	</select>
 </form>
 
-<button on:click={() => formElement.submit()}>REFRESH</button>
+<button onclick={() => formElement.requestSubmit()}>REFRESH</button>
 
 <br />
-<button on:click={fetchSQL}>DUMP</button>
+<button onclick={fetchSQL}>DUMP</button>
 <br />
 {#if isFetching}
 	FETCHING...
@@ -117,7 +138,7 @@
 {#if tableSQL}
 	SQL READY:
 	<br />
-	<button on:click={() => navigator.clipboard.writeText(tableSQL)}>COPY</button>
+	<button onclick={() => navigator.clipboard.writeText(tableSQL)}>COPY</button>
 {/if}
 
 {#if form && form.table}
@@ -155,7 +176,7 @@
 						<td>
 							<button
 								type="button"
-								on:click={() => {
+								onclick={() => {
 									save = null;
 									if (query.edit.has(rowIndex)) query.edit.delete(rowIndex);
 									else {
@@ -172,7 +193,7 @@
 						<td>
 							<button
 								type="button"
-								on:click={() => {
+								onclick={() => {
 									save = null;
 									if (query.delete.has(rowIndex)) query.delete.delete(rowIndex);
 									else {
@@ -201,7 +222,7 @@
 						<td>
 							<button
 								type="button"
-								on:click={() => {
+								onclick={() => {
 									save = null;
 									Object.keys(form.table[0]).forEach((_, i) => {
 										(document.getElementById(`add-${i}`) as HTMLInputElement).value =
@@ -217,7 +238,7 @@
 						<td>
 							<button
 								type="button"
-								on:click={() => {
+								onclick={() => {
 									save = null;
 									query.add.splice(newRowIndex, 1);
 									query.add = query.add;
@@ -236,7 +257,7 @@
 					<td colspan="2"
 						><button
 							type="button"
-							on:click={() => {
+							onclick={() => {
 								save = null;
 								addNewRow();
 								query.add = query.add;
@@ -246,7 +267,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<button on:click={confirm}>Save</button>
+		<button onclick={confirm}>Save</button>
 	{:else}
 		EMPTY TABLE
 	{/if}
