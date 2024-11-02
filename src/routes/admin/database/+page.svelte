@@ -144,11 +144,11 @@
 									<input
 										class="bg-transparent"
 										type="text"
-										value={colValue}
+										value={JSON.stringify(colValue)}
 										id={`${rowIndex}-${colIndex}`}
 									/>
 								{:else}
-									{colValue}
+									{JSON.stringify(colValue)}
 								{/if}
 							</td>
 						{/each}

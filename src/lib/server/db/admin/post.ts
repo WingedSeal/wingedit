@@ -57,7 +57,9 @@ export const executeQuery = (
 				try {
 					deleteRows.run(...values);
 				} catch (error) {
-					const pos = values.map((value, i) => `${primaryKeys[i]}="${value}"`).join(', ');
+					const pos = values
+						.map((value, i) => `${primaryKeys[i]}=${JSON.stringify(value.toString())}`)
+						.join(', ');
 					where = `Query failed during deletion of (${pos})`;
 					errorRow = row;
 					throw error;
@@ -65,9 +67,11 @@ export const executeQuery = (
 			});
 			query.edit.forEach(([keyValues, values, row]) => {
 				try {
-					updateRows.run(...values, ...keyValues);
+					updateRows.run(...values, ...keyValues.map((v) => JSON.parse(v)));
 				} catch (error) {
-					const pos = keyValues.map((value, i) => `${primaryKeys[i]}="${value}"`).join(', ');
+					const pos = keyValues
+						.map((value, i) => `${primaryKeys[i]}=${JSON.stringify(value.toString())}`)
+						.join(', ');
 					where = `Query failed during updation of (${pos})`;
 					errorRow = row;
 					throw error;
@@ -75,9 +79,11 @@ export const executeQuery = (
 			});
 			query.add.forEach((values, row) => {
 				try {
-					insertRows.run(...values);
+					insertRows.run(...values.map((v) => JSON.parse(v)));
 				} catch (error) {
-					const pos = values.map((value, i) => `${columnNames[i]}="${value}"`).join(', ');
+					const pos = values
+						.map((value, i) => `${columnNames[i]}=${JSON.stringify(value.toString())}`)
+						.join(', ');
 					isAdd = true;
 					where = `Query failed during insertion of (${pos})`;
 					errorRow = row;
@@ -86,10 +92,22 @@ export const executeQuery = (
 			});
 		})();
 	} catch (error) {
-		if (!(error instanceof SqliteError)) {
-			throw error;
+		console.log(error);
+		if (error instanceof SqliteError) {
+			return { error: { code: error.code, why: error.message, where, isAdd, row: errorRow! } };
 		}
-		return { error: { code: error.code, why: error.message, where, isAdd, row: errorRow! } };
+		if (error instanceof SyntaxError) {
+			return {
+				error: {
+					code: 'INVALID_VALUE',
+					why: 'Unable to parse the value.',
+					where,
+					isAdd,
+					row: errorRow!
+				}
+			};
+		}
+		throw error;
 	}
 	return { success: true };
 };
