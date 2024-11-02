@@ -13,6 +13,7 @@
 
 	const getDetails = (lineup: Lineup) => {
 		return {
+			ID: lineup.ID,
 			abilityNameID: abilities[lineup.AbilityID].NameID,
 			ability: abilities[lineup.AbilityID].Name,
 			grade: gameInfo.grades[lineup.GradeID].Name,
@@ -45,7 +46,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each details as detail, i}
+		{#each details as detail, i (detail.ID)}
 			<tr>
 				<td>
 					<img

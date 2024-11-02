@@ -51,7 +51,7 @@
 		</div>
 		<div class="bg-slate-500 h-full p-1 relative">
 			<div class="absolute w-full h-full top-0 left-0 p-[inherit]">
-				{#each lineupList as lineup, index}
+				{#each lineupList as lineup, index (lineup.ID)}
 					<RenderLine {lineup} grades={data.gameInfo.grades} {index} {lineupIndex} />
 				{/each}
 			</div>

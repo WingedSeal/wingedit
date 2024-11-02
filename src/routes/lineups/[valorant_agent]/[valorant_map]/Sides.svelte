@@ -10,7 +10,7 @@
 </script>
 
 <div class="flex flex-row gap-4 max-h-full">
-	{#each sides as side}
+	{#each sides as side (side.ID)}
 		<button
 			class="flex flex-row p-4 aspect-square {!$filterdOutSideIDs.has(side.ID)
 				? 'bg-blue-800'
