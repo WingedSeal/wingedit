@@ -1,4 +1,4 @@
-import { IMAGES_PATH } from '$env/static/private';
+import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
 import { addLineup, getAbilities, getGameInfo, getThrowTypes } from '$lib/server/db/valorant';
 import fs from 'fs';
 import path from 'path';
@@ -16,26 +16,27 @@ let a = async (f: File) => {
 	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
 };
 
-const schema = getLineupSchema(
-	// imageSchema,
-	// gifSchema
-	async (f) => {
-		const size = await sharp(await f.arrayBuffer()).metadata();
-		return (size.width &&
-			size.height &&
-			size.width * 9 === size.height * 16 &&
-			size.width >= 1920) as boolean;
-	},
-	'Please upload 1920x1080 image.',
-	async (f) => {
-		const size = await sharp(await f.arrayBuffer()).metadata();
-		return (size.width &&
-			size.height &&
-			size.width * 9 === size.height * 16 &&
-			size.width >= 1920) as boolean;
-	},
-	'Please upload 1920x1080 gif.'
-);
+const schema =
+	VALIDATE_IMAGE_SIZE === 'true'
+		? getLineupSchema(
+				async (f) => {
+					const size = await sharp(await f.arrayBuffer()).metadata();
+					return (size.width &&
+						size.height &&
+						size.width * 9 === size.height * 16 &&
+						size.width >= 1920) as boolean;
+				},
+				'Please upload 1920x1080 image.',
+				async (f) => {
+					const size = await sharp(await f.arrayBuffer()).metadata();
+					return (size.width &&
+						size.height &&
+						size.width * 9 === size.height * 16 &&
+						size.width >= 1920) as boolean;
+				},
+				'Please upload 1920x1080 gif.'
+			)
+		: getLineupSchema(null, '', null, '');
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);

@@ -1,14 +1,18 @@
 import { lucia } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
-import { IMAGES_PATH, DB_PATH } from '$env/static/private';
+import { IMAGES_PATH, DB_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
 import { PUBLIC_REQUIRE_ALL_IMAGES } from '$env/static/public';
 
-if (!IMAGES_PATH || !DB_PATH || !PUBLIC_REQUIRE_ALL_IMAGES) {
+if (!IMAGES_PATH || !DB_PATH || !PUBLIC_REQUIRE_ALL_IMAGES || !VALIDATE_IMAGE_SIZE) {
 	throw Error('Missing .env');
 }
 
 if (PUBLIC_REQUIRE_ALL_IMAGES !== 'true' && PUBLIC_REQUIRE_ALL_IMAGES !== 'false') {
 	throw Error('REQUIRE_ALL_IMAGES is neither true nor false');
+}
+
+if (VALIDATE_IMAGE_SIZE !== 'true' && VALIDATE_IMAGE_SIZE !== 'false') {
+	throw Error('VALIDATE_IMAGE_SIZE is neither true nor false');
 }
 
 const _simulateLatency = (ms: number) => {
