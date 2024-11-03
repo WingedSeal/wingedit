@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: `<tr>` is invalid inside `<table>` -->
 <script lang="ts">
 	import { enhance as svelteEnhance } from '$app/forms';
 	import { page } from '$app/stores';
@@ -6,7 +5,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { inviteSchema as schema } from '$lib/schema';
-	export let data;
+	const { data } = $props();
 	const {
 		form,
 		errors,
@@ -18,9 +17,11 @@
 	const copyCode = (code: string) => {
 		return navigator.clipboard.writeText($page.url.origin + '/account/signup?code=' + code);
 	};
-	$: if ($message?.code) {
-		copyCode($message?.code);
-	}
+	$effect(() => {
+		if ($message?.code) {
+			copyCode($message?.code);
+		}
+	});
 	if (data.canHideSource) {
 		$form.isHideSource = true;
 	}
@@ -86,7 +87,7 @@ INVITE
 					</form>
 				</td>
 				<td>
-					<button type="button" on:click={() => copyCode(code.Code)} aria-label="copy code">
+					<button type="button" onclick={() => copyCode(code.Code)} aria-label="copy code">
 						<i class="fa-solid fa-copy mx-2"></i>
 					</button>
 				</td>
@@ -124,7 +125,7 @@ INVITE
 						</form>
 					</td>
 					<td>
-						<button type="button" on:click={() => copyCode(code.Code)} aria-label="copy code">
+						<button type="button" onclick={() => copyCode(code.Code)} aria-label="copy code">
 							<i class="fa-solid fa-copy mx-2"></i>
 						</button>
 					</td>
