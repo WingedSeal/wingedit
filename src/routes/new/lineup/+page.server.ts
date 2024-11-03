@@ -86,6 +86,9 @@ export const actions = {
 			writeWebp(
 				form.data.throwSpotThirdPerson,
 				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.webp')
+			),
+			...form.data.extraImages.map((extraImage, i) =>
+				writeExtraImages(extraImage, path.join(LINEUP_DIRECTORY, lineupID, `${i + 1}.webp`))
 			)
 		]);
 
@@ -102,6 +105,11 @@ const writeWebp = async (file: File, fileName: string) => {
 		.resize(1980, 1080)
 		.webp({ minSize: true, effort: 6 })
 		.toFile(path.join(IMAGES_PATH, fileName));
+};
+
+const writeExtraImages = async (file: File, fileName: string) => {
+	const buffer = await file.arrayBuffer();
+	sharp(buffer).webp({ minSize: true, effort: 6 }).toFile(path.join(IMAGES_PATH, fileName));
 };
 
 const writeWebpAnimated = async (file: File, fileName: string) => {
