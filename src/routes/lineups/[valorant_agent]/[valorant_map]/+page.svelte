@@ -55,14 +55,14 @@
 			</div>
 		</div>
 		<div class="bg-slate-500 h-full p-1 relative">
-			<div class="absolute w-full h-full top-0 left-0 p-[inherit]">
+			<div class="absolute w-[calc(100%-0.5rem)] h-[calc(100%-0.5rem)] top-0 left-0 p-[inherit]">
 				{#each lineupList as { lineup, index }}
 					<RenderLine {lineup} grades={data.gameInfo.grades} {index} {lineupIndex} />
 				{/each}
 			</div>
 			<img
 				src="/api/image/maps/{data.valorant.map.ID}/minimap.webp"
-				class="h-full min-w-max"
+				class="h-full w-full min-w-max"
 				alt="minimap.webp"
 				onload={() => {
 					$isLoaded = true;

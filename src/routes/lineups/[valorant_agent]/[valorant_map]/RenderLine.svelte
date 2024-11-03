@@ -40,7 +40,7 @@
 	};
 </script>
 
-<div class="h-full w-full pointer-events-none relative" bind:clientWidth bind:clientHeight>
+<div class="h-full w-full pointer-events-none absolute" bind:clientWidth bind:clientHeight>
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<img
