@@ -67,7 +67,19 @@ export const executeQuery = (
 			});
 			query.edit.forEach(([keyValues, values, row]) => {
 				try {
-					updateRows.run(...values, ...keyValues.map((v) => JSON.parse(v)));
+					updateRows.run(
+						...values,
+						...keyValues.map((v) => {
+							try {
+								return JSON.parse(v);
+							} catch (error) {
+								if (error instanceof SyntaxError) {
+									error.message = `Unable to parse the value: ${v}`;
+								}
+								throw error;
+							}
+						})
+					);
 				} catch (error) {
 					const pos = keyValues
 						.map((value, i) => `${primaryKeys[i]}=${JSON.stringify(value.toString())}`)
@@ -79,7 +91,18 @@ export const executeQuery = (
 			});
 			query.add.forEach((values, row) => {
 				try {
-					insertRows.run(...values.map((v) => JSON.parse(v)));
+					insertRows.run(
+						...values.map((v) => {
+							try {
+								return JSON.parse(v);
+							} catch (error) {
+								if (error instanceof SyntaxError) {
+									error.message = `Unable to parse the value: ${v}`;
+								}
+								throw error;
+							}
+						})
+					);
 				} catch (error) {
 					const pos = values
 						.map((value, i) => `${columnNames[i]}=${JSON.stringify(value.toString())}`)
@@ -100,7 +123,7 @@ export const executeQuery = (
 			return {
 				error: {
 					code: 'INVALID_VALUE',
-					why: 'Unable to parse the value.',
+					why: error.message,
 					where,
 					isAdd,
 					row: errorRow!

@@ -3,19 +3,21 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { afterNavigate, goto } from '$app/navigation';
+	import { writable, type Writable } from 'svelte/store';
+	import { onMount } from 'svelte';
 	let { form, data } = $props();
 	let formElement: HTMLFormElement;
 	type PK = number[];
 	type DatabaseObject = string[];
-	let query: {
+	let query: Writable<{
 		delete: Set<number>;
 		add: string[][];
 		edit: Set<number>;
-	} = {
+	}> = writable({
 		delete: new Set(),
 		add: [],
 		edit: new Set()
-	};
+	});
 	const tableParam = 'table';
 	const getPK = (row: number): PK => {
 		if (!form || !form.primaryKeys) throw Error('form is null');
@@ -43,7 +45,7 @@
 			input.value = '';
 			return value;
 		});
-		if (isSomething) query.add.push(newRow);
+		if (isSomething) $query.add.push(newRow);
 	};
 	let save = $state<{
 		error?: {
@@ -63,9 +65,9 @@
 				primaryKeys: form!.primaryKeys!,
 				columnNames: Object.keys(form!.table[0]),
 				query: {
-					delete: [...query.delete].map((row) => [getPK(row), row]),
-					add: query.add,
-					edit: [...query.edit].map((row) => [getPK(row), getDatabaseObject(row), row])
+					delete: [...$query.delete].map((row) => [getPK(row), row]),
+					add: $query.add,
+					edit: [...$query.edit].map((row) => [getPK(row), getDatabaseObject(row), row])
 				}
 			}),
 			headers: {
@@ -154,13 +156,13 @@
 			<tbody>
 				{#each form.table as row, rowIndex}
 					<tr
-						class={(query.delete.has(rowIndex) ? 'bg-red-400' : '') +
-							(query.edit.has(rowIndex) ? 'bg-green-300' : '') +
+						class={($query.delete.has(rowIndex) ? 'bg-red-400' : '') +
+							($query.edit.has(rowIndex) ? 'bg-green-300' : '') +
 							(save?.error?.row === rowIndex && !save.error.isAdd ? ' bg-red-900' : '')}
 					>
 						{#each Object.values(row) as colValue, colIndex}
 							<td>
-								{#if query.edit.has(rowIndex)}
+								{#if $query.edit.has(rowIndex)}
 									<input
 										class="bg-transparent"
 										type="text"
@@ -177,12 +179,12 @@
 								type="button"
 								onclick={() => {
 									save = null;
-									if (query.edit.has(rowIndex)) query.edit.delete(rowIndex);
+									if ($query.edit.has(rowIndex)) $query.edit.delete(rowIndex);
 									else {
-										query.edit.add(rowIndex);
-										query.delete.delete(rowIndex);
+										$query.edit.add(rowIndex);
+										$query.delete.delete(rowIndex);
 									}
-									query.edit = query.edit;
+									$query.edit = $query.edit;
 								}}
 								aria-label="edit"
 							>
@@ -194,12 +196,12 @@
 								type="button"
 								onclick={() => {
 									save = null;
-									if (query.delete.has(rowIndex)) query.delete.delete(rowIndex);
+									if ($query.delete.has(rowIndex)) $query.delete.delete(rowIndex);
 									else {
-										query.delete.add(rowIndex);
-										query.edit.delete(rowIndex);
+										$query.delete.add(rowIndex);
+										$query.edit.delete(rowIndex);
 									}
-									query.delete = query.delete;
+									$query.delete = $query.delete;
 								}}
 								aria-label="delete"
 							>
@@ -208,7 +210,8 @@
 						</td>
 					</tr>
 				{/each}
-				{#each query.add as newRow, newRowIndex}
+				{#each $query.add as newRow, newRowIndex}
+					{@const a = console.log(newRow, newRowIndex)}
 					<tr
 						class={'bg-blue-100' +
 							(save?.error?.row === newRowIndex && save.error.isAdd ? '  bg-red-900' : '')}
@@ -225,10 +228,10 @@
 									save = null;
 									Object.keys(form.table[0]).forEach((_, i) => {
 										(document.getElementById(`add-${i}`) as HTMLInputElement).value =
-											query.add[newRowIndex][i];
+											$query.add[newRowIndex][i];
 									});
-									query.add.splice(newRowIndex, 1);
-									query.add = query.add;
+									$query.add.splice(newRowIndex, 1);
+									$query.add = $query.add;
 								}}
 							>
 								E
@@ -239,8 +242,8 @@
 								type="button"
 								onclick={() => {
 									save = null;
-									query.add.splice(newRowIndex, 1);
-									query.add = query.add;
+									$query.add.splice(newRowIndex, 1);
+									$query.add = $query.add;
 								}}
 								aria-label="add"
 							>
@@ -259,7 +262,7 @@
 							onclick={() => {
 								save = null;
 								addNewRow();
-								query.add = query.add;
+								$query.add = $query.add;
 							}}>ADD</button
 						></td
 					>
