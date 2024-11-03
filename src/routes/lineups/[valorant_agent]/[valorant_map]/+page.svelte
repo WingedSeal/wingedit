@@ -15,19 +15,24 @@
 
 	let { data }: Props = $props();
 	let lineupIndex = $state(0);
-	let allLineupList = Object.values(data.lineups).flat();
+	const allLineupList = Object.values(data.lineups).flat();
+
 	let selectedAbilityID = $state<number | null>(null);
 	let filterdOutGradeIDs: Writable<Set<number>> = $state(writable(new Set()));
 	let filterdOutSideIDs: Writable<Set<number>> = $state(writable(new Set()));
-	let lineupList = $derived(
-		allLineupList.filter(
-			(lineup) =>
-				selectedAbilityID === lineup.AbilityID &&
-				!$filterdOutGradeIDs.has(lineup.GradeID) &&
-				!$filterdOutSideIDs.has(lineup.SideID)
-		)
+	const lineupList = $derived(
+		allLineupList
+			.map((v, i) => {
+				return { index: i, lineup: v };
+			})
+			.filter(
+				({ lineup }) =>
+					selectedAbilityID === lineup.AbilityID &&
+					!$filterdOutGradeIDs.has(lineup.GradeID) &&
+					!$filterdOutSideIDs.has(lineup.SideID)
+			)
 	);
-	let selectedLineup = $derived(lineupList[lineupIndex]);
+	let selectedLineup = $derived(allLineupList[lineupIndex]);
 	$isLoaded = false;
 </script>
 
@@ -51,7 +56,7 @@
 		</div>
 		<div class="bg-slate-500 h-full p-1 relative">
 			<div class="absolute w-full h-full top-0 left-0 p-[inherit]">
-				{#each lineupList as lineup, index (lineup.ID)}
+				{#each lineupList as { lineup, index }}
 					<RenderLine {lineup} grades={data.gameInfo.grades} {index} {lineupIndex} />
 				{/each}
 			</div>
@@ -69,7 +74,7 @@
 	<section class="h-dvh bg-slate-200 flex flex-col p-16 snap-center">
 		<div class="flex flex-col overflow-auto max-h-full p-4">
 			<LineupList
-				lineups={lineupList}
+				lineups={allLineupList}
 				gameInfo={data.gameInfo}
 				abilities={data.abilities}
 				bind:lineupIndex
