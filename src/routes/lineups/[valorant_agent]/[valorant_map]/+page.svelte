@@ -57,7 +57,7 @@
 		<div class="bg-slate-500 h-full p-1 relative">
 			<div class="absolute w-[calc(100%-0.5rem)] h-[calc(100%-0.5rem)] top-0 left-0 p-[inherit]">
 				{#each lineupList as { lineup, index }}
-					<RenderLine {lineup} grades={data.gameInfo.grades} {index} {lineupIndex} />
+					<RenderLine {lineup} grades={data.gameInfo.grades} {index} bind:lineupIndex />
 				{/each}
 			</div>
 			<img
@@ -85,11 +85,9 @@
 
 {#if selectedLineup}
 	<Popup
-		title="{data.gameInfo.sides[selectedLineup.SideID].Name}: {data.gameInfo.mapPositions[
-			selectedLineup.MapID
-		][selectedLineup.FromMapPositionID].Callout} to {data.gameInfo.mapPositions[
-			selectedLineup.MapID
-		][selectedLineup.ToMapPositionID].Callout}"
+		title="({selectedLineup.ID}) {data.gameInfo.sides[selectedLineup.SideID].Name}: {data.gameInfo
+			.mapPositions[selectedLineup.MapID][selectedLineup.FromMapPositionID].Callout} to {data
+			.gameInfo.mapPositions[selectedLineup.MapID][selectedLineup.ToMapPositionID].Callout}"
 	>
 		<LineupShow lineup={selectedLineup} gameInfo={data.gameInfo} />
 	</Popup>

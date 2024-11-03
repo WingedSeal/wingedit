@@ -35,6 +35,7 @@
 	});
 
 	const onClick = () => {
+		console.log(index);
 		lineupIndex = index;
 		$isPopupShow = true;
 	};
