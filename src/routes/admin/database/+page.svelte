@@ -85,6 +85,11 @@
 		save = await response.json();
 		if (save!.success) {
 			formElement.requestSubmit();
+			$query = {
+				delete: new Set(),
+				add: [],
+				edit: new Set()
+			};
 		}
 	};
 	let isFetching = $state(false);
