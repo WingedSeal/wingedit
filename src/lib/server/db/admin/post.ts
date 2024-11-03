@@ -77,7 +77,7 @@ export const executeQuery = (
 									if (v) {
 										error.message = `Unable to parse the value: ${JSON.stringify(v)} of "${columnNames[i]}"`;
 									} else {
-										error.message = `Missing value in "${columnNames[i]}". If it is meant to be 'null', explicity type it.`;
+										error.message = `Missing value in "${columnNames[i]}". If it is meant to be 'null', explicitly type it.`;
 									}
 								}
 								throw error;
@@ -104,7 +104,7 @@ export const executeQuery = (
 									if (v) {
 										error.message = `Unable to parse the value: ${JSON.stringify(v)} of "${columnNames[i]}"`;
 									} else {
-										error.message = `Missing value in "${columnNames[i]}". If it is meant to be 'null', explicity type it.`;
+										error.message = `Missing value in "${columnNames[i]}". If it is meant to be 'null', explicitly type it.`;
 									}
 								}
 								throw error;

@@ -279,7 +279,7 @@
 								if (missingValueCol === null) {
 									customError = '';
 								} else {
-									customError = `Missing value in column "${Object.keys(form.table[0])[missingValueCol]}". If it is meant to be 'null', explicity type it.`;
+									customError = `Missing value in column "${Object.keys(form.table[0])[missingValueCol]}". If it is meant to be 'null', explicitly type it.`;
 								}
 								$query.add = $query.add;
 							}}>ADD</button
