@@ -56,7 +56,7 @@ export const actions = {
 			GradeID: form.data.grade,
 			Difficulty: 0, // TODO
 			SideID: 0, // TODO
-			CreatedBy: null, // TODO
+			CreatedBy: locals.user.id,
 			FromMapPositionID: form.data.from,
 			ToMapPositionID: form.data.to,
 			FromX: form.data.fromX,
