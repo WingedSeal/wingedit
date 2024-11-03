@@ -166,9 +166,8 @@
 
 	<label for="side">Valorant Side</label>
 	<select name="side" bind:value={$form.side}>
-		<option hidden selected value="-1"></option>
-		{#each Object.values(data.gameInfo.sides) as side}
-			<option value={side.ID}>{side.Name}</option>
+		{#each Object.values(data.gameInfo.sides) as side, i}
+			<option value={side.ID} selected={i === 0}>{side.Name}</option>
 		{/each}
 	</select>
 	{#if $errors.side}
