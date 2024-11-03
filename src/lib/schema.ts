@@ -45,7 +45,7 @@ export const agentSchema = z.object({
 		.array()
 });
 
-export const imageSchema = z
+const imageSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
@@ -63,7 +63,7 @@ const extraImageSchema = z
 		'Please upload an image.'
 	);
 
-export const gifSchema = z
+const gifSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 20_000_000, 'Max 20 MB upload size.')
 	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
@@ -76,7 +76,14 @@ const decimalSchema = z
 	.refine((x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON, 'Expected up to 2 decimal points.')
 	.default(null as unknown as number);
 
-export const getLineupSchema = (_imageSchema: ZodType, _gifSchema: ZodType) => {
+export const getLineupSchema = (
+	refineImage: ((f: File) => Promise<boolean>) | null,
+	refineImageError: string,
+	refineGif: ((f: File) => Promise<boolean>) | null,
+	refineGifError: string
+) => {
+	let _imageSchema = refineImage ? imageSchema.refine(refineImage, refineImageError) : imageSchema;
+	let _gifSchema = refineGif ? gifSchema.refine(refineGif, refineGifError) : gifSchema;
 	const require_all_images = PUBLIC_REQUIRE_ALL_IMAGES === 'true';
 	const nullableImageSchema = require_all_images ? _imageSchema.nullable() : _imageSchema;
 	return z
@@ -84,7 +91,7 @@ export const getLineupSchema = (_imageSchema: ZodType, _gifSchema: ZodType) => {
 			agent: z.number().int().min(1, 'Please select an agent.'),
 			map: z.number().int().min(1, 'Please select a map.'),
 			ability: z.number().int().min(1, 'Please select an agent ability.'),
-			throwLineup: _imageSchema,
+			throwLineup: imageSchema,
 			throwGif: require_all_images ? _gifSchema : _gifSchema.nullable(),
 			landSpot: nullableImageSchema,
 			throwSpotFirstPerson: nullableImageSchema,

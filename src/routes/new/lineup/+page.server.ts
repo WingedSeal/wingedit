@@ -8,20 +8,33 @@ import { zod } from 'sveltekit-superforms/adapters';
 import type { Lineup } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
 import { Privilege } from '$lib/server/auth';
-import { getLineupSchema, imageSchema, gifSchema } from '$lib/schema';
+import { getLineupSchema } from '$lib/schema';
 import sharp from 'sharp';
 
+let a = async (f: File) => {
+	const size = await sharp(await f.arrayBuffer()).metadata();
+	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
+};
+
 const schema = getLineupSchema(
-	imageSchema,
-	gifSchema
-	// imageSchema.refine(async (f) => {
-	// 	const size = await sharp(await f.arrayBuffer()).metadata();
-	// 	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
-	// }, 'Please upload 1920x1080 image.'),
-	// gifSchema.refine(async (f) => {
-	// 	const size = await sharp(await f.arrayBuffer()).metadata();
-	// 	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
-	// }, 'Please upload 1920x1080 gif.')
+	// imageSchema,
+	// gifSchema
+	async (f) => {
+		const size = await sharp(await f.arrayBuffer()).metadata();
+		return (size.width &&
+			size.height &&
+			size.width * 9 === size.height * 16 &&
+			size.width >= 1920) as boolean;
+	},
+	'Please upload 1920x1080 image.',
+	async (f) => {
+		const size = await sharp(await f.arrayBuffer()).metadata();
+		return (size.width &&
+			size.height &&
+			size.width * 9 === size.height * 16 &&
+			size.width >= 1920) as boolean;
+	},
+	'Please upload 1920x1080 gif.'
 );
 
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -99,7 +112,8 @@ export const actions = {
 	}
 };
 
-const writeWebp = async (file: File, fileName: string) => {
+const writeWebp = async (file: File | null, fileName: string) => {
+	if (file === null) return;
 	const buffer = await file.arrayBuffer();
 	sharp(buffer)
 		.resize(1980, 1080)
@@ -107,12 +121,14 @@ const writeWebp = async (file: File, fileName: string) => {
 		.toFile(path.join(IMAGES_PATH, fileName));
 };
 
-const writeExtraImages = async (file: File, fileName: string) => {
+const writeExtraImages = async (file: File | null, fileName: string) => {
+	if (file === null) return;
 	const buffer = await file.arrayBuffer();
 	sharp(buffer).webp({ minSize: true, effort: 6 }).toFile(path.join(IMAGES_PATH, fileName));
 };
 
-const writeWebpAnimated = async (file: File, fileName: string) => {
+const writeWebpAnimated = async (file: File | null, fileName: string) => {
+	if (file === null) return;
 	const buffer = await file.arrayBuffer();
 	sharp(buffer, { animated: true })
 		.resize(1980, 1080)

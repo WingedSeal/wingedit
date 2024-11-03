@@ -5,9 +5,9 @@
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { getLineupSchema, gifSchema, imageSchema } from '$lib/schema';
+	import { getLineupSchema } from '$lib/schema';
 	let { data } = $props();
-	const schema = getLineupSchema(imageSchema, gifSchema);
+	const schema = getLineupSchema(null, '', null, '');
 	const { form, errors, enhance, message } = superForm(data.form, {
 		validators: zodClient(schema),
 		taintedMessage: 'Changes you made may not be saved.',
@@ -27,7 +27,6 @@
 		Sub1: 1,
 		Sub2: 2
 	};
-	let descriptionTextArea: HTMLTextAreaElement;
 	let agentAbilities = $state<Ability[]>();
 	let overlayMode = $state<OverlayMode>(OverlayModes.Main);
 </script>
@@ -206,9 +205,11 @@
 	<textarea
 		name="description"
 		id=""
-		onpaste={() => {
+		onpaste={(event) => {
 			setTimeout(() => {
-				descriptionTextArea.value = descriptionTextArea.value.replaceAll('\n', ' ');
+				(event.target as HTMLTextAreaElement).value = (
+					event.target as HTMLTextAreaElement
+				).value.replaceAll('\n', ' ');
 			});
 		}}
 		onkeydown={(event) => {
@@ -216,7 +217,6 @@
 				event.preventDefault();
 			}
 		}}
-		bind:this={descriptionTextArea}
 		bind:value={$form.description}
 	></textarea>
 	{#if $errors.description}
