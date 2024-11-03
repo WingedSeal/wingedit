@@ -5,11 +5,9 @@
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { getLineupSchema } from '$lib/schema';
-	import { z } from 'zod';
-
+	import { getLineupSchema, gifSchema, imageSchema } from '$lib/schema';
 	let { data } = $props();
-	const schema = getLineupSchema(z.any(), z.any());
+	const schema = getLineupSchema(imageSchema, gifSchema);
 	const { form, errors, enhance, message } = superForm(data.form, {
 		validators: zodClient(schema),
 		taintedMessage: 'Changes you made may not be saved.',
@@ -31,11 +29,6 @@
 	};
 	let descriptionTextArea: HTMLTextAreaElement;
 	let agentAbilities = $state<Ability[]>();
-	let throwLineup = $state<FileList>();
-	let throwGif = $state<FileList>();
-	let landSpot = $state<FileList>();
-	let throwSpotFirstPerson = $state<FileList>();
-	let throwSpotThirdPerson = $state<FileList>();
 	let overlayMode = $state<OverlayMode>(OverlayModes.Main);
 </script>
 
@@ -98,8 +91,7 @@
 	<input
 		type="file"
 		name="throwLineup"
-		bind:value={$form.throwLineup}
-		bind:files={throwLineup}
+		oninput={(e) => ($form.throwLineup = e.currentTarget.files?.item(0) as File)}
 		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwLineup}
@@ -111,8 +103,7 @@
 	<input
 		type="file"
 		name="throwGif"
-		bind:value={$form.throwGif}
-		bind:files={throwGif}
+		oninput={(e) => ($form.throwGif = e.currentTarget.files?.item(0) as File)}
 		accept="image/gif, image/webp"
 	/>
 	{#if $errors.throwGif}
@@ -123,8 +114,7 @@
 	<input
 		type="file"
 		name="landSpot"
-		bind:value={$form.landSpot}
-		bind:files={landSpot}
+		oninput={(e) => ($form.landSpot = e.currentTarget.files?.item(0) as File)}
 		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.landSpot}
@@ -135,8 +125,7 @@
 	<input
 		type="file"
 		name="throwSpotFirstPerson"
-		bind:value={$form.throwSpotFirstPerson}
-		bind:files={throwSpotFirstPerson}
+		oninput={(e) => ($form.throwSpotFirstPerson = e.currentTarget.files?.item(0) as File)}
 		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwSpotFirstPerson}
@@ -147,8 +136,7 @@
 	<input
 		type="file"
 		name="throwSpotThirdPerson"
-		bind:value={$form.throwSpotThirdPerson}
-		bind:files={throwSpotThirdPerson}
+		oninput={(e) => ($form.throwSpotThirdPerson = e.currentTarget.files?.item(0) as File)}
 		accept="image/jpeg, image/png, image/webp"
 	/>
 	{#if $errors.throwSpotThirdPerson}
@@ -164,6 +152,28 @@
 	</select>
 	{#if $errors.grade}
 		<small>{$errors.grade[0]}</small>
+	{/if}
+
+	<label for="difficulty">Difficulty</label>
+	<select name="difficulty" bind:value={$form.difficulty}>
+		<option hidden selected></option>
+		{#each Object.values(data.gameInfo.grades) as difficulties}
+			<option value={difficulties.ID}>{difficulties.Name}</option>
+		{/each}
+	</select>
+	{#if $errors.difficulty}
+		<small>{$errors.difficulty[0]}</small>
+	{/if}
+
+	<label for="side">Valorant Side</label>
+	<select name="side" bind:value={$form.side}>
+		<option hidden selected value="-1"></option>
+		{#each Object.values(data.gameInfo.sides) as side}
+			<option value={side.ID}>{side.Name}</option>
+		{/each}
+	</select>
+	{#if $errors.side}
+		<small>{$errors.side[0]}</small>
 	{/if}
 
 	<label for="throwType">Throw Type</label>
@@ -379,6 +389,18 @@
 		<small>{$errors.toY[0]}</small>
 	{/if}
 
+	<label for="extraImages">Extra images</label>
+	<input
+		type="file"
+		multiple
+		name="extraImages"
+		oninput={(e) => ($form.extraImages = Array.from(e.currentTarget.files ?? []))}
+		accept="image/jpeg, image/png, image/webp"
+	/>
+
+	{#if $errors.extraImages}
+		<small>{$errors.extraImages[0]}</small>
+	{/if}
 	<button type="submit" class="bg-red-300">button</button>
 </form>
 
@@ -423,7 +445,7 @@
 	<label for="sub2">Sub2</label>
 </form>
 
-{#if throwLineup}
+{#if $form.throwLineup}
 	<div class="aspect-video w-[100rem] bg-red relative m-4">
 		<LineupShowOverlay
 			DrawOverMainX={$form.mainX}
@@ -434,7 +456,7 @@
 			DrawOverSub2Y={$form.sub2Y || null}
 		/>
 		<ClickableImage
-			src={URL.createObjectURL(throwLineup[0])}
+			src={URL.createObjectURL($form.throwLineup)}
 			alt={`Preview image of "Throw Lineup"`}
 			onClick={(x, y) => {
 				switch (overlayMode) {

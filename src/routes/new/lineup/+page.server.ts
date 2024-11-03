@@ -12,14 +12,16 @@ import { getLineupSchema, imageSchema, gifSchema } from '$lib/schema';
 import sharp from 'sharp';
 
 const schema = getLineupSchema(
-	imageSchema.refine(async (f) => {
-		const size = await sharp(await f.arrayBuffer()).metadata();
-		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
-	}, 'Please upload 1920x1080 image.'),
-	gifSchema.refine(async (f) => {
-		const size = await sharp(await f.arrayBuffer()).metadata();
-		return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
-	}, 'Please upload 1920x1080 gif.')
+	imageSchema,
+	gifSchema
+	// imageSchema.refine(async (f) => {
+	// 	const size = await sharp(await f.arrayBuffer()).metadata();
+	// 	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
+	// }, 'Please upload 1920x1080 image.'),
+	// gifSchema.refine(async (f) => {
+	// 	const size = await sharp(await f.arrayBuffer()).metadata();
+	// 	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
+	// }, 'Please upload 1920x1080 gif.')
 );
 
 export const load: PageServerLoad = async ({ locals, url }) => {
@@ -50,12 +52,12 @@ export const actions = {
 			AgentID: form.data.agent,
 			AbilityID: form.data.ability,
 			MapID: form.data.map,
-			ExtraImageCount: -1, // TODO
-			ThrowTypeID: getThrowTypes()[form.data.throwType].ID,
+			ExtraImageCount: form.data.extraImages.length,
+			ThrowTypeID: form.data.throwType,
 			TimeToLand: form.data.timeToLand,
 			GradeID: form.data.grade,
-			Difficulty: 0, // TODO
-			SideID: 0, // TODO
+			Difficulty: form.data.difficulty,
+			SideID: form.data.side,
 			CreatedBy: locals.user.id,
 			FromMapPositionID: form.data.from,
 			ToMapPositionID: form.data.to,

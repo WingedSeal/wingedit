@@ -54,6 +54,15 @@ export const imageSchema = z
 		'Please upload an image.'
 	);
 
+const extraImageSchema = z
+	.instanceof(File, { message: 'Please upload a file.' })
+	.refine((f) => f.size < 2_000_000, 'Max 2 MB upload size per extra image.')
+	.refine((f) => f.name && f.size != 0, 'Please upload a file.')
+	.refine(
+		(f) => f.type === 'image/jpeg' || f.type === 'image/png' || f.type === 'image/webp',
+		'Please upload an image.'
+	);
+
 export const gifSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })
 	.refine((f) => f.size < 20_000_000, 'Max 20 MB upload size.')
@@ -80,7 +89,10 @@ export const getLineupSchema = (_imageSchema: ZodType, _gifSchema: ZodType) => {
 			landSpot: nullableImageSchema,
 			throwSpotFirstPerson: nullableImageSchema,
 			throwSpotThirdPerson: nullableImageSchema,
+			extraImages: extraImageSchema.array(),
 			grade: z.number().int().min(1, 'Please select a grade.'),
+			difficulty: z.number().int().min(1, 'Please select a difficulty.'),
+			side: z.number().int().min(0, "Please select a lineup's side."),
 			throwType: z.number().int().min(1, 'Please select a throw type.'),
 			timeToLand: z
 				.number({ message: 'Expected a number.' })
