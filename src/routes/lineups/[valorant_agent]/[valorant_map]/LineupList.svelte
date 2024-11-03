@@ -11,8 +11,9 @@
 
 	let { lineups, lineupIndex = $bindable(), gameInfo, abilities }: Props = $props();
 
-	const getDetails = (lineup: Lineup) => {
+	const getDetails = (lineup: Lineup, index: number) => {
 		return {
+			index: index,
 			lineup: lineup,
 			abilityNameID: abilities[lineup.AbilityID].NameID,
 			ability: abilities[lineup.AbilityID].Name,
@@ -26,12 +27,10 @@
 
 	type Detail = ReturnType<typeof getDetails>;
 
-	let details = $state(
-		lineups.map((lineup) => {
-			return getDetails(lineup);
-		})
-	);
-
+	const details = lineups.map((lineup, index) => {
+		return getDetails(lineup, index);
+	});
+	let sortedDetails = $state(details);
 	const compareStr = (a: string, b: string) => (a > b ? 1 : -1);
 	const sortFunc = (a: Detail, b: Detail): number => {
 		switch (sortedBy) {
@@ -58,7 +57,7 @@
 	let sortedBy = $state('ID');
 	let isSortAscending = $state(true);
 	const reSort = () => {
-		details.sort((a, b) => {
+		sortedDetails = details.toSorted((a, b) => {
 			return (isSortAscending ? 1 : -1) * sortFunc(a, b);
 		});
 	};
@@ -109,7 +108,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each details as detail, i (detail.lineup.ID)}
+		{#each sortedDetails as detail (detail.lineup.ID)}
 			<tr>
 				<td>
 					{detail.lineup.ID}
@@ -117,7 +116,8 @@
 				<td>
 					<img
 						class="inline h-4 -translate-y-1 bg-slate-800 rounded-md"
-						src="/api/image/agents/{lineups[i].AgentID}/abilities/{lineups[i].AbilityID}.webp"
+						src="/api/image/agents/{lineups[detail.index].AgentID}/abilities/{lineups[detail.index]
+							.AbilityID}.webp"
 						alt={detail.abilityNameID}
 					/>
 					{detail.ability}
@@ -145,7 +145,7 @@
 						class="w-6 h-6 rounded-md bg-purple-300"
 						aria-label="open lineup"
 						onclick={() => {
-							lineupIndex = i;
+							lineupIndex = detail.index;
 							$isPopupShow = true;
 						}}
 					>
