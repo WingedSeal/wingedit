@@ -46,13 +46,6 @@
 			>
 		</form>
 
-		<form method="post" use:enhance action="/account/signout" class="mt-4">
-			<button
-				class="bg-gray-300 text-gray-700 rounded-md py-2 w-full hover:bg-gray-400 transition-colors"
-				>Sign out</button
-			>
-		</form>
-
 		{#if $message}
 			<div class="text-green-500 mt-4">{$message}</div>
 		{/if}
