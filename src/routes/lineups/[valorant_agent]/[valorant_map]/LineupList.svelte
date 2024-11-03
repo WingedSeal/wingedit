@@ -32,7 +32,7 @@
 		})
 	);
 
-	const compareStr = (a: string, b: string) => (a > b ? -1 : 1);
+	const compareStr = (a: string, b: string) => (a > b ? 1 : -1);
 	const sortFunc = (a: Detail, b: Detail): number => {
 		switch (sortedBy) {
 			case 'ID':
