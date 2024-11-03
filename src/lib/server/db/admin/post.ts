@@ -53,11 +53,11 @@ export const executeQuery = (
 	let errorRow: number;
 	try {
 		db.transaction(() => {
-			query.delete.forEach(([values, row]) => {
+			query.delete.forEach(([whereValues, row]) => {
 				try {
-					deleteRows.run(...values);
+					deleteRows.run(...whereValues);
 				} catch (error) {
-					const pos = values
+					const pos = whereValues
 						.map((value, i) => `${primaryKeys[i]}=${JSON.stringify(value.toString())}`)
 						.join(', ');
 					where = `Query failed during deletion of (${pos})`;
@@ -65,23 +65,27 @@ export const executeQuery = (
 					throw error;
 				}
 			});
-			query.edit.forEach(([keyValues, values, row]) => {
+			query.edit.forEach(([newValues, whereValues, row]) => {
 				try {
 					updateRows.run(
-						...values,
-						...keyValues.map((v) => {
+						...whereValues,
+						...newValues.map((v, i) => {
 							try {
 								return JSON.parse(v);
 							} catch (error) {
 								if (error instanceof SyntaxError) {
-									error.message = `Unable to parse the value: ${v}`;
+									if (v) {
+										error.message = `Unable to parse the value: ${JSON.stringify(v)} of "${columnNames[i]}"`;
+									} else {
+										error.message = `Missing value in "${columnNames[i]}". If it is meant to be 'null', explicity type it.`;
+									}
 								}
 								throw error;
 							}
 						})
 					);
 				} catch (error) {
-					const pos = keyValues
+					const pos = newValues
 						.map((value, i) => `${primaryKeys[i]}=${JSON.stringify(value.toString())}`)
 						.join(', ');
 					where = `Query failed during updation of (${pos})`;
@@ -92,12 +96,16 @@ export const executeQuery = (
 			query.add.forEach((values, row) => {
 				try {
 					insertRows.run(
-						...values.map((v) => {
+						...values.map((v, i) => {
 							try {
 								return JSON.parse(v);
 							} catch (error) {
 								if (error instanceof SyntaxError) {
-									error.message = `Unable to parse the value: ${v}`;
+									if (v) {
+										error.message = `Unable to parse the value: ${JSON.stringify(v)} of "${columnNames[i]}"`;
+									} else {
+										error.message = `Missing value in "${columnNames[i]}". If it is meant to be 'null', explicity type it.`;
+									}
 								}
 								throw error;
 							}

@@ -4,7 +4,6 @@
 	import { page } from '$app/stores';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { writable, type Writable } from 'svelte/store';
-	import { onMount } from 'svelte';
 	let { form, data } = $props();
 	let formElement: HTMLFormElement;
 	type PK = number[];
@@ -34,18 +33,27 @@
 		});
 	};
 
+	const STOP_ITERATION = new Error();
 	const addNewRow = () => {
 		if (!form) throw Error('form is null');
-		let isSomething = false;
-		const newRow = Object.keys(form.table[0]).map((_, col) => {
-			const input = document.getElementById(`add-${col}`) as HTMLInputElement;
-			if (!input) throw Error('Missing input');
-			const value = input.value;
-			if (value) isSomething = true;
-			input.value = '';
-			return value;
-		});
-		if (isSomething) $query.add.push(newRow);
+		missingValueCol = null;
+		let newRow;
+		try {
+			newRow = Object.keys(form.table[0]).map((_, col) => {
+				const input = document.getElementById(`add-${col}`) as HTMLInputElement;
+				if (!input) throw Error(`Missing input element: ${col}`);
+				const value = input.value;
+				if (!value) {
+					missingValueCol = col;
+					throw STOP_ITERATION;
+				}
+				input.value = '';
+				return value;
+			});
+		} catch (error) {
+			if (error !== STOP_ITERATION) throw error;
+		}
+		if (newRow) $query.add.push(newRow);
 	};
 	let save = $state<{
 		error?: {
@@ -92,6 +100,8 @@
 		tableSQL = await response.json();
 		isFetching = false;
 	};
+	let missingValueCol = $state<number | null>(null);
+	let customError = $state('');
 	afterNavigate(() => formElement.requestSubmit());
 </script>
 
@@ -99,6 +109,9 @@
 	<p class="text-red-500">Code: {save.error?.code}</p>
 	<p class="text-red-500">{save.error?.where}</p>
 	<p class="text-red-500">{save.error?.why}</p>
+{/if}
+{#if customError}
+	<p class="text-red-500">{customError}</p>
 {/if}
 <form
 	bind:this={formElement}
@@ -211,7 +224,6 @@
 					</tr>
 				{/each}
 				{#each $query.add as newRow, newRowIndex}
-					{@const a = console.log(newRow, newRowIndex)}
 					<tr
 						class={'bg-blue-100' +
 							(save?.error?.row === newRowIndex && save.error.isAdd ? '  bg-red-900' : '')}
@@ -254,7 +266,9 @@
 				{/each}
 				<tr>
 					{#each Object.keys(form.table[0]) as _, col}
-						<td><input type="text" id={`add-${col}`} /></td>
+						<td class:bg-red-900={missingValueCol === col}>
+							<input class="bg-transparent" type="text" id={`add-${col}`} />
+						</td>
 					{/each}
 					<td colspan="2"
 						><button
@@ -262,6 +276,11 @@
 							onclick={() => {
 								save = null;
 								addNewRow();
+								if (missingValueCol === null) {
+									customError = '';
+								} else {
+									customError = `Missing value in column "${Object.keys(form.table[0])[missingValueCol]}". If it is meant to be 'null', explicity type it.`;
+								}
 								$query.add = $query.add;
 							}}>ADD</button
 						></td
