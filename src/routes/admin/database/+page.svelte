@@ -2,8 +2,7 @@
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	let { form, data } = $props();
 	let formElement: HTMLFormElement;
 	type PK = number[];
@@ -91,7 +90,7 @@
 		tableSQL = await response.json();
 		isFetching = false;
 	};
-	onMount(() => formElement.requestSubmit());
+	afterNavigate(() => formElement.requestSubmit());
 </script>
 
 {#if save && save.error}

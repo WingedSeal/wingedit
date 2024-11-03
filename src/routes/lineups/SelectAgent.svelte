@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Agent } from '$lib/server/db/types';
-	import { onMount } from 'svelte';
 	import AgentDisplay from './AgentDisplay.svelte';
 	import {
 		getFavouriteAgentIDs,
@@ -9,6 +8,7 @@
 		updateFavouriteAgentIDs,
 		updateMainAgentID
 	} from './stores';
+	import { afterNavigate } from '$app/navigation';
 
 	interface Props {
 		agents: {
@@ -42,7 +42,7 @@
 			}
 		});
 	};
-	onMount(() => {
+	afterNavigate(() => {
 		updateFavouriteAgentIDs(favouriteAgentIDs);
 		updateMainAgentID(mainAgentID);
 		$selectedAgent = $mainAgentID;
