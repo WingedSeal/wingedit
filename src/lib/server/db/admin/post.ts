@@ -123,7 +123,6 @@ export const executeQuery = (
 			});
 		})();
 	} catch (error) {
-		console.log(error);
 		if (error instanceof SqliteError) {
 			return { error: { code: error.code, why: error.message, where, isAdd, row: errorRow! } };
 		}
