@@ -436,8 +436,6 @@
 						{$errors.sub2Y[0]}
 					{/if}
 				</label>
-
-				<button type="submit" class="bg-red-300">button</button>
 			</div>
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
