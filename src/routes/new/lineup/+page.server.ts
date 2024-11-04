@@ -7,7 +7,7 @@ import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Lineup } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
-import { Privilege } from '$lib/server/auth';
+import Privilege from '$lib/privilege';
 import { getLineupSchema } from '$lib/schema';
 import sharp from 'sharp';
 

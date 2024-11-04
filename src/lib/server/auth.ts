@@ -23,12 +23,6 @@ export const lucia = new Lucia(adapter, {
 	}
 });
 
-export const Privilege = {
-	Member: 1,
-	Moderator: 2,
-	Admin: 3
-};
-
 declare module 'lucia' {
 	interface Register {
 		Lucia: typeof lucia;

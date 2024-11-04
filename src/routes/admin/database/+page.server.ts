@@ -1,7 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { getTables, getTable, getPrimaryKeys } from '$lib/server/db/admin';
 import { error, fail } from '@sveltejs/kit';
-import { Privilege } from '$lib/server/auth';
+import Privilege from '$lib/privilege';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	await parent();

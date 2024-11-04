@@ -12,7 +12,7 @@ import {
 import type { ReferralCode } from '$lib/server/db/types';
 import { fail, message, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { Privilege } from '$lib/server/auth';
+import Privilege from '$lib/privilege';
 import { inviteSchema as schema } from '$lib/schema';
 
 const MAX_CODE_COUNT = 4;
@@ -85,7 +85,6 @@ export const load = async (event: Parameters<PageServerLoad>[0]) => {
 	const canHideSource = event.locals.user.privilege >= Privilege.Admin;
 	return {
 		form: await superValidate<Infer<typeof schema>, FormMessage>(zod(schema)),
-		privileges: getPrivileges(),
 		codes: getReferralCodes(event.locals.user.id),
 		hiddenCodes: canHideSource ? getHiddenReferralCodes() : null,
 		canHideSource

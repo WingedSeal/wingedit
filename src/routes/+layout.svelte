@@ -12,5 +12,5 @@
 	let { children, data }: Props = $props();
 </script>
 
-<NavBar user={data.user} />
+<NavBar user={data.user} privileges={data.privileges} />
 {@render children?.()}

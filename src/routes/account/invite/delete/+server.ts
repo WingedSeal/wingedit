@@ -1,4 +1,4 @@
-import { Privilege } from '$lib/server/auth';
+import Privilege from '$lib/privilege';
 import { deleteReferralCode, getReferralCodes } from '$lib/server/db/auth';
 import { error, json, type RequestHandler } from '@sveltejs/kit';
 

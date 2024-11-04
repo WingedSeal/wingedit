@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
-import { Privilege } from '$lib/server/auth';
+import Privilege from '$lib/privilege';
 import { superValidate } from 'sveltekit-superforms';
 import { getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
 import { zod } from 'sveltekit-superforms/adapters';

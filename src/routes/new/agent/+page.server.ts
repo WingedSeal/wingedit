@@ -4,7 +4,7 @@ import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { Agent } from '$lib/server/db/types';
-import { Privilege } from '$lib/server/auth';
+import Privilege from '$lib/privilege';
 import { agentSchema as schema } from '$lib/schema';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
