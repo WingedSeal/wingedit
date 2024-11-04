@@ -5,7 +5,8 @@ export default {
 		extend: {
 			colors: {
 				primary: '#FFFFFF', // white
-				secondary: '#CCCCCC' // white
+				secondary: '#CCCCCC', // white
+				error: '#CC0033' // red
 			}
 		}
 	},
