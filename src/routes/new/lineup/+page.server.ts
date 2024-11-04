@@ -11,11 +11,6 @@ import Privilege from '$lib/privilege';
 import { getLineupSchema } from '$lib/schema';
 import sharp from 'sharp';
 
-let a = async (f: File) => {
-	const size = await sharp(await f.arrayBuffer()).metadata();
-	return size.width && size.height && size.width * 9 === size.height * 16 && size.width >= 1920;
-};
-
 const schema =
 	VALIDATE_IMAGE_SIZE === 'true'
 		? getLineupSchema(
