@@ -8,7 +8,7 @@ export const getMainAgentID = () => {
 };
 
 export const updateMainAgentID = (mainAgentID: ReturnType<typeof getMainAgentID>): Unsubscriber => {
-	mainAgentID.set(Number.parseInt(localStorage.getItem(MAIN_AGENT_LOCAL_STORAGE) || '-1'));
+	mainAgentID.set(Number.parseInt(localStorage.getItem(MAIN_AGENT_LOCAL_STORAGE) || '0'));
 	return mainAgentID.subscribe((agent) => {
 		localStorage.setItem(MAIN_AGENT_LOCAL_STORAGE, agent.toString());
 	});
