@@ -340,7 +340,7 @@
 					<label for="sub2">Sub2</label>
 				</div>
 			</div>
-			<div class="w-1/4 flex flex-col p-12">
+			<div class="w-1/4 flex flex-col px-12 pt-12 pb-2">
 				<label for="mainX" class="main-label">Main Circle (X-axis)</label>
 				<input
 					type="number"
@@ -436,6 +436,10 @@
 						{$errors.sub2Y[0]}
 					{/if}
 				</label>
+
+				<div class="mt-auto h-20 flex">
+					{@render scrollDown(3)}
+				</div>
 			</div>
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
