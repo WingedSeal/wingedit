@@ -250,7 +250,7 @@
 				</div>
 			</div>
 			<div class="h-20 flex">
-				{@render scrollDown(1)}
+				{@render scrollDown(2)}
 			</div>
 		</section>
 		<section class="bg-yellow-100 section h-dvh-nav"></section>
