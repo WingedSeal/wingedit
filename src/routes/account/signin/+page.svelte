@@ -5,7 +5,7 @@
 	import { signinSchema as schema } from '$lib/schema';
 	let { data } = $props();
 
-	const { form, errors, message, enhance } = superForm(data.form, {
+	const { form, errors, enhance } = superForm(data.form, {
 		validators: zodClient(schema)
 	});
 </script>
@@ -46,19 +46,14 @@
 			>
 		</form>
 
-		{#if $message}
-			<div class="text-green-500 mt-4">{$message}</div>
-		{/if}
-
-		{#if $errors._errors}
+		<!-- {#if $errors._errors}
 			<div class="text-red-500 mt-4">{$errors._errors}</div>
-		{/if}
-		<h1 class="text-blue-500 mt-4 inline-block">Don't have account?</h1>
+		{/if} -->
 		<a
 			href={'/account/signup' + $page.url.search}
 			class="text-blue-500 mt-4 inline-block hover:underline"
 		>
-			Sign up
+			Don't have account? Sign up
 		</a>
 	</div>
 </div>
