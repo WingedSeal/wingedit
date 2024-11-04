@@ -1,12 +1,14 @@
-<script>
+<script lang="ts">
 	import '../app.scss';
-	/**
-	 * @typedef {Object} Props
-	 * @property {import('svelte').Snippet} [children]
-	 */
+	import { type Snippet } from 'svelte';
+	import NavBar from './NavBar.svelte';
 
-	/** @type {Props} */
-	let { children } = $props();
+	type Props = {
+		children: Snippet;
+	};
+
+	let { children }: Props = $props();
 </script>
 
+<NavBar />
 {@render children?.()}

@@ -9,3 +9,19 @@
 	padding: 0;
 	box-sizing: border-box;
 }
+
+:root {
+	--navbar-h: 4rem;
+}
+
+.h-nav {
+	height: var(--navbar-h);
+}
+
+.h-dvh-nav {
+	height: calc(100dvh - var(--navbar-h));
+}
+
+.min-h-dvh-nav {
+	min-height: calc(100dvh - var(--navbar-h));
+}

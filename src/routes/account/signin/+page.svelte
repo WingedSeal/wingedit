@@ -11,7 +11,7 @@
 </script>
 
 <!-- all container to make it be at the center-->
-<div class="flex items-center justify-center min-h-screen bg-gray-600">
+<div class="flex items-center justify-center min-h-dvh-nav bg-gray-600">
 	<!-- smaller container-->
 	<div class="bg-white p-8 rounded-lg max-w-md w-full text-center">
 		<h1 class="text-2xl font-semibold mb-6">Sign in</h1>

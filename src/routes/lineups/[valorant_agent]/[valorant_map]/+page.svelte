@@ -37,8 +37,8 @@
 </script>
 
 <LoadingScreen />
-<main class="snap-mandatory snap-y h-dvh overflow-y-auto">
-	<section class="h-dvh bg-slate-200 flex snap-center">
+<main class="snap-mandatory snap-y h-dvh-nav overflow-y-auto">
+	<section class="h-full bg-slate-200 flex snap-center">
 		<div class="bg-green-300 flex-grow flex flex-col relative h-full">
 			<div
 				class="absolute right-0 bottom-0 h-full bg-yellow-100 aspect-[2/3] bg-no-repeat bg-cover bg-center"
@@ -71,7 +71,7 @@
 		</div>
 	</section>
 
-	<section class="h-dvh bg-slate-200 flex flex-col p-16 snap-center">
+	<section class="h-full bg-slate-200 flex flex-col p-16 snap-center">
 		<div class="flex flex-col overflow-auto max-h-full p-4">
 			<LineupList
 				lineups={allLineupList}

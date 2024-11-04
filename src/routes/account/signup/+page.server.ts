@@ -30,16 +30,16 @@ export const actions: Actions = {
 			return setError(form, 'referralCode', 'Invalid code');
 		}
 		const userId = generateIdFromEntropySize(10); // 16 characters long
-		const passwordHash = await hash(form.data.password, {
-			memoryCost: 2 ** 16,
-			timeCost: 2,
-			hashLength: 32,
-			parallelism: 1
-		});
 
 		if (isUsernameExist(form.data.username)) {
-			return setError(form, 'username', "This username doesn't exist.");
+			return setError(form, 'username', 'This username already exist.');
 		}
+		const passwordHash = await hash(form.data.password, {
+			memoryCost: 64 * 1024,
+			timeCost: 3,
+			hashLength: 32,
+			parallelism: 4
+		});
 		const user: User = {
 			UserID: userId,
 			Username: form.data.username,
