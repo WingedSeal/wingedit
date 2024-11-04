@@ -23,6 +23,6 @@
 	};
 </script>
 
-<button class=" aspect-video w-full h-full" onmousemove={move} onmousedown={handleEvent}>
+<button class="aspect-video w-full h-full" onmousemove={move} onmousedown={handleEvent}>
 	<img {src} {alt} class="w-full h-full" draggable="false" />
 </button>

@@ -1,20 +1,23 @@
 <script lang="ts">
-	import { superForm } from 'sveltekit-superforms';
+	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { getLineupSchema } from '$lib/schema';
 	import '$lib/styles/form.scss';
 	import type { Ability } from '$lib/server/db/types.js';
+	import { OverlayMode } from './enum.js';
+	import ClickableImage from './ClickableImage.svelte';
+	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 
 	const schema = getLineupSchema(null, '', null, '');
 
 	let { data } = $props();
 	const { form, errors, enhance } = superForm(data.form, {
 		validators: zodClient(schema),
-		taintedMessage: 'Changes you made may not be saved.',
-		validationMethod: 'onsubmit'
+		taintedMessage: 'Changes you made may not be saved.'
 	});
 
 	let agentAbilities = $state<Ability[]>();
+	let selectedOverlayMode = $state<OverlayMode>(OverlayMode.Main);
 </script>
 
 {#snippet scrollDown(n: number)}
@@ -253,8 +256,193 @@
 				{@render scrollDown(2)}
 			</div>
 		</section>
-		<section class="bg-yellow-100 section h-dvh-nav"></section>
-		<section class="bg-green-100 section h-dvh-nav"></section>
+		<section class="bg-yellow-100 section h-dvh-nav">
+			<div class="w-3/4 bg-yellow-300 p-4 flex flex-col">
+				<div class="w-full aspect-video bg-black">
+					{#if $form.throwLineup}
+						<div class="w-full h-full relative">
+							<LineupShowOverlay
+								DrawOverMainX={$form.mainX}
+								DrawOverMainY={$form.mainY}
+								DrawOverSub1X={$form.sub1X || null}
+								DrawOverSub1Y={$form.sub1Y || null}
+								DrawOverSub2X={$form.sub2X || null}
+								DrawOverSub2Y={$form.sub2Y || null}
+							/>
+							<ClickableImage
+								src={URL.createObjectURL($form.throwLineup)}
+								alt={`Preview image of "Throw Lineup"`}
+								onClick={(x, y) => {
+									switch (selectedOverlayMode) {
+										case OverlayMode.Main:
+											$form.mainX = x;
+											$form.mainY = y;
+											break;
+										case OverlayMode.Sub1:
+											$form.sub1X = x;
+											$form.sub1Y = y;
+											break;
+										case OverlayMode.Sub2:
+											$form.sub2X = x;
+											$form.sub2Y = y;
+											break;
+									}
+								}}
+							/>
+						</div>
+					{/if}
+				</div>
+
+				<div class="grow flex select-overlay-mode justify-around">
+					<input
+						type="radio"
+						form="none"
+						id="main"
+						name="overlay-mode"
+						class="hidden"
+						value={OverlayMode.Main}
+						bind:group={selectedOverlayMode}
+					/>
+					<label for="main">Main</label>
+
+					<input
+						type="radio"
+						form="none"
+						id="sub1"
+						name="overlay-mode"
+						class="hidden"
+						value={OverlayMode.Sub1}
+						bind:group={selectedOverlayMode}
+						onclick={() => {
+							$form.sub1X ??= $form.mainX;
+							$form.sub1Y ??= $form.mainY;
+							$form.sub2X ??= $form.mainX;
+							$form.sub2Y ??= $form.mainY;
+						}}
+					/>
+					<label for="sub1">Sub1</label>
+
+					<input
+						type="radio"
+						form="none"
+						id="sub2"
+						name="overlay-mode"
+						class="hidden"
+						value={OverlayMode.Sub2}
+						bind:group={selectedOverlayMode}
+						onclick={() => {
+							$form.sub1X ??= $form.mainX;
+							$form.sub1Y ??= $form.mainY;
+							$form.sub2X ??= $form.mainX;
+							$form.sub2Y ??= $form.mainY;
+						}}
+					/>
+					<label for="sub2">Sub2</label>
+				</div>
+			</div>
+			<div class="w-1/4 flex flex-col p-12">
+				<label for="mainX" class="main-label">Main Circle (X-axis)</label>
+				<input
+					type="number"
+					name="mainX"
+					bind:value={$form.mainX}
+					placeholder="0"
+					min="0"
+					max="100"
+					step="0.01"
+				/>
+				<label for="mainX" class="error">
+					{#if $errors.mainX}
+						{$errors.mainX[0]}
+					{/if}
+				</label>
+
+				<label for="mainY" class="main-label">Main Circle (Y-axis)</label>
+				<input
+					type="number"
+					name="mainY"
+					bind:value={$form.mainY}
+					placeholder="0"
+					min="0"
+					max="100"
+					step="0.01"
+				/>
+				<label for="mainY" class="error">
+					{#if $errors.mainY}
+						{$errors.mainY[0]}
+					{/if}
+				</label>
+
+				<label for="sub1X" class="main-label">Sub Circle 1 (X-axis)</label>
+				<input
+					type="number"
+					name="sub1X"
+					bind:value={$form.sub1X}
+					placeholder="0"
+					min="0"
+					max="100"
+					step="0.01"
+				/>
+				<label for="sub1X" class="error">
+					{#if $errors.sub1X}
+						{$errors.sub1X[0]}
+					{/if}
+				</label>
+
+				<label for="sub1Y" class="main-label">Sub Circle 1 (Y-axis)</label>
+				<input
+					type="number"
+					name="sub1Y"
+					bind:value={$form.sub1Y}
+					placeholder="0"
+					min="0"
+					max="100"
+					step="0.01"
+				/>
+				<label for="sub1Y" class="error">
+					{#if $errors.sub1Y}
+						{$errors.sub1Y[0]}
+					{/if}
+				</label>
+
+				<label for="sub2X" class="main-label">Sub Circle 2 (X-axis)</label>
+				<input
+					type="number"
+					name="sub2X"
+					bind:value={$form.sub2X}
+					placeholder="0"
+					min="0"
+					max="100"
+					step="0.01"
+				/>
+				<label for="sub2X" class="error">
+					{#if $errors.sub2X}
+						{$errors.sub2X[0]}
+					{/if}
+				</label>
+
+				<label for="sub2Y" class="main-label">Sub Circle 2 (Y-axis)</label>
+				<input
+					type="number"
+					name="sub2Y"
+					bind:value={$form.sub2Y}
+					placeholder="0"
+					min="0"
+					max="100"
+					step="0.01"
+				/>
+				<label for="sub2Y" class="error">
+					{#if $errors.sub2Y}
+						{$errors.sub2Y[0]}
+					{/if}
+				</label>
+
+				<button type="submit" class="bg-red-300">button</button>
+			</div>
+		</section>
+		<section class="bg-green-100 section h-dvh-nav">
+			<SuperDebug data={$form} />
+		</section>
 	</form>
 </main>
 
@@ -272,5 +460,15 @@
 
 	.section {
 		@apply flex snap-center w-full;
+	}
+
+	.select-overlay-mode {
+		label {
+			@apply font-bold text-2xl my-auto block bg-white px-4 py-1 rounded-md;
+		}
+
+		input[type='radio']:checked + label {
+			@apply text-red-600;
+		}
 	}
 </style>

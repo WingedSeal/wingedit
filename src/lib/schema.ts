@@ -6,6 +6,11 @@ export const inviteSchema = z.object({
 	isHideSource: z.boolean()
 });
 
+const countDecimals = (value: number) => {
+	if (value % 1 != 0) return value.toString().split('.')[1].length;
+	return 0;
+};
+
 export const signinSchema = z.object({
 	username: z
 		.string()
@@ -73,7 +78,7 @@ const decimalSchema = z
 	.number({ message: 'Expected a number.' })
 	.positive()
 	.max(100)
-	.refine((x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON, 'Expected up to 2 decimal points.')
+	.refine((x) => countDecimals(x) <= 2, 'Expected up to 2 decimal points.')
 	.default(null as unknown as number);
 
 export const getLineupSchema = (
@@ -85,7 +90,7 @@ export const getLineupSchema = (
 	let _imageSchema = refineImage ? imageSchema.refine(refineImage, refineImageError) : imageSchema;
 	let _gifSchema = refineGif ? gifSchema.refine(refineGif, refineGifError) : gifSchema;
 	const require_all_images = PUBLIC_REQUIRE_ALL_IMAGES === 'true';
-	const nullableImageSchema = require_all_images ? _imageSchema.nullable() : _imageSchema;
+	const nullableImageSchema = require_all_images ? _imageSchema : _imageSchema.nullable();
 	return z
 		.object({
 			agent: z.number().int().min(1, 'Please select an agent.'),
@@ -105,11 +110,8 @@ export const getLineupSchema = (
 				.number({ message: 'Expected a number.' })
 				.positive()
 				.max(300)
-				.refine(
-					(x) => x * 100 - Math.trunc(x * 100) < Number.EPSILON,
-					'Expected up to 2 decimal points.'
-				)
-				.default('' as unknown as number),
+				.refine((x) => countDecimals(x) <= 2, 'Expected up to 2 decimal points.')
+				.default(null as unknown as number),
 			description: z.string().trim(),
 			mainX: decimalSchema.default(50),
 			mainY: decimalSchema.default(50),
