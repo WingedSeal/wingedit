@@ -40,7 +40,7 @@
 			>
 				<div
 					class="absolute h-[calc(100%+2.5rem)] w-[calc(100%+2rem)] top-1/2 left-1/2 -translate-y-[calc(50%+0.5rem)]
-					-translate-x-1/2 -z-10 bg-red-300 opacity-30"
+					-translate-x-1/2 -z-10"
 				></div>
 				{#snippet newButton(href: string, name: string)}
 					<a
@@ -72,7 +72,7 @@
 			class="absolute top-[calc(100%+1rem)] right-0 scale-y-0 -translate-y-1/2 transition-all ease-in duration-100 dropdown-content"
 		>
 			<div
-				class="absolute h-[calc(100%+2.5rem)] w-[calc(100%+2rem)] top-1/2 right-0 -translate-y-[calc(50%+0.5rem)] translate-x-2 -z-10 bg-red-300 opacity-30"
+				class="absolute h-[calc(100%+2.5rem)] w-[calc(100%+2rem)] top-1/2 right-0 -translate-y-[calc(50%+0.5rem)] translate-x-2 -z-10"
 			></div>
 			<div class="bg-blue-200 rounded-md flex flex-col overflow-hidden">
 				{#if user}

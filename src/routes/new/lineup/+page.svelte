@@ -195,7 +195,55 @@
 				</div>
 			</div>
 		</section>
-		<section class="bg-blue-100 section h-dvh-nav"></section>
+		<section
+			class="bg-blue-100 section h-dvh-nav flex flex-col justify-center items-center py-12 pt-12 pb-6"
+		>
+			<div class="aspect-video max-h-[calc(100%-5rem)] max-w-full overflow-hidden relative">
+				<div class="h-screen w-screen"></div>
+				<div
+					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9"
+				>
+					<div class="row-span-2 col-span-2 relative bg-purple-200">
+						<label for="throwLineup" class="absolute top-2 left-2 main-label z-20"
+							>Throw Lineup</label
+						>
+						<label
+							for="throwLineup"
+							class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"
+						>
+						</label>
+						<input
+							type="file"
+							name="throwLineup"
+							id="throwLineup"
+							oninput={(e) => ($form.throwLineup = e.currentTarget.files?.item(0) as File)}
+							accept="image/jpeg, image/png, image/webp"
+							class="hidden"
+						/>
+						{#if $form.throwLineup}
+							<img
+								class="absolute top-0 left-0 w-full h-full z-10"
+								src={URL.createObjectURL($form.throwLineup)}
+								alt="throw lineup"
+							/>
+						{/if}
+						<label for="throwLineup" class="error absolute bottom-1 left-1 z-20">
+							{#if $errors.throwLineup}
+								{$errors.throwLineup[0]}
+							{/if}
+						</label>
+					</div>
+					<div class=" bg-sky-100"></div>
+					<div class=" bg-green-100"></div>
+					<div class=" bg-yellow-100"></div>
+					<div class=" bg-orange-100"></div>
+					<div class=" bg-red-100"></div>
+				</div>
+			</div>
+			<div class="h-20 flex">
+				{@render scrollDown(1)}
+			</div>
+		</section>
 		<section class="bg-yellow-100 section h-dvh-nav"></section>
 		<section class="bg-green-100 section h-dvh-nav"></section>
 	</form>
@@ -214,6 +262,6 @@
 	}
 
 	.section {
-		@apply flex snap-center;
+		@apply flex snap-center w-full;
 	}
 </style>
