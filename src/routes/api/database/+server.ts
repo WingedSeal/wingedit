@@ -9,7 +9,7 @@ const intoStringLiteral = (value: unknown) => {
 		return str;
 	}
 	const str = value.toString();
-	return "'" + str.replace("'", "''").slice(1, -1) + "'";
+	return "'" + str.replace("'", "''") + "'";
 };
 
 export const GET: RequestHandler = async ({ url, locals }) => {
