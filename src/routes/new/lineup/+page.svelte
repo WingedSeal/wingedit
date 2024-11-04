@@ -32,6 +32,34 @@
 	</button>
 {/snippet}
 
+{#snippet uploadFile(
+	_for: 'throwLineup' | 'throwGif' | 'landSpot' | 'throwSpotFirstPerson' | 'throwSpotThirdPerson',
+	text: string
+)}
+	<label for={_for} class="absolute top-2 left-2 main-label z-20">{text}</label>
+	<label for={_for} class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"></label>
+	<input
+		type="file"
+		name={_for}
+		id={_for}
+		oninput={(e) => ($form[_for] = e.currentTarget.files?.item(0) as File)}
+		accept={_for === 'throwGif' ? 'image/gif, image/webp' : 'image/jpeg, image/png, image/webp'}
+		class="hidden"
+	/>
+	{#if $form[_for]}
+		<img
+			class="absolute top-0 left-0 w-full h-full z-10"
+			src={URL.createObjectURL($form[_for])}
+			alt={text}
+		/>
+	{/if}
+	<label for={_for} class="error absolute bottom-1 left-1 z-20">
+		{#if $errors[_for]}
+			{$errors[_for][0]}
+		{/if}
+	</label>
+{/snippet}
+
 <main class="snap-mandatory snap-y h-dvh-nav overflow-y-auto">
 	<form
 		method="post"
@@ -204,40 +232,21 @@
 					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9"
 				>
 					<div class="row-span-2 col-span-2 relative bg-purple-200">
-						<label for="throwLineup" class="absolute top-2 left-2 main-label z-20"
-							>Throw Lineup</label
-						>
-						<label
-							for="throwLineup"
-							class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"
-						>
-						</label>
-						<input
-							type="file"
-							name="throwLineup"
-							id="throwLineup"
-							oninput={(e) => ($form.throwLineup = e.currentTarget.files?.item(0) as File)}
-							accept="image/jpeg, image/png, image/webp"
-							class="hidden"
-						/>
-						{#if $form.throwLineup}
-							<img
-								class="absolute top-0 left-0 w-full h-full z-10"
-								src={URL.createObjectURL($form.throwLineup)}
-								alt="throw lineup"
-							/>
-						{/if}
-						<label for="throwLineup" class="error absolute bottom-1 left-1 z-20">
-							{#if $errors.throwLineup}
-								{$errors.throwLineup[0]}
-							{/if}
-						</label>
+						{@render uploadFile('throwLineup', 'How to Lineup')}
 					</div>
-					<div class=" bg-sky-100"></div>
-					<div class=" bg-green-100"></div>
-					<div class=" bg-yellow-100"></div>
-					<div class=" bg-orange-100"></div>
-					<div class=" bg-red-100"></div>
+					<div class=" bg-sky-100 relative">
+						{@render uploadFile('throwGif', 'Throw Gif')}
+					</div>
+					<div class=" bg-green-100 relative">
+						{@render uploadFile('landSpot', 'Land Spot')}
+					</div>
+					<div class=" bg-yellow-100 relative">TODO: Upload extra images</div>
+					<div class=" bg-orange-100 relative">
+						{@render uploadFile('throwSpotFirstPerson', 'Throw Spot First Person')}
+					</div>
+					<div class=" bg-red-100 relative">
+						{@render uploadFile('throwSpotThirdPerson', 'Throw Spot Third Person')}
+					</div>
 				</div>
 			</div>
 			<div class="h-20 flex">
