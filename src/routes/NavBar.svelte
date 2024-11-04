@@ -30,7 +30,7 @@
 			class="absolute top-[calc(100%+1rem)] right-0 scale-y-0 -translate-y-1/2 transition-all ease-in duration-100 dropdown-content"
 		>
 			<div
-				class="absolute h-[calc(100%+4rem)] w-[calc(100%+2rem)] top-1/2 right-0 -translate-y-[calc(50%+1.5rem)] translate-x-2 -z-10"
+				class="absolute h-[calc(100%+3rem)] w-[calc(100%+2rem)] top-1/2 right-0 -translate-y-[calc(50%+1rem)] translate-x-2 -z-10 bg-red-300"
 			></div>
 			<div class="bg-green-300 w-72 h-72 rounded-md p-2 flex flex-col">
 				{#if user}
