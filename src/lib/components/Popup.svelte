@@ -3,7 +3,6 @@
 </script>
 
 <script lang="ts">
-	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { writable } from 'svelte/store';
 	import { type Snippet } from 'svelte';
 	interface Props {

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance as svelteEnhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { inviteSchema as schema } from '$lib/schema';

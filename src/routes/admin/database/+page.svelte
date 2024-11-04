@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { afterNavigate, goto } from '$app/navigation';

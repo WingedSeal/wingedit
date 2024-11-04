@@ -1,14 +1,16 @@
 <script lang="ts">
 	import '../app.scss';
 	import { type Snippet } from 'svelte';
+	import type { PageData } from './$types';
 	import NavBar from './NavBar.svelte';
 
 	type Props = {
 		children: Snippet;
+		data: PageData;
 	};
 
-	let { children }: Props = $props();
+	let { children, data }: Props = $props();
 </script>
 
-<NavBar />
+<NavBar user={data.user} />
 {@render children?.()}
