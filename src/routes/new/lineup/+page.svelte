@@ -230,7 +230,7 @@
 			class="bg-blue-100 section h-dvh-nav flex flex-col justify-center items-center py-12 pt-12 pb-6"
 		>
 			<div class="aspect-video max-h-[calc(100%-5rem)] max-w-full overflow-hidden relative">
-				<div class="h-screen w-screen"></div>
+				<div class="h-screen w-screen invisible"></div>
 				<div
 					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9"
 				>
@@ -258,42 +258,46 @@
 		</section>
 		<section class="bg-yellow-100 section h-dvh-nav">
 			<div class="w-3/4 bg-yellow-300 p-4 flex flex-col">
-				<div class="w-full aspect-video bg-black">
-					{#if $form.throwLineup}
-						<div class="w-full h-full relative">
-							<LineupShowOverlay
-								DrawOverMainX={$form.mainX}
-								DrawOverMainY={$form.mainY}
-								DrawOverSub1X={$form.sub1X || null}
-								DrawOverSub1Y={$form.sub1Y || null}
-								DrawOverSub2X={$form.sub2X || null}
-								DrawOverSub2Y={$form.sub2Y || null}
-							/>
-							<ClickableImage
-								src={URL.createObjectURL($form.throwLineup)}
-								alt={`Preview image of "Throw Lineup"`}
-								onClick={(x, y) => {
-									switch (selectedOverlayMode) {
-										case OverlayMode.Main:
-											$form.mainX = x;
-											$form.mainY = y;
-											break;
-										case OverlayMode.Sub1:
-											$form.sub1X = x;
-											$form.sub1Y = y;
-											break;
-										case OverlayMode.Sub2:
-											$form.sub2X = x;
-											$form.sub2Y = y;
-											break;
-									}
-								}}
-							/>
-						</div>
-					{/if}
+				<div class="max-w-full max-h-[calc(100%-7rem)] grow-0 aspect-video relative m-auto">
+					<div class="h-screen w-screen invisible"></div>
+
+					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
+						{#if $form.throwLineup}
+							<div class="w-full h-full relative">
+								<LineupShowOverlay
+									DrawOverMainX={$form.mainX}
+									DrawOverMainY={$form.mainY}
+									DrawOverSub1X={$form.sub1X || null}
+									DrawOverSub1Y={$form.sub1Y || null}
+									DrawOverSub2X={$form.sub2X || null}
+									DrawOverSub2Y={$form.sub2Y || null}
+								/>
+								<ClickableImage
+									src={URL.createObjectURL($form.throwLineup)}
+									alt={`Preview image of "Throw Lineup"`}
+									onClick={(x, y) => {
+										switch (selectedOverlayMode) {
+											case OverlayMode.Main:
+												$form.mainX = x;
+												$form.mainY = y;
+												break;
+											case OverlayMode.Sub1:
+												$form.sub1X = x;
+												$form.sub1Y = y;
+												break;
+											case OverlayMode.Sub2:
+												$form.sub2X = x;
+												$form.sub2Y = y;
+												break;
+										}
+									}}
+								/>
+							</div>
+						{/if}
+					</div>
 				</div>
 
-				<div class="grow flex select-overlay-mode justify-around">
+				<div class="grow flex select-overlay-mode justify-around mt-5">
 					<input
 						type="radio"
 						form="none"
@@ -303,7 +307,7 @@
 						value={OverlayMode.Main}
 						bind:group={selectedOverlayMode}
 					/>
-					<label for="main">Main</label>
+					<label for="main" class="cursor-pointer">Main</label>
 
 					<input
 						type="radio"
@@ -320,7 +324,7 @@
 							$form.sub2Y ??= $form.mainY;
 						}}
 					/>
-					<label for="sub1">Sub1</label>
+					<label for="sub1" class="cursor-pointer">Sub1</label>
 
 					<input
 						type="radio"
@@ -337,7 +341,7 @@
 							$form.sub2Y ??= $form.mainY;
 						}}
 					/>
-					<label for="sub2">Sub2</label>
+					<label for="sub2" class="cursor-pointer">Sub2</label>
 				</div>
 			</div>
 			<div class="w-1/4 flex flex-col px-12 pt-12 pb-2">
