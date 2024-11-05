@@ -39,7 +39,7 @@
 	_for: 'throwLineup' | 'throwGif' | 'landSpot' | 'throwSpotFirstPerson' | 'throwSpotThirdPerson',
 	text: string
 )}
-	<label for={_for} class="absolute top-2 left-2 main-label z-20">{text}</label>
+	<label for={_for} class="absolute top-2 left-2 main-label z-20 text-outline">{text}</label>
 	<label for={_for} class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"></label>
 	<input
 		type="file"
@@ -472,5 +472,18 @@
 		input[type='radio']:checked + label {
 			@apply text-red-600;
 		}
+	}
+
+	.text-outline {
+		--outline-size: 0.1rem;
+		--outline-size-neg: calc(var(--outline-size) * -1);
+		--outline-color: #ffffff;
+		--outline-blur: 0;
+
+		text-shadow:
+			var(--outline-size-neg) var(--outline-size-neg) var(--outline-blur) var(--outline-color),
+			var(--outline-size-neg) var(--outline-size) var(--outline-blur) var(--outline-color),
+			var(--outline-size) var(--outline-size-neg) var(--outline-blur) var(--outline-color),
+			var(--outline-size) var(--outline-size) var(--outline-blur) var(--outline-color);
 	}
 </style>
