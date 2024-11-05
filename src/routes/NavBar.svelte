@@ -107,4 +107,9 @@
 		--tw-scale-y: 1;
 		--tw-translate-y: 0%;
 	}
+
+	.dropdown-content:has(a:focus) {
+		--tw-scale-y: 1;
+		--tw-translate-y: 0%;
+	}
 </style>
