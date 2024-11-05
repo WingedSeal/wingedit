@@ -11,12 +11,8 @@
 </script>
 
 <nav class="w-full h-nav bg-blue-900 sticky flex flex-row p-2 z-10">
-	<a href="/">
-		<img
-			src="/favicon-512.png"
-			alt="wingedit icon"
-			class="h-full aspect-square mr-4 ml-12 rounded-lg"
-		/>
+	<a href="/" class="mr-4 ml-12 aspect-square">
+		<img src="/favicon-512.png" alt="wingedit icon" class="h-full aspect-square rounded-lg" />
 	</a>
 	<a
 		href="/"
