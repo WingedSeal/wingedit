@@ -1,52 +1,49 @@
 import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
-import {
-	addLineup,
-	getAbilities,
-	getGameInfo,
-	getMaps,
-	getThrowTypes
-} from '$lib/server/db/valorant';
+import { addLineup, getAbilities, getGameInfo, getMaps } from '$lib/server/db/valorant';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
-import { superValidate, fail, message } from 'sveltekit-superforms';
+import { superValidate, fail, message, setError, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Lineup, MapPosition } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
 import Privilege from '$lib/privilege';
-import { getLineupSchema } from '$lib/schema';
+import { getLineupSchema, mapPositionSchema } from '$lib/schema';
 import sharp from 'sharp';
-import { fail as svelteFail } from '@sveltejs/kit';
 import { isMapPositionExist } from '$lib/server/db/valorant/get';
 import { addMapPosition } from '$lib/server/db/valorant/post';
 
-const schema =
+const lineupSchema =
 	VALIDATE_IMAGE_SIZE === 'true'
-		? getLineupSchema(
-				async (f) => {
+		? getLineupSchema({
+				refineImage: async (f) => {
 					const size = await sharp(await f.arrayBuffer()).metadata();
 					return (size.width &&
 						size.height &&
 						size.width * 9 === size.height * 16 &&
 						size.width >= 1920) as boolean;
 				},
-				'Please upload 1920x1080 image.',
-				async (f) => {
+				refineImageError: 'Please upload 1920x1080 image.',
+				refineGif: async (f) => {
 					const size = await sharp(await f.arrayBuffer()).metadata();
 					return (size.width &&
 						size.height &&
 						size.width * 9 === size.height * 16 &&
 						size.width >= 1920) as boolean;
 				},
-				'Please upload 1920x1080 gif.'
-			)
-		: getLineupSchema(null, '', null, '');
+				refineGifError: 'Please upload 1920x1080 gif.'
+			})
+		: getLineupSchema();
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
 	return {
-		form: await superValidate(zod(schema)),
+		lineupForm: await superValidate(zod(lineupSchema)),
+		mapPositionForm: await superValidate<
+			Infer<typeof mapPositionSchema>,
+			{ message: string; newMapPosition: MapPosition; mapID: number }
+		>(zod(mapPositionSchema)),
 		gameInfo: getGameInfo(),
 		abilities: getAbilities()
 	};
@@ -62,7 +59,7 @@ export const actions = {
 		if (locals.user.privilege < Privilege.Moderator) {
 			return error(403, 'Not enough privilege');
 		}
-		const form = await superValidate(request, zod(schema));
+		const form = await superValidate(request, zod(lineupSchema));
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -112,29 +109,43 @@ export const actions = {
 
 		return message(form, 'Sucess');
 	},
-	addMapPosition: async ({ request }) => {
-		const data = await request.formData();
-		const callout = data.get('callout') as string;
-		const mapID = data.get('map') as unknown as number;
-		if (!mapID) return svelteFail(400, { error: true, message: `No map was chosen.` });
-		if (isMapPositionExist(callout, mapID))
-			return svelteFail(400, {
-				error: true,
-				message: `Callout '${callout}' already exists in map '${getMaps()[mapID]}'`
-			});
-		const { success, newID } = addMapPosition(callout, mapID);
-		if (!success) {
-			return svelteFail(400, {
-				error: true,
-				message: `Fail to add map position '${callout}'.`
-			});
+	addMapPosition: async ({ request, locals }) => {
+		if (!locals.user) {
+			return error(401, 'Invalid or missing session');
 		}
-		const newPosition: MapPosition = {
+		if (locals.user.privilege < Privilege.Moderator) {
+			return error(403, 'Not enough privilege');
+		}
+		const form = await superValidate(request, zod(mapPositionSchema));
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+		if (isMapPositionExist(form.data.callout, form.data.mapID))
+			return setError(
+				form,
+				'callout',
+				`Callout '${form.data.callout}' already exists in map '${getMaps()[form.data.mapID].Name}'`
+			);
+
+		const { success, newID } = addMapPosition(form.data.callout, form.data.mapID);
+		if (!success) {
+			return setError(
+				form,
+				'callout',
+				`Something went wrong. Failed to add new map position '${form.data.callout}'.`
+			);
+		}
+		const newMapPosition: MapPosition = {
 			ID: newID,
-			Callout: callout,
-			MapID: mapID
+			MapID: form.data.mapID,
+			Callout: form.data.callout
 		};
-		return { success: true, message: 'Callout was added successfully.', newPosition };
+		form.data.callout = '';
+		return message(form, {
+			message: 'Callout was added successfully.',
+			newMapPosition,
+			mapID: form.data.mapID
+		});
 	}
 };
 

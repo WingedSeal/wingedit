@@ -1,5 +1,5 @@
 import { PUBLIC_REQUIRE_ALL_IMAGES } from '$env/static/public';
-import { z, ZodType } from 'zod';
+import { z } from 'zod';
 
 export const inviteSchema = z.object({
 	privilege: z.number().int().default(1),
@@ -82,13 +82,19 @@ const decimalSchema = z
 	.default(null as unknown as number);
 
 export const getLineupSchema = (
-	refineImage: ((f: File) => Promise<boolean>) | null,
-	refineImageError: string,
-	refineGif: ((f: File) => Promise<boolean>) | null,
-	refineGifError: string
+	refines: {
+		refineImage: (f: File) => Promise<boolean>;
+		refineImageError: string;
+		refineGif: (f: File) => Promise<boolean>;
+		refineGifError: string;
+	} | null = null
 ) => {
-	let _imageSchema = refineImage ? imageSchema.refine(refineImage, refineImageError) : imageSchema;
-	let _gifSchema = refineGif ? gifSchema.refine(refineGif, refineGifError) : gifSchema;
+	let _imageSchema = refines
+		? imageSchema.refine(refines.refineImage, refines.refineImageError)
+		: imageSchema;
+	let _gifSchema = refines
+		? gifSchema.refine(refines.refineGif, refines.refineGifError)
+		: gifSchema;
 	const require_all_images = PUBLIC_REQUIRE_ALL_IMAGES === 'true';
 	const nullableImageSchema = require_all_images ? _imageSchema : _imageSchema.nullable();
 	return z
@@ -138,6 +144,11 @@ export const getLineupSchema = (
 };
 
 export const mapSchema = z.object({
-	mapID: z.number().int(),
+	mapID: z.number().int().min(1),
 	mapName: z.string().min(1).max(16).trim()
+});
+
+export const mapPositionSchema = z.object({
+	mapID: z.number().int().min(1, 'No map was chosen.'),
+	callout: z.string().min(1).trim()
 });

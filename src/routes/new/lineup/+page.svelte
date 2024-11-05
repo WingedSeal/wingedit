@@ -1,25 +1,53 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { getLineupSchema } from '$lib/schema';
+	import { getLineupSchema, mapPositionSchema } from '$lib/schema';
 	import '$lib/styles/form.scss';
 	import type { Ability } from '$lib/server/db/types.js';
 	import { FromToMode, OverlayMode } from './enum.js';
 	import ClickableImage from './ClickableImage.svelte';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
-	import { enhance as svelteEnhance } from '$app/forms';
+	import { onMount } from 'svelte';
 
-	const schema = getLineupSchema(null, '', null, '');
+	const lineupSchema = getLineupSchema();
 
-	let { data, form: addMapPositionForm } = $props();
+	const { data } = $props();
+	let mapPositions = $state(data.gameInfo.mapPositions);
+
 	const {
-		form,
-		errors,
-		enhance: superEnhance
-	} = superForm(data.form, {
-		validators: zodClient(schema),
+		form: lineupForm,
+		errors: lineupErrors,
+		enhance: lineupEnhance
+	} = superForm(data.lineupForm, {
+		validators: zodClient(lineupSchema),
 		taintedMessage: 'Changes you made may not be saved.'
+	});
+
+	const {
+		form: mapPositionForm,
+		errors: mapPositionErrors,
+		enhance: mapPositionEnhance,
+		message: mapPositionMessage
+	} = superForm(data.mapPositionForm, {
+		validators: zodClient(mapPositionSchema),
+		taintedMessage: 'Changes you made may not be saved.',
+		resetForm: false,
+		invalidateAll: false,
+		onUpdate: (event) => {
+			if (event.result.type !== 'success') return;
+			if (!event.form.message) return;
+			const mapPosition = event.form.message.newMapPosition;
+			mapPositions[event.form.message.mapID][mapPosition.ID] = mapPosition;
+			switch (mapPositionSource) {
+				case 'from':
+					$lineupForm.from = mapPosition.ID;
+					break;
+				case 'to':
+					$lineupForm.to = mapPosition.ID;
+					break;
+			}
+		}
 	});
 
 	let agentAbilities = $state<Ability[]>();
@@ -27,20 +55,24 @@
 	let selectedFromToMode = $state<FromToMode>(FromToMode.From);
 
 	const ADD_MAP_POSITION_VALUE = '__add__';
-	const onMapPositionChange = (event: Event) => {
+
+	let mapPositionSource: 'from' | 'to' = 'from';
+	const onMapPositionChange = (event: Event, source: 'from' | 'to') => {
 		let target = event.target! as HTMLSelectElement;
-		if (target.value !== ADD_MAP_POSITION_VALUE) {
-			return;
+		if (target.value === ADD_MAP_POSITION_VALUE) {
+			mapPositionSource = source;
+			$isPopupShow = true;
+			return true;
 		}
-		$isPopupShow = true;
+		return false;
 	};
 
-	// $effect.pre(() => {
-	// 	if (addMapPositionForm?.success) {
-	// 		data.gameInfo.mapPositions[$form.map][addMapPositionForm.newPosition.ID] =
-	// 			addMapPositionForm.newPosition;
-	// 	}
-	// });
+	onMount(() => {
+		const unsubscribe = lineupForm.subscribe((form) => {
+			$mapPositionForm.mapID = form.map;
+		});
+		return () => unsubscribe();
+	});
 </script>
 
 {#snippet scrollDown(n: number)}
@@ -68,20 +100,20 @@
 		type="file"
 		name={_for}
 		id={_for}
-		oninput={(e) => ($form[_for] = e.currentTarget.files?.item(0) as File)}
+		oninput={(e) => ($lineupForm[_for] = e.currentTarget.files?.item(0) as File)}
 		accept={_for === 'throwGif' ? 'image/gif, image/webp' : 'image/jpeg, image/png, image/webp'}
 		class="hidden"
 	/>
-	{#if $form[_for]}
+	{#if $lineupForm[_for]}
 		<img
 			class="absolute top-0 left-0 w-full h-full z-10"
-			src={URL.createObjectURL($form[_for])}
+			src={URL.createObjectURL($lineupForm[_for])}
 			alt={text}
 		/>
 	{/if}
 	<label for={_for} class="error absolute bottom-1 left-1 z-20">
-		{#if $errors[_for]}
-			{$errors[_for][0]}
+		{#if $lineupErrors[_for]}
+			{$lineupErrors[_for][0]}
 		{/if}
 	</label>
 {/snippet}
@@ -89,7 +121,7 @@
 <main class="snap-mandatory snap-y h-dvh-nav overflow-y-auto">
 	<form
 		method="post"
-		use:superEnhance
+		use:lineupEnhance
 		action="?/upload"
 		class="h-full w-full flex-col main-form"
 		enctype="multipart/form-data"
@@ -102,10 +134,10 @@
 						<label for="agent" class="main-label">Agent</label>
 						<select
 							name="agent"
-							bind:value={$form.agent}
+							bind:value={$lineupForm.agent}
 							onchange={() => {
-								agentAbilities = Object.values(data.abilities[$form.agent]);
-								$form.ability = 0;
+								agentAbilities = Object.values(data.abilities[$lineupForm.agent]);
+								$lineupForm.ability = 0;
 							}}
 						>
 							<option hidden selected value={0}>- Select an Agent -</option>
@@ -116,13 +148,13 @@
 							{/each}
 						</select>
 						<label for="agent" class="error">
-							{#if $errors.agent}
-								{$errors.agent[0]}
+							{#if $lineupErrors.agent}
+								{$lineupErrors.agent[0]}
 							{/if}
 						</label>
 
 						<label for="ability" class="main-label">Ability</label>
-						<select name="ability" bind:value={$form.ability}>
+						<select name="ability" bind:value={$lineupForm.ability}>
 							{#if agentAbilities}
 								<option hidden selected value={0}>- Select an Ability -</option>
 								{#each agentAbilities as ability}
@@ -133,73 +165,73 @@
 							{/if}
 						</select>
 						<label for="ability" class="error">
-							{#if $errors.ability}
-								{$errors.ability[0]}
+							{#if $lineupErrors.ability}
+								{$lineupErrors.ability[0]}
 							{/if}
 						</label>
 
 						<label for="map" class="main-label">Map</label>
-						<select name="map" bind:value={$form.map}>
+						<select name="map" bind:value={$lineupForm.map}>
 							<option hidden selected value={0}>- Select a Map -</option>
 							{#each Object.values(data.gameInfo.maps) as map}
 								<option value={map.ID}>{map.Name}</option>
 							{/each}
 						</select>
 						<label for="map" class="error">
-							{#if $errors.map}
-								{$errors.map[0]}
+							{#if $lineupErrors.map}
+								{$lineupErrors.map[0]}
 							{/if}
 						</label>
 
 						<label for="throwType" class="main-label">Throw Type</label>
-						<select name="throwType" bind:value={$form.throwType}>
+						<select name="throwType" bind:value={$lineupForm.throwType}>
 							<option hidden selected value={0}>- Select Throw Type -</option>
 							{#each Object.values(data.gameInfo.throw_types) as throw_type}
 								<option value={throw_type.ID}>{throw_type.Name}</option>
 							{/each}
 						</select>
 						<label for="throwType" class="error">
-							{#if $errors.throwType}
-								{$errors.throwType[0]}
+							{#if $lineupErrors.throwType}
+								{$lineupErrors.throwType[0]}
 							{/if}
 						</label>
 					</div>
 					<div class="w-1/2 flex flex-col">
 						<label for="grade" class="main-label">Grade</label>
-						<select name="grade" bind:value={$form.grade}>
+						<select name="grade" bind:value={$lineupForm.grade}>
 							<option hidden selected value={0}>- Select Grade -</option>
 							{#each Object.values(data.gameInfo.grades) as grade}
 								<option value={grade.ID}>{grade.Name}</option>
 							{/each}
 						</select>
 						<label for="grade" class="error">
-							{#if $errors.grade}
-								{$errors.grade[0]}
+							{#if $lineupErrors.grade}
+								{$lineupErrors.grade[0]}
 							{/if}
 						</label>
 
 						<label for="difficulty" class="main-label">Difficulty</label>
-						<select name="grade" bind:value={$form.difficulty}>
+						<select name="grade" bind:value={$lineupForm.difficulty}>
 							<option hidden selected value={0}>- Select Difficulty -</option>
 							{#each Object.values(data.gameInfo.grades) as difficulty}
 								<option value={difficulty.ID}>{difficulty.Name}</option>
 							{/each}
 						</select>
 						<label for="difficulty" class="error">
-							{#if $errors.difficulty}
-								{$errors.difficulty[0]}
+							{#if $lineupErrors.difficulty}
+								{$lineupErrors.difficulty[0]}
 							{/if}
 						</label>
 
 						<label for="side" class="main-label">Side</label>
-						<select name="side" bind:value={$form.side}>
+						<select name="side" bind:value={$lineupForm.side}>
 							{#each Object.values(data.gameInfo.sides) as side}
 								<option value={side.ID}>{side.Name}</option>
 							{/each}
 						</select>
 						<label for="side" class="error">
-							{#if $errors.side}
-								{$errors.side[0]}
+							{#if $lineupErrors.side}
+								{$lineupErrors.side[0]}
 							{/if}
 						</label>
 
@@ -210,12 +242,12 @@
 							min="0"
 							max="300"
 							step="0.01"
-							bind:value={$form.timeToLand}
+							bind:value={$lineupForm.timeToLand}
 							placeholder="0"
 						/>
 						<label for="timeToLand" class="error">
-							{#if $errors.timeToLand}
-								{$errors.timeToLand[0]}
+							{#if $lineupErrors.timeToLand}
+								{$lineupErrors.timeToLand[0]}
 							{/if}
 						</label>
 					</div>
@@ -238,10 +270,10 @@
 						}}
 						class="p-4 h-full rounded-md indent-6 text-lg border-2 border-black"
 						placeholder="Lineup's description"
-						bind:value={$form.description}
+						bind:value={$lineupForm.description}
 					></textarea>
-					{#if $errors.description}
-						<label for="description" class="error">{$errors.description[0]}</label>
+					{#if $lineupErrors.description}
+						<label for="description" class="error">{$lineupErrors.description[0]}</label>
 					{/if}
 				</div>
 				<div class="h-20 flex">
@@ -286,32 +318,32 @@
 					<div class="h-dvh w-[75dvw] invisible"></div>
 
 					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
-						{#if $form.throwLineup}
+						{#if $lineupForm.throwLineup}
 							<div class="w-full h-full relative">
 								<LineupShowOverlay
-									DrawOverMainX={$form.mainX}
-									DrawOverMainY={$form.mainY}
-									DrawOverSub1X={$form.sub1X || null}
-									DrawOverSub1Y={$form.sub1Y || null}
-									DrawOverSub2X={$form.sub2X || null}
-									DrawOverSub2Y={$form.sub2Y || null}
+									DrawOverMainX={$lineupForm.mainX}
+									DrawOverMainY={$lineupForm.mainY}
+									DrawOverSub1X={$lineupForm.sub1X || null}
+									DrawOverSub1Y={$lineupForm.sub1Y || null}
+									DrawOverSub2X={$lineupForm.sub2X || null}
+									DrawOverSub2Y={$lineupForm.sub2Y || null}
 								/>
 								<ClickableImage
-									src={URL.createObjectURL($form.throwLineup)}
+									src={URL.createObjectURL($lineupForm.throwLineup)}
 									alt={`Preview image of "Throw Lineup"`}
 									onClick={(x, y) => {
 										switch (selectedOverlayMode) {
 											case OverlayMode.Main:
-												$form.mainX = x;
-												$form.mainY = y;
+												$lineupForm.mainX = x;
+												$lineupForm.mainY = y;
 												break;
 											case OverlayMode.Sub1:
-												$form.sub1X = x;
-												$form.sub1Y = y;
+												$lineupForm.sub1X = x;
+												$lineupForm.sub1Y = y;
 												break;
 											case OverlayMode.Sub2:
-												$form.sub2X = x;
-												$form.sub2Y = y;
+												$lineupForm.sub2X = x;
+												$lineupForm.sub2Y = y;
 												break;
 										}
 									}}
@@ -343,10 +375,10 @@
 						bind:group={selectedOverlayMode}
 						tabindex="0"
 						onclick={() => {
-							$form.sub1X ??= $form.mainX;
-							$form.sub1Y ??= $form.mainY;
-							$form.sub2X ??= $form.mainX;
-							$form.sub2Y ??= $form.mainY;
+							$lineupForm.sub1X ??= $lineupForm.mainX;
+							$lineupForm.sub1Y ??= $lineupForm.mainY;
+							$lineupForm.sub2X ??= $lineupForm.mainX;
+							$lineupForm.sub2Y ??= $lineupForm.mainY;
 						}}
 					/>
 					<label for="sub1" class="cursor-pointer">Sub1</label>
@@ -360,10 +392,10 @@
 						value={OverlayMode.Sub2}
 						bind:group={selectedOverlayMode}
 						onclick={() => {
-							$form.sub1X ??= $form.mainX;
-							$form.sub1Y ??= $form.mainY;
-							$form.sub2X ??= $form.mainX;
-							$form.sub2Y ??= $form.mainY;
+							$lineupForm.sub1X ??= $lineupForm.mainX;
+							$lineupForm.sub1Y ??= $lineupForm.mainY;
+							$lineupForm.sub2X ??= $lineupForm.mainX;
+							$lineupForm.sub2Y ??= $lineupForm.mainY;
 						}}
 					/>
 					<label for="sub2" class="cursor-pointer">Sub2</label>
@@ -374,15 +406,15 @@
 				<input
 					type="number"
 					name="mainX"
-					bind:value={$form.mainX}
+					bind:value={$lineupForm.mainX}
 					placeholder="0"
 					min="0"
 					max="100"
 					step="0.01"
 				/>
 				<label for="mainX" class="error">
-					{#if $errors.mainX}
-						{$errors.mainX[0]}
+					{#if $lineupErrors.mainX}
+						{$lineupErrors.mainX[0]}
 					{/if}
 				</label>
 
@@ -390,15 +422,15 @@
 				<input
 					type="number"
 					name="mainY"
-					bind:value={$form.mainY}
+					bind:value={$lineupForm.mainY}
 					placeholder="0"
 					min="0"
 					max="100"
 					step="0.01"
 				/>
 				<label for="mainY" class="error">
-					{#if $errors.mainY}
-						{$errors.mainY[0]}
+					{#if $lineupErrors.mainY}
+						{$lineupErrors.mainY[0]}
 					{/if}
 				</label>
 
@@ -406,15 +438,15 @@
 				<input
 					type="number"
 					name="sub1X"
-					bind:value={$form.sub1X}
+					bind:value={$lineupForm.sub1X}
 					placeholder="0"
 					min="0"
 					max="100"
 					step="0.01"
 				/>
 				<label for="sub1X" class="error">
-					{#if $errors.sub1X}
-						{$errors.sub1X[0]}
+					{#if $lineupErrors.sub1X}
+						{$lineupErrors.sub1X[0]}
 					{/if}
 				</label>
 
@@ -422,15 +454,15 @@
 				<input
 					type="number"
 					name="sub1Y"
-					bind:value={$form.sub1Y}
+					bind:value={$lineupForm.sub1Y}
 					placeholder="0"
 					min="0"
 					max="100"
 					step="0.01"
 				/>
 				<label for="sub1Y" class="error">
-					{#if $errors.sub1Y}
-						{$errors.sub1Y[0]}
+					{#if $lineupErrors.sub1Y}
+						{$lineupErrors.sub1Y[0]}
 					{/if}
 				</label>
 
@@ -438,15 +470,15 @@
 				<input
 					type="number"
 					name="sub2X"
-					bind:value={$form.sub2X}
+					bind:value={$lineupForm.sub2X}
 					placeholder="0"
 					min="0"
 					max="100"
 					step="0.01"
 				/>
 				<label for="sub2X" class="error">
-					{#if $errors.sub2X}
-						{$errors.sub2X[0]}
+					{#if $lineupErrors.sub2X}
+						{$lineupErrors.sub2X[0]}
 					{/if}
 				</label>
 
@@ -454,15 +486,15 @@
 				<input
 					type="number"
 					name="sub2Y"
-					bind:value={$form.sub2Y}
+					bind:value={$lineupForm.sub2Y}
 					placeholder="0"
 					min="0"
 					max="100"
 					step="0.01"
 				/>
 				<label for="sub2Y" class="error">
-					{#if $errors.sub2Y}
-						{$errors.sub2Y[0]}
+					{#if $lineupErrors.sub2Y}
+						{$lineupErrors.sub2Y[0]}
 					{/if}
 				</label>
 
@@ -477,7 +509,7 @@
 					<div class="h-dvh w-[75dvw] invisible"></div>
 
 					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
-						{#if $form.throwLineup}
+						{#if $lineupForm.throwLineup}
 							<div class="w-full h-full relative">
 								<!-- TODO:  -->
 							</div>
@@ -514,26 +546,25 @@
 				<select
 					name="from"
 					onchange={(e) => {
-						$form.from = 0;
-						onMapPositionChange(e);
+						if (onMapPositionChange(e, 'from')) $lineupForm.from = 0;
 					}}
-					bind:value={$form.from}
+					bind:value={$lineupForm.from}
 				>
-					{#if $form.map}
+					{#if $lineupForm.map}
 						<option hidden selected value={0}>- Select From Position -</option>
-						{#if data.gameInfo.mapPositions[$form.map]}
-							{#each Object.values(data.gameInfo.mapPositions[$form.map]) as mapPosition}
+						{#if mapPositions[$lineupForm.map]}
+							{#each Object.values(mapPositions[$lineupForm.map]) as mapPosition}
 								<option value={mapPosition.ID}>{mapPosition.Callout}</option>
 							{/each}
 						{/if}
 						<option value={ADD_MAP_POSITION_VALUE}>- Add Map Position -</option>
 					{:else}
-						<option hidden selected value={0}>- Please select a Map. -</option>
+						<option selected value={0}>- Please select a Map. -</option>
 					{/if}
 				</select>
 				<label for="from" class="error">
-					{#if $errors.from}
-						{$errors.from[0]}
+					{#if $lineupErrors.from}
+						{$lineupErrors.from[0]}
 					{/if}
 				</label>
 
@@ -541,26 +572,25 @@
 				<select
 					name="to"
 					onchange={(e) => {
-						$form.to = 0;
-						onMapPositionChange(e);
+						if (onMapPositionChange(e, 'to')) $lineupForm.to = 0;
 					}}
-					bind:value={$form.to}
+					bind:value={$lineupForm.to}
 				>
-					{#if $form.map}
+					{#if $lineupForm.map}
 						<option hidden selected value={0}>- Select To Position -</option>
-						{#if data.gameInfo.mapPositions[$form.map]}
-							{#each Object.values(data.gameInfo.mapPositions[$form.map]) as mapPosition}
+						{#if mapPositions[$lineupForm.map]}
+							{#each Object.values(mapPositions[$lineupForm.map]) as mapPosition}
 								<option value={mapPosition.ID}>{mapPosition.Callout}</option>
 							{/each}
 						{/if}
 						<option value={ADD_MAP_POSITION_VALUE}>- Add Map Position -</option>
 					{:else}
-						<option hidden selected value={0}>- Please select a Map. -</option>
+						<option selected value={0}>- Please select a Map. -</option>
 					{/if}
 				</select>
 				<label for="to" class="error">
-					{#if $errors.to}
-						{$errors.to[0]}
+					{#if $lineupErrors.to}
+						{$lineupErrors.to[0]}
 					{/if}
 				</label>
 
@@ -569,15 +599,15 @@
 					<input
 						type="number"
 						name={_for}
-						bind:value={$form[_for]}
+						bind:value={$lineupForm[_for]}
 						placeholder="0"
 						min="0"
 						max="100"
 						step="0.01"
 					/>
 					<label for={_for} class="error">
-						{#if $errors[_for]}
-							{$errors[_for][0]}
+						{#if $lineupErrors[_for]}
+							{$lineupErrors[_for][0]}
 						{/if}
 					</label>
 				{/snippet}
@@ -597,17 +627,41 @@
 </main>
 
 <Popup title="Add new position">
-	<form action="?/addMapPosition" class="main-form" method="post" use:svelteEnhance>
-		<input type="text" name="map" class="hidden" value={$form.map} />
+	<form action="?/addMapPosition" class="main-form" method="post" use:mapPositionEnhance>
+		<input type="text" name="map" class="hidden" value={$lineupForm.map} />
 
 		<div class="flex flex-col bg-sky-100 m-12 h-full p-12 rounded-md">
-			<label for="callout" class="main-label">Callout</label>
-			<input type="text" name="callout" placeholder="New Map Position" />
-			<label for="callout" class="error"> ERROR GOES HERE </label>
-			<button type="submit" class="py-4 px-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto"
-				>Add</button
-			>
-			{JSON.stringify(addMapPositionForm)}
+			<input type="hidden" name="mapID" bind:value={$mapPositionForm.mapID} />
+
+			<label for="callout" class="main-label">
+				Callout
+				{#if $mapPositionForm.mapID}
+					({data.gameInfo.maps[$mapPositionForm.mapID].Name})
+				{/if}
+			</label>
+			<input
+				type="text"
+				name="callout"
+				placeholder="New Map Position"
+				bind:value={$mapPositionForm.callout}
+			/>
+			<label for="callout" class:error={$mapPositionErrors} class:success={$mapPositionMessage}>
+				{#if $mapPositionErrors.callout}
+					{$mapPositionErrors.callout[0]}
+				{/if}
+				{#if $mapPositionErrors.callout && $mapPositionErrors.mapID}
+					<br />
+				{/if}
+				{#if $mapPositionErrors.mapID}
+					{$mapPositionErrors.mapID[0]}
+				{/if}
+				{#if $mapPositionMessage}
+					{$mapPositionMessage.message}
+				{/if}
+			</label>
+			<button type="submit" class="py-4 px-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto">
+				Add
+			</button>
 		</div>
 	</form>
 </Popup>

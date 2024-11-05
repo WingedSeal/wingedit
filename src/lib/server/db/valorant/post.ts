@@ -60,7 +60,7 @@ export const addMapPosition = (
 				1;`
 			)
 			.get(mapID) as { ID: number } | undefined;
-		const ID = lastID ? lastID.ID + 1 : 0;
+		const ID = lastID ? lastID.ID + 1 : 1;
 		db.prepare(
 			`
 			INSERT INTO
