@@ -297,13 +297,13 @@
 					</div>
 				</div>
 
-				<div class="grow flex select-overlay-mode justify-around mt-5">
+				<div class="grow flex select-overlay-mode justify-around mt-5 relative">
 					<input
 						type="radio"
 						form="none"
 						id="main"
 						name="overlay-mode"
-						class="hidden"
+						class="sr-only"
 						value={OverlayMode.Main}
 						bind:group={selectedOverlayMode}
 					/>
@@ -314,9 +314,10 @@
 						form="none"
 						id="sub1"
 						name="overlay-mode"
-						class="hidden"
+						class="sr-only"
 						value={OverlayMode.Sub1}
 						bind:group={selectedOverlayMode}
+						tabindex="0"
 						onclick={() => {
 							$form.sub1X ??= $form.mainX;
 							$form.sub1Y ??= $form.mainY;
@@ -331,7 +332,7 @@
 						form="none"
 						id="sub2"
 						name="overlay-mode"
-						class="hidden"
+						class="sr-only"
 						value={OverlayMode.Sub2}
 						bind:group={selectedOverlayMode}
 						onclick={() => {
@@ -476,6 +477,11 @@
 		input[type='radio']:checked + label {
 			@apply text-red-600;
 		}
+
+		input[type='radio']:focus + label {
+			outline: 2px solid Highlight;
+			outline: 5px auto -webkit-focus-ring-color;
+		}
 	}
 
 	.text-outline {
@@ -489,5 +495,12 @@
 			var(--outline-size-neg) var(--outline-size) var(--outline-blur) var(--outline-color),
 			var(--outline-size) var(--outline-size-neg) var(--outline-blur) var(--outline-color),
 			var(--outline-size) var(--outline-size) var(--outline-blur) var(--outline-color);
+	}
+
+	.sr-only {
+		clip: rect(0, 0, 0, 0);
+		position: absolute;
+		margin: -1px;
+		overflow: hidden;
 	}
 </style>
