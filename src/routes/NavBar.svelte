@@ -73,11 +73,13 @@
 			<div class="bg-blue-200 rounded-md flex flex-col overflow-hidden">
 				{#if user}
 					<div class="flex bg-blue-100 p-4">
-						<a href="/account" aria-label="account">
-							<i class="fa-solid fa-user text-8xl text-slate-700 mr-8 aspect-auto"></i></a
-						>
+						<a href="/account" aria-label="account" class="mr-8" tabindex="-1">
+							<i class="fa-solid fa-user text-8xl text-slate-700 aspect-auto"></i>
+						</a>
 						<div class="flex flex-col">
-							<h2 class="font-bold text-2xl"><a href="/account">{user.username}</a></h2>
+							<h2 class="font-bold text-2xl">
+								<a href="/account" tabindex="-1">{user.username}</a>
+							</h2>
 							<h3 class="text-lg mb-auto">{privileges[user.privilege].RoleName}</h3>
 							<a href="/account/signout" class="inline-block" data-sveltekit-reload>Log out</a>
 						</div>
