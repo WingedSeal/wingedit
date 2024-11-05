@@ -226,6 +226,7 @@
 				</div>
 			</div>
 		</section>
+
 		<section
 			class="bg-blue-100 section h-dvh-nav flex flex-col justify-center items-center py-12 pt-12 pb-6"
 		>
@@ -259,7 +260,7 @@
 		<section class="bg-yellow-100 section h-dvh-nav">
 			<div class="w-3/4 bg-yellow-300 p-4 flex flex-col">
 				<div class="max-w-full max-h-[calc(100%-7rem)] grow-0 aspect-video relative m-auto">
-					<div class="h-screen w-screen invisible"></div>
+					<div class="h-dvh w-[75dvw] invisible"></div>
 
 					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
 						{#if $form.throwLineup}
