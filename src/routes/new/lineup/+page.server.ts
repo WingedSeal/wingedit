@@ -1,15 +1,24 @@
 import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
-import { addLineup, getAbilities, getGameInfo, getThrowTypes } from '$lib/server/db/valorant';
+import {
+	addLineup,
+	getAbilities,
+	getGameInfo,
+	getMaps,
+	getThrowTypes
+} from '$lib/server/db/valorant';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { Lineup } from '$lib/server/db/types';
+import type { Lineup, MapPosition } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
 import Privilege from '$lib/privilege';
 import { getLineupSchema } from '$lib/schema';
 import sharp from 'sharp';
+import { fail as svelteFail } from '@sveltejs/kit';
+import { isMapPositionExist } from '$lib/server/db/valorant/get';
+import { addMapPosition } from '$lib/server/db/valorant/post';
 
 const schema =
 	VALIDATE_IMAGE_SIZE === 'true'
@@ -103,8 +112,29 @@ export const actions = {
 
 		return message(form, 'Sucess');
 	},
-	addMapPosition: async () => {
-		console.log('WIP');
+	addMapPosition: async ({ request }) => {
+		const data = await request.formData();
+		const callout = data.get('callout') as string;
+		const mapID = data.get('map') as unknown as number;
+		if (!mapID) return svelteFail(400, { error: true, message: `No map was chosen.` });
+		if (isMapPositionExist(callout, mapID))
+			return svelteFail(400, {
+				error: true,
+				message: `Callout '${callout}' already exists in map '${getMaps()[mapID]}'`
+			});
+		const { success, newID } = addMapPosition(callout, mapID);
+		if (!success) {
+			return svelteFail(400, {
+				error: true,
+				message: `Fail to add map position '${callout}'.`
+			});
+		}
+		const newPosition: MapPosition = {
+			ID: newID,
+			Callout: callout,
+			MapID: mapID
+		};
+		return { success: true, message: 'Callout was added successfully.', newPosition };
 	}
 };
 

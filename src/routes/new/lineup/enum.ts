@@ -3,3 +3,8 @@ export enum OverlayMode {
 	Sub1,
 	Sub2
 }
+
+export enum FromToMode {
+	From,
+	To
+}

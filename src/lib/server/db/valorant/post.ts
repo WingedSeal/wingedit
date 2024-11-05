@@ -16,6 +16,7 @@ export const addAgent = (agent: Agent): boolean => {
 		if (!(error instanceof SqliteError)) {
 			throw error;
 		}
+		return false;
 	}
 	return true;
 };
@@ -34,8 +35,47 @@ export const addAbility = (ability: Ability): boolean => {
 		if (!(error instanceof SqliteError)) {
 			throw error;
 		}
+		return false;
 	}
 	return true;
+};
+
+export const addMapPosition = (
+	callout: string,
+	mapID: number
+): { success: boolean; newID: number } => {
+	try {
+		const lastID = db
+			.prepare(
+				`
+			SELECT
+				ID
+			FROM
+				"MapPositions"
+			WHERE
+				"MapID" = ?
+			ORDER BY
+				ID DESC
+			LIMIT
+				1;`
+			)
+			.get(mapID) as { ID: number } | undefined;
+		const ID = lastID ? lastID.ID + 1 : 0;
+		db.prepare(
+			`
+			INSERT INTO
+				"MapPositions" ("ID", "MapID", "Callout")
+			VALUES
+				(@ID, @mapID, @callout);
+			`
+		).run({ ID, callout, mapID });
+		return { success: true, newID: ID };
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
+		return { success: false, newID: -1 };
+	}
 };
 
 export const addLineup = (lineup: Lineup): number => {

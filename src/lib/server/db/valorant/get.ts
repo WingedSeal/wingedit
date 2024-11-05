@@ -52,6 +52,24 @@ export const getMaps = () => {
 	return maps;
 };
 
+export const isMapPositionExist = (callout: string, mapID: number) => {
+	const isExists = db
+		.prepare(
+			`
+SELECT
+	1
+FROM
+	"MapPositions"
+WHERE
+	"MapID" = @mapID
+	AND
+	"Callout" = @callout;
+`
+		)
+		.get({ callout, mapID }) as boolean;
+	return isExists;
+};
+
 export const getGrades = () => {
 	const rows = db.prepare(`SELECT * FROM "Grades";`).all() as Grade[];
 	const grades: { [gradeID: number]: Grade } = {};

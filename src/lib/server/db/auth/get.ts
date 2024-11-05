@@ -2,7 +2,7 @@ import { db } from '..';
 import type { User, ReferralCode, PrivilegeRole } from '../types';
 
 export const isUsernameExist = (username: string) => {
-	const isExists = db
+	const isExist = db
 		.prepare(
 			`
 SELECT
@@ -13,7 +13,7 @@ WHERE
     "Username" = @username;`
 		)
 		.get({ username }) as boolean;
-	return isExists;
+	return isExist;
 };
 
 export const getUser = (username: string) => {

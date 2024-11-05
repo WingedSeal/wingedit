@@ -5,6 +5,7 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { type Snippet } from 'svelte';
+	import { beforeNavigate } from '$app/navigation';
 	interface Props {
 		title: string;
 		sizeX?: number;
@@ -12,6 +13,9 @@
 		children?: Snippet;
 	}
 	let { title, sizeX = 80, sizeY = 80, children }: Props = $props();
+	beforeNavigate(() => {
+		$isPopupShow = false;
+	});
 </script>
 
 {#if $isPopupShow}

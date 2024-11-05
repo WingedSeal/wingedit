@@ -1,23 +1,46 @@
 <script lang="ts">
-	import SuperDebug, { superForm } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { getLineupSchema } from '$lib/schema';
 	import '$lib/styles/form.scss';
 	import type { Ability } from '$lib/server/db/types.js';
-	import { OverlayMode } from './enum.js';
+	import { FromToMode, OverlayMode } from './enum.js';
 	import ClickableImage from './ClickableImage.svelte';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
+	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
+	import { enhance as svelteEnhance } from '$app/forms';
 
 	const schema = getLineupSchema(null, '', null, '');
 
-	let { data } = $props();
-	const { form, errors, enhance } = superForm(data.form, {
+	let { data, form: addMapPositionForm } = $props();
+	const {
+		form,
+		errors,
+		enhance: superEnhance
+	} = superForm(data.form, {
 		validators: zodClient(schema),
 		taintedMessage: 'Changes you made may not be saved.'
 	});
 
 	let agentAbilities = $state<Ability[]>();
 	let selectedOverlayMode = $state<OverlayMode>(OverlayMode.Main);
+	let selectedFromToMode = $state<FromToMode>(FromToMode.From);
+
+	const ADD_MAP_POSITION_VALUE = '__add__';
+	const onMapPositionChange = (event: Event) => {
+		let target = event.target! as HTMLSelectElement;
+		if (target.value !== ADD_MAP_POSITION_VALUE) {
+			return;
+		}
+		$isPopupShow = true;
+	};
+
+	// $effect.pre(() => {
+	// 	if (addMapPositionForm?.success) {
+	// 		data.gameInfo.mapPositions[$form.map][addMapPositionForm.newPosition.ID] =
+	// 			addMapPositionForm.newPosition;
+	// 	}
+	// });
 </script>
 
 {#snippet scrollDown(n: number)}
@@ -66,7 +89,7 @@
 <main class="snap-mandatory snap-y h-dvh-nav overflow-y-auto">
 	<form
 		method="post"
-		use:enhance
+		use:superEnhance
 		action="?/upload"
 		class="h-full w-full flex-col main-form"
 		enctype="multipart/form-data"
@@ -449,10 +472,145 @@
 			</div>
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
-			<SuperDebug data={$form} />
+			<div class="w-3/4 bg-green-300 p-4 flex flex-col">
+				<div class="max-w-full max-h-[calc(100%-7rem)] grow-0 aspect-video relative m-auto">
+					<div class="h-dvh w-[75dvw] invisible"></div>
+
+					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
+						{#if $form.throwLineup}
+							<div class="w-full h-full relative">
+								<!-- TODO:  -->
+							</div>
+						{/if}
+					</div>
+				</div>
+
+				<div class="grow flex select-overlay-mode justify-around mt-5 relative">
+					<input
+						type="radio"
+						form="none"
+						id="from"
+						name="fromto-mode"
+						class="sr-only"
+						value={FromToMode.From}
+						bind:group={selectedFromToMode}
+					/>
+					<label for="from" class="cursor-pointer">From</label>
+
+					<input
+						type="radio"
+						form="none"
+						id="to"
+						name="fromto-mode"
+						class="sr-only"
+						value={FromToMode.To}
+						bind:group={selectedFromToMode}
+					/>
+					<label for="to" class="cursor-pointer">To</label>
+				</div>
+			</div>
+			<div class="w-1/4 flex flex-col px-12 pt-12 pb-2">
+				<label for="from" class="main-label">From</label>
+				<select
+					name="from"
+					onchange={(e) => {
+						$form.from = 0;
+						onMapPositionChange(e);
+					}}
+					bind:value={$form.from}
+				>
+					{#if $form.map}
+						<option hidden selected value={0}>- Select From Position -</option>
+						{#if data.gameInfo.mapPositions[$form.map]}
+							{#each Object.values(data.gameInfo.mapPositions[$form.map]) as mapPosition}
+								<option value={mapPosition.ID}>{mapPosition.Callout}</option>
+							{/each}
+						{/if}
+						<option value={ADD_MAP_POSITION_VALUE}>- Add Map Position -</option>
+					{:else}
+						<option hidden selected value={0}>- Please select a Map. -</option>
+					{/if}
+				</select>
+				<label for="from" class="error">
+					{#if $errors.from}
+						{$errors.from[0]}
+					{/if}
+				</label>
+
+				<label for="to" class="main-label">To</label>
+				<select
+					name="to"
+					onchange={(e) => {
+						$form.to = 0;
+						onMapPositionChange(e);
+					}}
+					bind:value={$form.to}
+				>
+					{#if $form.map}
+						<option hidden selected value={0}>- Select To Position -</option>
+						{#if data.gameInfo.mapPositions[$form.map]}
+							{#each Object.values(data.gameInfo.mapPositions[$form.map]) as mapPosition}
+								<option value={mapPosition.ID}>{mapPosition.Callout}</option>
+							{/each}
+						{/if}
+						<option value={ADD_MAP_POSITION_VALUE}>- Add Map Position -</option>
+					{:else}
+						<option hidden selected value={0}>- Please select a Map. -</option>
+					{/if}
+				</select>
+				<label for="to" class="error">
+					{#if $errors.to}
+						{$errors.to[0]}
+					{/if}
+				</label>
+
+				{#snippet input(_for: 'fromX' | 'fromY' | 'toX' | 'toY', text: string)}
+					<label for={_for} class="main-label">{text}</label>
+					<input
+						type="number"
+						name={_for}
+						bind:value={$form[_for]}
+						placeholder="0"
+						min="0"
+						max="100"
+						step="0.01"
+					/>
+					<label for={_for} class="error">
+						{#if $errors[_for]}
+							{$errors[_for][0]}
+						{/if}
+					</label>
+				{/snippet}
+
+				{@render input('fromX', 'From (X-axis)')}
+				{@render input('fromY', 'From (Y-axis)')}
+				{@render input('toX', 'To (X-axis)')}
+				{@render input('toY', 'To (Y-axis)')}
+
+				<div class="mt-auto h-20 flex">
+					{@render scrollDown(4)}
+				</div>
+			</div>
 		</section>
+		<section class="bg-slate-200 section h-dvh-nav"></section>
 	</form>
 </main>
+
+<Popup title="Add new position">
+	<form action="?/addMapPosition" class="main-form" method="post" use:svelteEnhance>
+		<input type="text" name="map" class="hidden" value={$form.map} />
+
+		<div class="flex flex-col bg-sky-100 m-12 h-full p-12 rounded-md">
+			<label for="callout" class="main-label">Callout</label>
+			<input type="text" name="callout" placeholder="New Map Position" />
+			<label for="callout" class="error"> ERROR GOES HERE </label>
+			<button type="submit" class="py-4 px-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto"
+				>Add</button
+			>
+			{JSON.stringify(addMapPositionForm)}
+		</div>
+	</form>
+</Popup>
 
 <style lang="postcss">
 	.main-form {
