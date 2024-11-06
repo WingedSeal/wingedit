@@ -84,6 +84,7 @@
 			});
 		}}
 		aria-label="scroll down"
+		tabindex="-1"
 		class="text-4xl m-auto animate-bounce"
 	>
 		<i class="fa-solid fa-angles-down"></i>
@@ -95,15 +96,15 @@
 	text: string
 )}
 	<label for={_for} class="absolute top-2 left-2 main-label z-20 text-outline">{text}</label>
-	<label for={_for} class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"></label>
 	<input
 		type="file"
 		name={_for}
 		id={_for}
 		oninput={(e) => ($lineupForm[_for] = e.currentTarget.files?.item(0) as File)}
 		accept={_for === 'throwGif' ? 'image/gif, image/webp' : 'image/jpeg, image/png, image/webp'}
-		class="hidden"
+		class="sr-only"
 	/>
+	<label for={_for} class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"></label>
 	{#if $lineupForm[_for]}
 		<img
 			class="absolute top-0 left-0 w-full h-full z-10"
@@ -111,7 +112,7 @@
 			alt={text}
 		/>
 	{/if}
-	<label for={_for} class="error absolute bottom-1 left-1 z-20">
+	<label for={_for} class="error absolute bottom-1 left-1 z-20 text-outline">
 		{#if $lineupErrors[_for]}
 			{$lineupErrors[_for][0]}
 		{/if}
@@ -288,7 +289,7 @@
 			<div class="aspect-video max-h-[calc(100%-5rem)] max-w-full overflow-hidden relative">
 				<div class="h-screen w-screen invisible"></div>
 				<div
-					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9"
+					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9 select-file"
 				>
 					<div class="row-span-2 col-span-2 relative bg-purple-200">
 						{@render uploadFile('throwLineup', 'How to Lineup')}
@@ -359,7 +360,7 @@
 						form="none"
 						id="main"
 						name="overlay-mode"
-						class="sr-only"
+						class="hidden"
 						value={OverlayMode.Main}
 						bind:group={selectedOverlayMode}
 					/>
@@ -370,7 +371,7 @@
 						form="none"
 						id="sub1"
 						name="overlay-mode"
-						class="sr-only"
+						class="hidden"
 						value={OverlayMode.Sub1}
 						bind:group={selectedOverlayMode}
 						tabindex="0"
@@ -388,7 +389,7 @@
 						form="none"
 						id="sub2"
 						name="overlay-mode"
-						class="sr-only"
+						class="hidden"
 						value={OverlayMode.Sub2}
 						bind:group={selectedOverlayMode}
 						onclick={() => {
@@ -523,7 +524,7 @@
 						form="none"
 						id="from"
 						name="fromto-mode"
-						class="sr-only"
+						class="hidden"
 						value={FromToMode.From}
 						bind:group={selectedFromToMode}
 					/>
@@ -534,7 +535,7 @@
 						form="none"
 						id="to"
 						name="fromto-mode"
-						class="sr-only"
+						class="hidden"
 						value={FromToMode.To}
 						bind:group={selectedFromToMode}
 					/>
@@ -622,7 +623,9 @@
 				</div>
 			</div>
 		</section>
-		<section class="bg-slate-200 section h-dvh-nav"></section>
+		<section class="bg-slate-200 section h-dvh-nav">
+			<button type="submit">SUBMIt</button>
+		</section>
 	</form>
 </main>
 
@@ -682,6 +685,13 @@
 		@apply flex snap-center w-full;
 	}
 
+	.select-file {
+		input[type='file']:focus + label {
+			outline: 2px solid Highlight;
+			outline: 5px auto -webkit-focus-ring-color;
+		}
+	}
+
 	.select-overlay-mode {
 		label {
 			@apply font-bold text-2xl my-auto block bg-white px-4 py-1 rounded-md;
@@ -689,11 +699,6 @@
 
 		input[type='radio']:checked + label {
 			@apply text-red-600;
-		}
-
-		input[type='radio']:focus + label {
-			outline: 2px solid Highlight;
-			outline: 5px auto -webkit-focus-ring-color;
 		}
 	}
 

@@ -17,6 +17,7 @@
 	<a
 		href="/"
 		class="font-bold text-4xl text-white mr-auto h-full flex border-t-2 border-b-2 rounded-md"
+		tabindex="-1"
 	>
 		<h1 class="my-auto block tracking-[0.2em]">WingedIT</h1>
 	</a>
