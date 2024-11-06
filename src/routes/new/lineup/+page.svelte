@@ -5,7 +5,7 @@
 	import '$lib/styles/form.scss';
 	import type { Ability } from '$lib/server/db/types.js';
 	import { FromToMode, OverlayMode } from './enum.js';
-	import ClickableImage from './ClickableImage.svelte';
+	import Clickable from './Clickable.svelte';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { onMount } from 'svelte';
@@ -55,9 +55,8 @@
 	let selectedOverlayMode = $state<OverlayMode>(OverlayMode.Main);
 	let selectedFromToMode = $state<FromToMode>(FromToMode.From);
 
-	const ADD_MAP_POSITION_VALUE = '__add__';
-
 	let mapPositionSource: 'from' | 'to' = 'from';
+	const ADD_MAP_POSITION_VALUE = '__add__';
 	const onMapPositionChange = (event: Event, source: 'from' | 'to') => {
 		let target = event.target! as HTMLSelectElement;
 		if (target.value === ADD_MAP_POSITION_VALUE) {
@@ -68,11 +67,28 @@
 		return false;
 	};
 
+	let minimapAspectRatio = 0;
+	let mimimapContainer: HTMLDivElement;
+	const resizeMinimap = () => {
+		if (!minimapAspectRatio) return;
+		mimimapContainer.style.width = '';
+		mimimapContainer.style.height = '';
+		if (mimimapContainer.clientWidth / mimimapContainer.clientHeight > minimapAspectRatio) {
+			mimimapContainer.style.width = mimimapContainer.clientHeight * minimapAspectRatio + 'px';
+		} else {
+			mimimapContainer.style.height = mimimapContainer.clientWidth / minimapAspectRatio + 'px';
+		}
+	};
+
 	onMount(() => {
+		window.addEventListener('resize', resizeMinimap);
 		const unsubscribe = lineupForm.subscribe((form) => {
 			$mapPositionForm.mapID = form.map;
 		});
-		return () => unsubscribe();
+		return () => {
+			window.removeEventListener('resize', resizeMinimap);
+			unsubscribe();
+		};
 	});
 </script>
 
@@ -330,7 +346,7 @@
 									DrawOverSub2X={$lineupForm.sub2X || null}
 									DrawOverSub2Y={$lineupForm.sub2Y || null}
 								/>
-								<ClickableImage
+								<Clickable
 									buttonClass="aspect-video w-full h-full"
 									onClick={(x, y) => {
 										switch (selectedOverlayMode) {
@@ -355,7 +371,7 @@
 										alt={`Preview image of "Throw Lineup"`}
 										draggable="false"
 									/>
-								</ClickableImage>
+								</Clickable>
 							</div>
 						{/if}
 					</div>
@@ -513,40 +529,42 @@
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
 			<div class="w-3/4 bg-green-300 p-4 flex">
-				<div class="bg-black h-full w-full flex items-center justify-center">
+				<div class="bg-black h-full w-full flex m-auto" bind:this={mimimapContainer}>
 					{#if $lineupForm.map}
-						<div class="relative flex">
+						<Clickable
+							buttonClass="w-full h-full relative"
+							onClick={(x, y) => {
+								switch (selectedFromToMode) {
+									case FromToMode.From:
+										$lineupForm.fromX = x;
+										$lineupForm.fromY = y;
+										break;
+									case FromToMode.To:
+										$lineupForm.toX = x;
+										$lineupForm.toY = y;
+										break;
+								}
+							}}
+						>
 							<img
 								src="/api/image/maps/{$lineupForm.map}/minimap.webp"
 								alt="bg.webp"
-								class="max-w-full max-h-full block bg-[rgba(200,20,20,0.1)]"
+								class="w-full h-full"
 								draggable="false"
-							/>
-
-							<ClickableImage
-								buttonClass="bg-[rgba(20,200,20,0.1)] absolute w-full h-full"
-								onClick={(x, y) => {
-									switch (selectedFromToMode) {
-										case FromToMode.From:
-											$lineupForm.fromX = x;
-											$lineupForm.fromY = y;
-											break;
-										case FromToMode.To:
-											$lineupForm.toX = x;
-											$lineupForm.toY = y;
-											break;
-									}
+								onload={(e) => {
+									const image = e.target as HTMLImageElement;
+									minimapAspectRatio = image.naturalWidth / image.naturalHeight;
+									resizeMinimap();
 								}}
-								>``
-								{#if $lineupForm.fromX && $lineupForm.fromY && $lineupForm.toX && $lineupForm.toY}
-									<RenderEmptyLine
-										fromCenter={[$lineupForm.fromX, $lineupForm.fromY]}
-										toCenter={[$lineupForm.toX, $lineupForm.toY]}
-										lineColor={data.gameInfo.grades[$lineupForm.grade]?.Color || '#FFFFFF'}
-									/>
-								{/if}
-							</ClickableImage>
-						</div>
+							/>
+							{#if $lineupForm.fromX && $lineupForm.fromY && $lineupForm.toX && $lineupForm.toY}
+								<RenderEmptyLine
+									fromCenter={[$lineupForm.fromX, $lineupForm.fromY]}
+									toCenter={[$lineupForm.toX, $lineupForm.toY]}
+									lineColor={data.gameInfo.grades[$lineupForm.grade]?.Color || '#FFFFFF'}
+								/>
+							{/if}
+						</Clickable>
 					{/if}
 				</div>
 

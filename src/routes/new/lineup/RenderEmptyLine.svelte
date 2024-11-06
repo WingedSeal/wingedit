@@ -8,9 +8,9 @@
 	};
 	let clientHeight = $state(0);
 	let clientWidth = $state(0);
-	const fromRadius = 2;
-	const toRadius = 2;
-	const lineWidth = 0.4;
+	const fromRadius = 1;
+	const toRadius = 1;
+	const lineWidth = 0.3;
 
 	let { fromCenter, toCenter, lineColor }: Props = $props();
 
@@ -20,7 +20,7 @@
 </script>
 
 <div
-	class="h-full w-full pointer-events-none bg-[rgba(173,116,116,0.3)]"
+	class="h-full w-full pointer-events-none absolute top-0 left-0"
 	bind:clientWidth
 	bind:clientHeight
 >
