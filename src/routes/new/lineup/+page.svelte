@@ -668,13 +668,14 @@
 				{@render input('toX', 'To (X-axis)')}
 				{@render input('toY', 'To (Y-axis)')}
 
-				<div class="mt-auto h-20 flex">
-					{@render scrollDown(4)}
+				<div class="mt-auto mb-8 h-20 flex">
+					<button
+						type="submit"
+						class="m-auto px-16 py-6 rounded-lg bg-green-900 text-white font-bold text-4xl"
+						>Confirm</button
+					>
 				</div>
 			</div>
-		</section>
-		<section class="bg-slate-200 section h-dvh-nav">
-			<button type="submit">SUBMIt</button>
 		</section>
 	</form>
 </main>
