@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { squareToCircle } from '$lib/components/calculateLinePos';
 	import { isPopupShow } from '$lib/components/Popup.svelte';
 	import type { Grade, Lineup } from '$lib/server/db/types';
 
