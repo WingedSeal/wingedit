@@ -15,7 +15,7 @@
 	const updateFormAbilities = (_abilityCount: number) => {
 		$form.abilities.length = _abilityCount;
 		for (let i = 0; i < _abilityCount; i++) {
-			$form.abilities[i] ??= { abilityName: '', abilityNameID: '' };
+			$form.abilities[i] ??= { abilityName: '' };
 		}
 	};
 	updateFormAbilities(DEFAULT_ABILITY_COUNT);
@@ -75,15 +75,6 @@
 		/>
 		{#if $errors.abilities && $errors.abilities[i] && $errors.abilities[i].abilityName}
 			<small>{$errors.abilities[i].abilityName[0]} </small>
-		{/if}
-		<label for={`abilities[${i}].abilityNameID`}>Ability Name ID</label>
-		<input
-			type="text"
-			name={`abilities[${i}].abilityNameID`}
-			bind:value={$form.abilities[i].abilityNameID}
-		/>
-		{#if $errors.abilities && $errors.abilities[i] && $errors.abilities[i].abilityNameID}
-			<small>{$errors.abilities[i].abilityNameID[0]} </small>
 		{/if}
 	{/each}
 	<button type="submit" class="bg-red-300">SUBMIT</button>

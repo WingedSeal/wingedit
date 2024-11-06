@@ -21,7 +21,7 @@
 			<img
 				class="w-20 h-20"
 				src="/api/image/agents/{ability.AgentID}/abilities/{ability.AbilityID}.webp"
-				alt={ability.NameID}
+				alt={ability.Name}
 			/>
 
 			<span class="text-4xl ml-2 font-bold self-end text-slate-100">{ability.Name}</span>

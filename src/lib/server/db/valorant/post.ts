@@ -26,9 +26,9 @@ export const addAbility = (ability: Ability): boolean => {
 		db.prepare(
 			`
 		INSERT INTO 
-			"Abilities" (AgentID, AbilityID, Name, NameID)
+			"Abilities" (AgentID, AbilityID, Name)
 		VALUES
-			(@AgentID, @AbilityID, @Name, @NameID);
+			(@AgentID, @AbilityID, @Name);
 		`
 		).run(ability);
 	} catch (error) {

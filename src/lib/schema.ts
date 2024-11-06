@@ -46,8 +46,7 @@ export const agentSchema = z.object({
 	agentRole: z.number().int().min(1).max(4),
 	abilities: z
 		.object({
-			abilityName: z.string().min(1).max(16).trim(),
-			abilityNameID: z.string().min(1).max(16).trim()
+			abilityName: z.string().min(1).max(16).trim()
 		})
 		.array()
 		.default(defaultAbilities)

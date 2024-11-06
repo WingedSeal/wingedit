@@ -39,8 +39,7 @@ export const actions: Actions = {
 			return {
 				AbilityID: i + 1,
 				AgentID: agent.ID,
-				Name: ability.abilityName,
-				NameID: ability.abilityNameID
+				Name: ability.abilityName
 			};
 		});
 

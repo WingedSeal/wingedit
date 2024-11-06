@@ -15,7 +15,6 @@
 		return {
 			index: index,
 			lineup: lineup,
-			abilityNameID: abilities[lineup.AbilityID].NameID,
 			ability: abilities[lineup.AbilityID].Name,
 			grade: gameInfo.grades[lineup.GradeID].Name,
 			side: gameInfo.sides[lineup.SideID].Name,
@@ -118,7 +117,7 @@
 						class="inline h-4 -translate-y-1 bg-slate-800 rounded-md"
 						src="/api/image/agents/{lineups[detail.index].AgentID}/abilities/{lineups[detail.index]
 							.AbilityID}.webp"
-						alt={detail.abilityNameID}
+						alt={detail.ability}
 					/>
 					{detail.ability}
 				</td>

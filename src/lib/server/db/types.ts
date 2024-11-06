@@ -39,7 +39,6 @@ export type Ability = {
 	AgentID: number;
 	AbilityID: number;
 	Name: string;
-	NameID: string;
 };
 
 export type Side = {
