@@ -72,7 +72,7 @@ VALUES
     (11, 'Abyss');
 
 INSERT INTO
-    "Abilities" ("AgentID", "AbilityID", "Name", "NameID")
+    "Abilities" ("AgentID", "AbilityID", "Name")
 VALUES
     (1, 1, 'Stim Beacon'),
     (1, 2, 'Incendiary'),
