@@ -127,10 +127,10 @@ export const getLineupSchema = (
 			sub2Y: decimalSchema.nullable(),
 			from: z.number().int().min(1, 'Please select map position.'),
 			to: z.number().int().min(1, 'Please select map position.'),
-			fromX: decimalSchema.default(50),
-			fromY: decimalSchema.default(50),
-			toX: decimalSchema.default(50),
-			toY: decimalSchema.default(50)
+			fromX: decimalSchema.default(0),
+			fromY: decimalSchema.default(0),
+			toX: decimalSchema.default(0),
+			toY: decimalSchema.default(0)
 		})
 		.refine((data) => {
 			if ([data.sub1X, data.sub1Y, data.sub2X, data.sub2Y].every((x) => x === null)) {

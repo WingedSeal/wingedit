@@ -22,6 +22,6 @@
 	};
 </script>
 
-<button class={buttonClass} onmousemove={handleEvent} onmousedown={handleEvent}>
+<button class={buttonClass} onmousemove={handleEvent} onmousedown={handleEvent} type="button">
 	{@render children?.()}
 </button>

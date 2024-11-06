@@ -22,7 +22,8 @@
 		enhance: lineupEnhance
 	} = superForm(data.lineupForm, {
 		validators: zodClient(lineupSchema),
-		taintedMessage: 'Changes you made may not be saved.'
+		taintedMessage: 'Changes you made may not be saved.',
+		scrollToError: { behavior: 'smooth', block: 'start', inline: 'nearest' }
 	});
 
 	const {
@@ -120,6 +121,7 @@
 		oninput={(e) => ($lineupForm[_for] = e.currentTarget.files?.item(0) as File)}
 		accept={_for === 'throwGif' ? 'image/gif, image/webp' : 'image/jpeg, image/png, image/webp'}
 		class="sr-only"
+		aria-invalid={$lineupErrors[_for] ? 'true' : undefined}
 	/>
 	<label for={_for} class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"></label>
 	{#if $lineupForm[_for]}
@@ -157,6 +159,7 @@
 								agentAbilities = Object.values(data.abilities[$lineupForm.agent]);
 								$lineupForm.ability = 0;
 							}}
+							aria-invalid={$lineupErrors.agent ? 'true' : undefined}
 						>
 							<option hidden selected value={0}>- Select an Agent -</option>
 							{#each Object.values(data.gameInfo.agents) as agent}
@@ -172,7 +175,11 @@
 						</label>
 
 						<label for="ability" class="main-label">Ability</label>
-						<select name="ability" bind:value={$lineupForm.ability}>
+						<select
+							name="ability"
+							bind:value={$lineupForm.ability}
+							aria-invalid={$lineupErrors.ability ? 'true' : undefined}
+						>
 							{#if agentAbilities}
 								<option hidden selected value={0}>- Select an Ability -</option>
 								{#each agentAbilities as ability}
@@ -189,7 +196,11 @@
 						</label>
 
 						<label for="map" class="main-label">Map</label>
-						<select name="map" bind:value={$lineupForm.map}>
+						<select
+							name="map"
+							bind:value={$lineupForm.map}
+							aria-invalid={$lineupErrors.map ? 'true' : undefined}
+						>
 							<option hidden selected value={0}>- Select a Map -</option>
 							{#each Object.values(data.gameInfo.maps) as map}
 								<option value={map.ID}>{map.Name}</option>
@@ -202,7 +213,11 @@
 						</label>
 
 						<label for="throwType" class="main-label">Throw Type</label>
-						<select name="throwType" bind:value={$lineupForm.throwType}>
+						<select
+							name="throwType"
+							bind:value={$lineupForm.throwType}
+							aria-invalid={$lineupErrors.throwType ? 'true' : undefined}
+						>
 							<option hidden selected value={0}>- Select Throw Type -</option>
 							{#each Object.values(data.gameInfo.throw_types) as throw_type}
 								<option value={throw_type.ID}>{throw_type.Name}</option>
@@ -216,7 +231,11 @@
 					</div>
 					<div class="w-1/2 flex flex-col">
 						<label for="grade" class="main-label">Grade</label>
-						<select name="grade" bind:value={$lineupForm.grade}>
+						<select
+							name="grade"
+							bind:value={$lineupForm.grade}
+							aria-invalid={$lineupErrors.grade ? 'true' : undefined}
+						>
 							<option hidden selected value={0}>- Select Grade -</option>
 							{#each Object.values(data.gameInfo.grades) as grade}
 								<option value={grade.ID}>{grade.Name}</option>
@@ -229,7 +248,11 @@
 						</label>
 
 						<label for="difficulty" class="main-label">Difficulty</label>
-						<select name="grade" bind:value={$lineupForm.difficulty}>
+						<select
+							name="grade"
+							bind:value={$lineupForm.difficulty}
+							aria-invalid={$lineupErrors.difficulty ? 'true' : undefined}
+						>
 							<option hidden selected value={0}>- Select Difficulty -</option>
 							{#each Object.values(data.gameInfo.grades) as difficulty}
 								<option value={difficulty.ID}>{difficulty.Name}</option>
@@ -242,7 +265,11 @@
 						</label>
 
 						<label for="side" class="main-label">Side</label>
-						<select name="side" bind:value={$lineupForm.side}>
+						<select
+							name="side"
+							bind:value={$lineupForm.side}
+							aria-invalid={$lineupErrors.side ? 'true' : undefined}
+						>
 							{#each Object.values(data.gameInfo.sides) as side}
 								<option value={side.ID}>{side.Name}</option>
 							{/each}
@@ -262,6 +289,7 @@
 							step="0.01"
 							bind:value={$lineupForm.timeToLand}
 							placeholder="0"
+							aria-invalid={$lineupErrors.timeToLand ? 'true' : undefined}
 						/>
 						<label for="timeToLand" class="error">
 							{#if $lineupErrors.timeToLand}
@@ -289,6 +317,7 @@
 						class="p-4 h-full rounded-md indent-6 text-lg border-2 border-black"
 						placeholder="Lineup's description"
 						bind:value={$lineupForm.description}
+						aria-invalid={$lineupErrors.description ? 'true' : undefined}
 					></textarea>
 					{#if $lineupErrors.description}
 						<label for="description" class="error">{$lineupErrors.description[0]}</label>
@@ -435,6 +464,7 @@
 					min="0"
 					max="100"
 					step="0.01"
+					aria-invalid={$lineupErrors.mainX ? 'true' : undefined}
 				/>
 				<label for="mainX" class="error">
 					{#if $lineupErrors.mainX}
@@ -451,6 +481,7 @@
 					min="0"
 					max="100"
 					step="0.01"
+					aria-invalid={$lineupErrors.mainY ? 'true' : undefined}
 				/>
 				<label for="mainY" class="error">
 					{#if $lineupErrors.mainY}
@@ -467,6 +498,7 @@
 					min="0"
 					max="100"
 					step="0.01"
+					aria-invalid={$lineupErrors.sub1X ? 'true' : undefined}
 				/>
 				<label for="sub1X" class="error">
 					{#if $lineupErrors.sub1X}
@@ -483,6 +515,7 @@
 					min="0"
 					max="100"
 					step="0.01"
+					aria-invalid={$lineupErrors.sub1Y ? 'true' : undefined}
 				/>
 				<label for="sub1Y" class="error">
 					{#if $lineupErrors.sub1Y}
@@ -499,6 +532,7 @@
 					min="0"
 					max="100"
 					step="0.01"
+					aria-invalid={$lineupErrors.sub2X ? 'true' : undefined}
 				/>
 				<label for="sub2X" class="error">
 					{#if $lineupErrors.sub2X}
@@ -515,6 +549,7 @@
 					min="0"
 					max="100"
 					step="0.01"
+					aria-invalid={$lineupErrors.sub2Y ? 'true' : undefined}
 				/>
 				<label for="sub2Y" class="error">
 					{#if $lineupErrors.sub2Y}
@@ -557,7 +592,7 @@
 									resizeMinimap();
 								}}
 							/>
-							{#if $lineupForm.fromX && $lineupForm.fromY && $lineupForm.toX && $lineupForm.toY}
+							{#if $lineupForm.fromX !== null && $lineupForm.fromY !== null && $lineupForm.toX !== null && $lineupForm.toY !== null}
 								<RenderEmptyLine
 									fromCenter={[$lineupForm.fromX, $lineupForm.fromY]}
 									toCenter={[$lineupForm.toX, $lineupForm.toY]}
@@ -600,6 +635,7 @@
 						if (onMapPositionChange(e, 'from')) $lineupForm.from = 0;
 					}}
 					bind:value={$lineupForm.from}
+					aria-invalid={$lineupErrors.from ? 'true' : undefined}
 				>
 					{#if $lineupForm.map}
 						<option hidden selected value={0}>- Select From Position -</option>
@@ -626,6 +662,7 @@
 						if (onMapPositionChange(e, 'to')) $lineupForm.to = 0;
 					}}
 					bind:value={$lineupForm.to}
+					aria-invalid={$lineupErrors.to ? 'true' : undefined}
 				>
 					{#if $lineupForm.map}
 						<option hidden selected value={0}>- Select To Position -</option>
@@ -655,6 +692,7 @@
 						min="0"
 						max="100"
 						step="0.01"
+						aria-invalid={$lineupErrors[_for] ? 'true' : undefined}
 					/>
 					<label for={_for} class="error">
 						{#if $lineupErrors[_for]}
@@ -698,6 +736,7 @@
 				name="callout"
 				placeholder="New Map Position"
 				bind:value={$mapPositionForm.callout}
+				aria-invalid={$mapPositionErrors.callout || $mapPositionErrors.mapID ? 'true' : undefined}
 			/>
 			<label for="callout" class:error={$mapPositionErrors} class:success={$mapPositionMessage}>
 				{#if $mapPositionErrors.callout}
