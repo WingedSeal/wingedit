@@ -82,7 +82,6 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS "Abilities" (
         "AgentID" TINYINT NOT NULL,
-        "AbilityID" SMALLINT NOT NULL,
         "Name" VARCHAR(16) NOT NULL UNIQUE,
         "NameID" VARCHAR(16) NOT NULL UNIQUE,
         PRIMARY KEY ("AgentID", "AbilityID"),
