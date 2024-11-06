@@ -505,20 +505,21 @@
 			</div>
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
-			<div class="w-3/4 bg-green-300 p-4 flex flex-col">
-				<div class="max-w-full max-h-[calc(100%-7rem)] grow-0 aspect-video relative m-auto">
-					<div class="h-dvh w-[75dvw] invisible"></div>
-
-					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
-						{#if $lineupForm.throwLineup}
-							<div class="w-full h-full relative">
-								<!-- TODO:  -->
-							</div>
-						{/if}
-					</div>
+			<div class="w-3/4 bg-green-300 p-4 flex">
+				<div class="bg-black h-full w-full">
+					{#if $lineupForm.map}
+						<div class="w-full h-full relative">
+							<img
+								class="rounded-lg w-full h-full object-contain"
+								src="/api/image/maps/{$lineupForm.map}/minimap.webp"
+								alt="bg.webp"
+								draggable="false"
+							/>
+						</div>
+					{/if}
 				</div>
 
-				<div class="grow flex select-overlay-mode justify-around mt-5 relative">
+				<div class="grow flex flex-col select-overlay-mode justify-around ml-5">
 					<input
 						type="radio"
 						form="none"
