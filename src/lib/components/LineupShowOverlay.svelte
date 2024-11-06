@@ -28,7 +28,7 @@
 			DrawOverSub2X === null ||
 			DrawOverSub2Y === null
 		)
-			return { main1: undefined, main2: undefined, sub1: undefined, sub2: undefined };
+			return {};
 
 		const main = [
 			(DrawOverMainX * clientWidth!) / 100,
@@ -79,17 +79,21 @@
 					rounded-[50%] border-solid border-red-300"
 			style={`height: ${subSizePercent}%; left: ${DrawOverSub2X}%; bottom: ${DrawOverSub2Y}%; border-width: ${clientHeight * 0.003 * SIZE_MULTIPLIER}px;`}
 		></div>
-		<svg
-			class="h-full w-full absolute stroke-red-300"
-			style={`stroke-width: ${0.15 * SIZE_MULTIPLIER}%;`}
-		>
-			<polyline points={`${sub1} ${main1}`}></polyline>
-		</svg>
-		<svg
-			class="h-full w-full absolute stroke-red-300"
-			style={`stroke-width: ${0.15 * SIZE_MULTIPLIER}%;`}
-		>
-			<polyline points={`${sub2} ${main2}`}></polyline>
-		</svg>
+		{#if !isNaN(sub1[0]) && !isNaN(sub1[1]) && !isNaN(main1[0]) && !isNaN(main1[0])}
+			<svg
+				class="h-full w-full absolute stroke-red-300"
+				style={`stroke-width: ${0.15 * SIZE_MULTIPLIER}%;`}
+			>
+				<polyline points={`${sub1} ${main1}`}></polyline>
+			</svg>
+		{/if}
+		{#if !isNaN(sub2[0]) && !isNaN(sub2[1]) && !isNaN(main2[0]) && !isNaN(main2[0])}
+			<svg
+				class="h-full w-full absolute stroke-red-300"
+				style={`stroke-width: ${0.15 * SIZE_MULTIPLIER}%;`}
+			>
+				<polyline points={`${sub2} ${main2}`}></polyline>
+			</svg>
+		{/if}
 	{/if}
 </div>

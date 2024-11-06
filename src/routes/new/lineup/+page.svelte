@@ -9,6 +9,7 @@
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { onMount } from 'svelte';
+	import RenderEmptyLine from './RenderEmptyLine.svelte';
 
 	const lineupSchema = getLineupSchema();
 
@@ -330,8 +331,7 @@
 									DrawOverSub2Y={$lineupForm.sub2Y || null}
 								/>
 								<ClickableImage
-									src={URL.createObjectURL($lineupForm.throwLineup)}
-									alt={`Preview image of "Throw Lineup"`}
+									buttonClass="aspect-video w-full h-full"
 									onClick={(x, y) => {
 										switch (selectedOverlayMode) {
 											case OverlayMode.Main:
@@ -348,7 +348,14 @@
 												break;
 										}
 									}}
-								/>
+								>
+									<img
+										class="h-full w-full"
+										src={URL.createObjectURL($lineupForm.throwLineup)}
+										alt={`Preview image of "Throw Lineup"`}
+										draggable="false"
+									/>
+								</ClickableImage>
 							</div>
 						{/if}
 					</div>
@@ -506,15 +513,39 @@
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
 			<div class="w-3/4 bg-green-300 p-4 flex">
-				<div class="bg-black h-full w-full">
+				<div class="bg-black h-full w-full flex items-center justify-center">
 					{#if $lineupForm.map}
-						<div class="w-full h-full relative">
+						<div class="relative flex">
 							<img
-								class="rounded-lg w-full h-full object-contain"
 								src="/api/image/maps/{$lineupForm.map}/minimap.webp"
 								alt="bg.webp"
+								class="max-w-full max-h-full block bg-[rgba(200,20,20,0.1)]"
 								draggable="false"
 							/>
+
+							<ClickableImage
+								buttonClass="bg-[rgba(20,200,20,0.1)] absolute w-full h-full"
+								onClick={(x, y) => {
+									switch (selectedFromToMode) {
+										case FromToMode.From:
+											$lineupForm.fromX = x;
+											$lineupForm.fromY = y;
+											break;
+										case FromToMode.To:
+											$lineupForm.toX = x;
+											$lineupForm.toY = y;
+											break;
+									}
+								}}
+								>``
+								{#if $lineupForm.fromX && $lineupForm.fromY && $lineupForm.toX && $lineupForm.toY}
+									<RenderEmptyLine
+										fromCenter={[$lineupForm.fromX, $lineupForm.fromY]}
+										toCenter={[$lineupForm.toX, $lineupForm.toY]}
+										lineColor={data.gameInfo.grades[$lineupForm.grade]?.Color || '#FFFFFF'}
+									/>
+								{/if}
+							</ClickableImage>
 						</div>
 					{/if}
 				</div>

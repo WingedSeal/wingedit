@@ -17,21 +17,13 @@
 	let { lineup, grades, lineupIndex = $bindable(), index }: Props = $props();
 
 	const { from, to } = $derived.by(() => {
-		let from = [(lineup.FromX * clientWidth) / 100, ((100 - lineup.FromY) * clientHeight) / 100];
-		let to = [(lineup.ToX * clientWidth) / 100, ((100 - lineup.ToY) * clientHeight) / 100];
-		const dx = from[0] - to[0];
-		const dy = from[1] - to[1];
-		const length = Math.sqrt(dx * dx + dy * dy);
-		const radiusFrom = (agentRadius * clientHeight) / 100;
-		const radiusTo = (abilityRadius * clientHeight) / 100;
-		const abs_dx = Math.abs(dx);
-		const abs_dy = Math.abs(dy);
-		from[0] -= Math.sign(dx) * (abs_dy > abs_dx ? (radiusFrom * abs_dx) / abs_dy : radiusFrom);
-		from[1] -= Math.sign(dy) * (abs_dx > abs_dy ? (radiusFrom * abs_dy) / abs_dx : radiusFrom);
-
-		to[0] += (dx * radiusTo) / length;
-		to[1] += (dy * radiusTo) / length;
-		return { from, to };
+		return squareToCircle(
+			[lineup.FromX, lineup.FromY],
+			[lineup.ToX, lineup.ToY],
+			[clientWidth, clientHeight],
+			agentRadius,
+			abilityRadius
+		);
 	});
 
 	const onClick = () => {

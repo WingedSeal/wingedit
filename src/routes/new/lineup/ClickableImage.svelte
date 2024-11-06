@@ -1,11 +1,13 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	interface Props {
 		onClick: (xPercent: number, yPercent: number) => void;
-		src: string;
-		alt: string;
+		buttonClass: string;
+		children: Snippet;
 	}
 
-	let { onClick, src, alt }: Props = $props();
+	let { onClick, buttonClass, children }: Props = $props();
 	const round = (num: number) => {
 		return Math.round((num + Number.EPSILON) * 100) / 100;
 	};
@@ -23,6 +25,6 @@
 	};
 </script>
 
-<button class="aspect-video w-full h-full" onmousemove={move} onmousedown={handleEvent}>
-	<img {src} {alt} class="w-full h-full" draggable="false" />
+<button class={buttonClass} onmousemove={move} onmousedown={handleEvent}>
+	{@render children?.()}
 </button>
