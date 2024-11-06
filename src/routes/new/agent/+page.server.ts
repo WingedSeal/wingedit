@@ -1,6 +1,6 @@
 import { addAbility, addAgent, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
 import type { PageServerLoad } from './$types';
-import { fail, message, superValidate } from 'sveltekit-superforms';
+import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { Agent } from '$lib/server/db/types';
@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Moderator) throw redirect(303, '/');
 	return {
-		form: await superValidate(zod(schema)),
+		form: await superValidate<Infer<typeof schema>, { newID: number }>(zod(schema)),
 		agentRoles: getAgentRoles(),
 		lastAgentId: getLastAgentID()
 	};
@@ -25,7 +25,7 @@ export const actions: Actions = {
 		if (locals.user.privilege < Privilege.Moderator) {
 			return error(403, 'Not enough privilege');
 		}
-		const form = await superValidate(request, zod(schema));
+		let form = await superValidate(request, zod(schema));
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -45,16 +45,21 @@ export const actions: Actions = {
 		});
 
 		if (!addAgent(agent)) {
-			form.message = 'Fail to add agent. (AgentID possibly already exists.)';
-			return fail(400, { form });
+			return setError(form, 'agentID', 'Fail to add agent. (AgentID possibly already exists.)');
 		}
-		abilities.forEach((ability) => {
+		abilities.forEach((ability, i) => {
 			if (!addAbility(ability)) {
-				form.message = `Fail to add ability: ${ability.Name}.`;
-				return fail(400, { form });
+				return setError(
+					form,
+					`abilities[${i}].abilityName`,
+					`Fail to add ability: ${ability.Name}.`
+				);
 			}
 		});
-
-		return message(form, 'Sucess');
+		form.data = {
+			...(await superValidate(zod(schema))).data,
+			agentID: agent.ID + 1
+		};
+		return { form };
 	}
 };

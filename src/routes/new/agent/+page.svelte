@@ -5,10 +5,11 @@
 	import { writable } from 'svelte/store';
 
 	let { data } = $props();
-	const { form, errors, enhance, message } = superForm(data.form, {
+	const { form, errors, enhance } = superForm(data.form, {
 		validators: zodClient(schema),
 		validationMethod: 'auto',
-		dataType: 'json'
+		dataType: 'json',
+		resetForm: false
 	});
 
 	const updateFormAbilities = (_abilityCount: number) => {
@@ -24,9 +25,6 @@
 	if (!$form.agentID) $form.agentID = data.lastAgentId + 1;
 </script>
 
-{#if $message}
-	{$message}
-{/if}
 <form class="flex flex-col w-1/2 p-10" method="post" use:enhance>
 	<label for="agentID">Agent ID</label>
 	<input type="number" id="agentID" bind:value={$form.agentID} />
