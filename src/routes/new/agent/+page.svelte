@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { agentSchema as schema } from '$lib/schema';
+	import { agentSchema as schema, DEFAULT_ABILITY_COUNT } from '$lib/schema';
 	import { writable } from 'svelte/store';
 
 	let { data } = $props();
@@ -10,7 +10,7 @@
 		validationMethod: 'auto',
 		dataType: 'json'
 	});
-	const DEFAULT_ABILITY_COUNT = 4;
+
 	const updateFormAbilities = (_abilityCount: number) => {
 		$form.abilities.length = _abilityCount;
 		for (let i = 0; i < _abilityCount; i++) {

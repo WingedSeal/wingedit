@@ -38,6 +38,8 @@ export const signupSchema = z
 		path: ['confirmPassword']
 	});
 
+export const DEFAULT_ABILITY_COUNT = 4;
+const defaultAbilities = Array(DEFAULT_ABILITY_COUNT).fill({});
 export const agentSchema = z.object({
 	agentID: z.number().int(),
 	agentName: z.string().min(1).max(16).trim(),
@@ -48,6 +50,7 @@ export const agentSchema = z.object({
 			abilityNameID: z.string().min(1).max(16).trim()
 		})
 		.array()
+		.default(defaultAbilities)
 });
 
 const imageSchema = z
