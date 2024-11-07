@@ -200,6 +200,10 @@
 							name="map"
 							bind:value={$lineupForm.map}
 							aria-invalid={$lineupErrors.map ? 'true' : undefined}
+							onchange={() => {
+								$lineupForm.from = 0;
+								$lineupForm.to = 0;
+							}}
 						>
 							<option hidden selected value={0}>- Select a Map -</option>
 							{#each Object.values(data.gameInfo.maps) as map}

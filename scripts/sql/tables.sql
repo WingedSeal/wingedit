@@ -90,10 +90,10 @@ CREATE TABLE
 
 CREATE TABLE
     IF NOT EXISTS "MapPositions" (
+        "ID" INTEGER NOT NULL, --AUTO_INCREMENT
         "MapID" TINYINT NOT NULL,
-        "ID" SMALLINT NOT NULL,
         "Callout" VARCHAR(32) NOT NULL,
-        PRIMARY KEY ("MapID", "ID"),
+        PRIMARY KEY ("ID"),
         CONSTRAINT "FK_Maps_MapID" FOREIGN KEY ("MapID") REFERENCES "Maps" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "UQ_Callout_MapID" UNIQUE ("Callout", "MapID")
     );

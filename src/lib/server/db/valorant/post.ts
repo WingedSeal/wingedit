@@ -45,35 +45,22 @@ export const addMapPosition = (
 	mapID: number
 ): { success: boolean; newID: number } => {
 	try {
-		const lastID = db
+		const ID = db
 			.prepare(
 				`
-			SELECT
-				ID
-			FROM
-				"MapPositions"
-			WHERE
-				"MapID" = ?
-			ORDER BY
-				ID DESC
-			LIMIT
-				1;`
-			)
-			.get(mapID) as { ID: number } | undefined;
-		const ID = lastID ? lastID.ID + 1 : 1;
-		db.prepare(
-			`
 			INSERT INTO
-				"MapPositions" ("ID", "MapID", "Callout")
+				"MapPositions" ("MapID", "Callout")
 			VALUES
-				(@ID, @mapID, @callout);
+				(@mapID, @callout);
 			`
-		).run({ ID, callout, mapID });
+			)
+			.run({ callout, mapID }).lastInsertRowid as number;
 		return { success: true, newID: ID };
 	} catch (error) {
 		if (!(error instanceof SqliteError)) {
 			throw error;
 		}
+		console.log(error);
 		return { success: false, newID: -1 };
 	}
 };
