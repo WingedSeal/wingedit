@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { squareToCircle } from '$lib/components/calculateLinePos';
+	import { squareToCircle } from '$lib/components/calculate-line-pos';
 
 	type Props = {
 		fromCenter: [number, number];
