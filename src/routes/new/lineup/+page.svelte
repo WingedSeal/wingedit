@@ -40,7 +40,7 @@
 			if (event.result.type !== 'success') return;
 			if (!event.form.message) return;
 			const mapPosition = event.form.message.newMapPosition;
-			mapPositions[event.form.message.mapID][mapPosition.ID] = { IsUsed: true, ...mapPosition };
+			mapPositions[event.form.message.mapID][mapPosition.ID] = { IsUsed: false, ...mapPosition };
 			switch (mapPositionSource) {
 				case 'from':
 					$lineupForm.from = mapPosition.ID;
