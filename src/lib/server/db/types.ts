@@ -93,7 +93,7 @@ export type GameInfo = {
 	};
 	mapPositions: {
 		[mapID: number]: {
-			[mapPositionID: number]: MapPosition;
+			[mapPositionID: number]: { IsUsed: boolean } & MapPosition;
 		};
 	};
 	sides: {

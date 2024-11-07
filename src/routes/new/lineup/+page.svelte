@@ -40,7 +40,7 @@
 			if (event.result.type !== 'success') return;
 			if (!event.form.message) return;
 			const mapPosition = event.form.message.newMapPosition;
-			mapPositions[event.form.message.mapID][mapPosition.ID] = mapPosition;
+			mapPositions[event.form.message.mapID][mapPosition.ID] = { IsUsed: true, ...mapPosition };
 			switch (mapPositionSource) {
 				case 'from':
 					$lineupForm.from = mapPosition.ID;
@@ -724,44 +724,53 @@
 </main>
 
 <Popup title="Add new position">
-	<form action="?/addMapPosition" class="main-form" method="post" use:mapPositionEnhance>
-		<input type="text" name="map" class="hidden" value={$lineupForm.map} />
+	<div class="h-full w-full flex flex-col py-6 px-20">
+		<form action="?/addMapPosition" class="main-form" method="post" use:mapPositionEnhance>
+			<input type="text" name="map" class="hidden" value={$lineupForm.map} />
 
-		<div class="flex flex-col bg-sky-100 m-12 h-full p-12 rounded-md">
-			<input type="hidden" name="mapID" bind:value={$mapPositionForm.mapID} />
+			<div class="flex flex-col bg-sky-100 mb-6 py-12 px-40 rounded-md">
+				<input type="hidden" name="mapID" bind:value={$mapPositionForm.mapID} />
 
-			<label for="callout" class="main-label">
-				Callout
-				{#if $mapPositionForm.mapID}
-					({data.gameInfo.maps[$mapPositionForm.mapID].Name})
-				{/if}
-			</label>
-			<input
-				type="text"
-				name="callout"
-				placeholder="New Map Position"
-				bind:value={$mapPositionForm.callout}
-				aria-invalid={$mapPositionErrors.callout || $mapPositionErrors.mapID ? 'true' : undefined}
-			/>
-			<label for="callout" class:error={$mapPositionErrors} class:success={$mapPositionMessage}>
-				{#if $mapPositionErrors.callout}
-					{$mapPositionErrors.callout[0]}
-				{/if}
-				{#if $mapPositionErrors.callout && $mapPositionErrors.mapID}
-					<br />
-				{/if}
-				{#if $mapPositionErrors.mapID}
-					{$mapPositionErrors.mapID[0]}
-				{/if}
-				{#if $mapPositionMessage}
-					{$mapPositionMessage.message}
-				{/if}
-			</label>
-			<button type="submit" class="py-4 px-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto">
-				Add
-			</button>
+				<label for="callout" class="main-label">
+					Callout
+					{#if $mapPositionForm.mapID}
+						({data.gameInfo.maps[$mapPositionForm.mapID].Name})
+					{/if}
+				</label>
+				<input
+					type="text"
+					name="callout"
+					placeholder="New Map Position"
+					bind:value={$mapPositionForm.callout}
+					aria-invalid={$mapPositionErrors.callout || $mapPositionErrors.mapID ? 'true' : undefined}
+				/>
+				<label for="callout" class:error={$mapPositionErrors} class:success={$mapPositionMessage}>
+					{#if $mapPositionErrors.callout}
+						{$mapPositionErrors.callout[0]}
+					{/if}
+					{#if $mapPositionErrors.callout && $mapPositionErrors.mapID}
+						<br />
+					{/if}
+					{#if $mapPositionErrors.mapID}
+						{$mapPositionErrors.mapID[0]}
+					{/if}
+					{#if $mapPositionMessage}
+						{$mapPositionMessage.message}
+					{/if}
+				</label>
+				<button type="submit" class="py-4 px-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto">
+					Add
+				</button>
+			</div>
+		</form>
+		<div class="flex flex-col bg-sky-100 h-full p-12 rounded-md">
+			<ul>
+				{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition}
+					<li>{mapPosition.Callout} <button type="button">DELETE</button></li>
+				{/each}
+			</ul>
 		</div>
-	</form>
+	</div>
 </Popup>
 
 <style lang="postcss">

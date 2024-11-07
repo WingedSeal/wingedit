@@ -60,7 +60,6 @@ export const addMapPosition = (
 		if (!(error instanceof SqliteError)) {
 			throw error;
 		}
-		console.log(error);
 		return { success: false, newID: -1 };
 	}
 };

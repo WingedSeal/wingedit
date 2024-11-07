@@ -104,8 +104,26 @@ export const getAgentAbilities = (agentID: number) => {
 };
 
 export const getMapPositions = () => {
-	const rows = db.prepare(`SELECT * FROM "MapPositions";`).all() as MapPosition[];
-	const mapPositions: { [mapID: number]: { [mapPositionID: number]: MapPosition } } = {};
+	const rows = db
+		.prepare(
+			`
+		SELECT 
+			*, 
+			EXISTS(
+				SELECT 1 
+				FROM "Lineups" 
+				WHERE 
+					MapPositions.ID = Lineups.FromMapPositionID 
+					OR 
+					MapPositions.ID = Lineups.ToMapPositionID
+			) as IsUsed
+		FROM "MapPositions";
+		`
+		)
+		.all() as ({ IsUsed: boolean } & MapPosition)[];
+	const mapPositions: {
+		[mapID: number]: { [mapPositionID: number]: { IsUsed: boolean } & MapPosition };
+	} = {};
 	rows.forEach((mapPosition) => {
 		if (!mapPositions[mapPosition.MapID]) {
 			mapPositions[mapPosition.MapID] = {};

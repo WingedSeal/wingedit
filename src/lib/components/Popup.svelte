@@ -27,7 +27,7 @@
 		aria-label="close"
 	></button>
 	<div
-		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation"
+		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation flex flex-col"
 		style="width: {sizeX}vw; height: {sizeY}vh;"
 	>
 		<div class="bg-slate-800 w-full h-[7%] rounded-xl text-primary p-1 flex">
@@ -42,7 +42,7 @@
 				<i class="fa-regular fa-circle-xmark"></i>
 			</button>
 		</div>
-		<div class="w-full h-[93%] p-2">{@render children?.()}</div>
+		<div class="w-full h-full p-2 overflow-y-auto">{@render children?.()}</div>
 	</div>
 {/if}
 
