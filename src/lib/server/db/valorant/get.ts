@@ -103,6 +103,29 @@ export const getAgentAbilities = (agentID: number) => {
 	return abilities;
 };
 
+export const isMapPositionUsed = (mapPositionID: number) => {
+	return db
+		.prepare(
+			`
+		SELECT 
+			1
+		FROM "MapPositions"
+		WHERE 
+			ID = ?
+			AND
+			(
+				SELECT 1 
+				FROM "Lineups" 
+				WHERE 
+					MapPositions.ID = Lineups.FromMapPositionID 
+					OR 
+					MapPositions.ID = Lineups.ToMapPositionID
+			);
+		`
+		)
+		.get(mapPositionID) as boolean;
+};
+
 export const getMapPositions = () => {
 	const rows = db
 		.prepare(
