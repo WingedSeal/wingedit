@@ -1,6 +1,5 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from '../account/signup/$types';
-import { toUserInfo } from '$lib/server/db/types';
 import Privilege from '$lib/privilege';
 
 export const load: PageServerLoad = async (event) => {
@@ -9,6 +8,6 @@ export const load: PageServerLoad = async (event) => {
 	if (event.locals.user.privilege < Privilege.Admin) throw redirect(303, '/');
 
 	return {
-		user: toUserInfo(event.locals.user!)
+		user: event.locals.user!
 	};
 };

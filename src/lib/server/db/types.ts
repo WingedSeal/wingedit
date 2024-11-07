@@ -133,7 +133,13 @@ export type User = {
 	CreationTimestamp: number;
 };
 
-export type UserInfo = Omit<User, 'HashedPassword'>;
+export type UserInfo = {
+	id: string;
+	username: string;
+	privilege: number;
+	// referredByUserID: string | null;
+	// creationTimeStamp: number;
+};
 
 export type Session = {
 	SessionID: string;

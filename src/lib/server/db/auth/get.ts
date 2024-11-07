@@ -62,12 +62,12 @@ WHERE
 	getSession: db.prepare(`
 SELECT 
 	Users.*,
-	Session.*
-FROM "Session" 
+	Sessions.*
+FROM "Sessions" 
 	INNER JOIN "Users" 
 	ON Users.UserID = Sessions.UserID 
 WHERE 
-	Session.UserID = ?;`)
+	Sessions.SessionID = ?;`)
 } as const;
 
 export const isUsernameExist = (username: string) => {
@@ -94,8 +94,24 @@ export const getReferralCode = (code: string): ReferralCode => {
 	return statements.getReferralCode.get({ code }) as ReferralCode;
 };
 
-export const getSession = (SessionID: string): { Users: User; Sessions: Session } => {
-	return statements.getSession.get(SessionID) as { Users: User; Sessions: Session };
+export const getSession = (SessionID: string): { user: User; session: Session } | null => {
+	const rows = statements.getSession.get(SessionID) as User & Session;
+	if (!rows) return null;
+	const user: User = {
+		UserID: rows.UserID,
+		Username: rows.Username,
+		HashedPassword: rows.HashedPassword,
+		Privilege: rows.Privilege,
+		CreationTimestamp: rows.CreationTimestamp,
+		ReferredByUserID: rows.ReferredByUserID
+	};
+
+	const session: Session = {
+		SessionID: rows.SessionID,
+		UserID: rows.UserID,
+		ExpiresAt: rows.ExpiresAt
+	};
+	return { user, session };
 };
 
 export const getReferralCodeCount = (userID: string): number => {

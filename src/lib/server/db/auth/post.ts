@@ -35,7 +35,7 @@ INSERT INTO
 DELETE FROM
 	"Sessions" 
 WHERE
-	"SessionID" = ?);`
+	"SessionID" = ?;`
 	),
 	resetSession: db.prepare(
 		`

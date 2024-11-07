@@ -1,5 +1,5 @@
 import { getPrivileges } from '$lib/server/db/auth';
-import { toUserInfo, type PrivilegeRole } from '$lib/server/db/types';
+import { type PrivilegeRole } from '$lib/server/db/types';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
@@ -11,7 +11,7 @@ export const load: LayoutServerLoad = async (event) => {
 			}
 		};
 	return {
-		user: toUserInfo(event.locals.user),
+		user: event.locals.user,
 		privileges: getPrivileges()
 	};
 };

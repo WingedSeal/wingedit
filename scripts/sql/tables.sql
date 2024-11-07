@@ -10,7 +10,7 @@ CREATE TABLE
     IF NOT EXISTS "Users" (
         "UserID" CHAR(16) NOT NULL,
         "Username" VARCHAR(32) NOT NULL UNIQUE,
-        "HashedPassword" CHAR(97) NOT NULL,
+        "HashedPassword" CHAR(97) NOT NULL, -- Argon2 hashed result contains information about the hash such as salt
         "Privilege" TINYINT NOT NULL,
         "ReferredByUserID" CHAR(16),
         "CreationTimestamp" INTEGER NOT NULL,
