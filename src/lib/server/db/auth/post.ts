@@ -1,31 +1,37 @@
 import { db } from '..';
 import type { ReferralCode, User } from '../types';
 
-export const addReferralCode = (referralCode: ReferralCode) => {
-	db.prepare(
+const statements = {
+	addReferralCode: db.prepare(
 		`
 INSERT INTO
 	"ReferralCodes" ("Code", "FromUserID", "Privilege")
 VALUES
 	(@Code, @FromUserID, @Privilege);`
-	).run(referralCode);
-};
-
-export const deleteReferralCode = (code: string) => {
-	db.prepare(
+	),
+	deleteReferralCode: db.prepare(
 		`
 DELETE FROM
 	"ReferralCodes"
 WHERE
 	"Code"=@code;`
-	).run({ code });
+	),
+	addUser: db.prepare(
+		`
+INSERT INTO
+"Users" ("UserID", "Username", "HashedPassword", "Privilege", "CreationTimestamp") VALUES (
+	@UserID, @Username, @HashedPassword, @Privilege, @CreationTimestamp
+);`
+	)
+} as const;
+
+export const addReferralCode = (referralCode: ReferralCode) => {
+	statements.addReferralCode.run(referralCode);
+};
+
+export const deleteReferralCode = (code: string) => {
+	statements.deleteReferralCode.run({ code });
 };
 export const addUser = (user: User) => {
-	db.prepare(
-		`
-            INSERT INTO
-            "Users" ("UserID", "Username", "HashedPassword", "Privilege", "CreationTimestamp") VALUES (
-                @UserID, @Username, @HashedPassword, @Privilege, @CreationTimestamp
-            );`
-	).run(user);
+	statements.addUser.run(user);
 };

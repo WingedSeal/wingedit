@@ -72,6 +72,31 @@ export type Lineup = {
 	DrawOverSub2Y: number | null;
 };
 
+export const lineupKeys: (keyof Lineup)[] = [
+	'AgentID',
+	'AbilityID',
+	'MapID',
+	'ExtraImageCount',
+	'ThrowTypeID',
+	'TimeToLand',
+	'GradeID',
+	'Difficulty',
+	'SideID',
+	'CreatedBy',
+	'FromMapPositionID',
+	'ToMapPositionID',
+	'FromX',
+	'FromY',
+	'ToX',
+	'ToY',
+	'DrawOverMainX',
+	'DrawOverMainY',
+	'DrawOverSub1X',
+	'DrawOverSub1Y',
+	'DrawOverSub2X',
+	'DrawOverSub2Y'
+] as const;
+
 export type ThrowType = {
 	ID: number;
 	Name: string;

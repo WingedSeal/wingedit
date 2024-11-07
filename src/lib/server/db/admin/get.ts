@@ -1,8 +1,12 @@
 import { db } from '..';
 import { SqliteError } from 'better-sqlite3';
 
+const statements = {
+	getTables: db.prepare("SELECT name FROM sqlite_master WHERE type='table';")
+} as const;
+
 export const getTables = () => {
-	const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table';").all() as {
+	const tables = statements.getTables.all() as {
 		name: string;
 	}[];
 	return tables.map((table) => table.name);

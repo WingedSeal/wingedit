@@ -253,7 +253,7 @@
 
 						<label for="difficulty" class="main-label">Difficulty</label>
 						<select
-							name="grade"
+							name="difficulty"
 							bind:value={$lineupForm.difficulty}
 							aria-invalid={$lineupErrors.difficulty ? 'true' : undefined}
 						>
@@ -765,7 +765,7 @@
 		</form>
 		<div class="flex flex-col bg-sky-100 h-full p-12 rounded-md">
 			<ul>
-				{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition}
+				{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition (mapPosition.ID)}
 					<li>{mapPosition.Callout} <button type="button">DELETE</button></li>
 				{/each}
 			</ul>
