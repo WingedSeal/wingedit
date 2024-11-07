@@ -5,7 +5,7 @@
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
 	import LoadingScreen, { isLoaded } from '$lib/components/LoadingScreen.svelte';
-	import RenderLine from './RenderLine.svelte';
+	import RenderLine from './LineupLineOverlay.svelte';
 	import Grades from './Grades.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import Sides from './Sides.svelte';
