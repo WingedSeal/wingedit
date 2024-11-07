@@ -1,5 +1,3 @@
-import { lucia } from '$lib/server/auth';
-import { generateIdFromEntropySize } from 'lucia';
 import { hash } from 'argon2';
 
 import { addUser, deleteReferralCode, getReferralCode, isUsernameExist } from '$lib/server/db/auth';
@@ -9,6 +7,12 @@ import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from '@sveltejs/kit';
 import { signupSchema as schema } from '$lib/schema';
+import {
+	createSession,
+	generateIdFromEntropySize,
+	generateSessionToken,
+	setSessionTokenCookie
+} from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -51,12 +55,9 @@ export const actions: Actions = {
 
 		addUser(user);
 		deleteReferralCode(referralCode.Code);
-		const session = await lucia.createSession(userId, {});
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
+		const sessionToken = generateSessionToken();
+		const session = createSession(sessionToken, user.UserID);
+		setSessionTokenCookie(cookies, sessionToken, session.ExpiresAt);
 		redirect(302, '/' + (url.searchParams.get('redirect') || ''));
 	}
 };

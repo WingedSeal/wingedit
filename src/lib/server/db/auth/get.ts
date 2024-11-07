@@ -1,5 +1,5 @@
 import { db } from '..';
-import type { User, ReferralCode, PrivilegeRole } from '../types';
+import type { User, ReferralCode, PrivilegeRole, Session } from '../types';
 
 const statements = {
 	isUsernameExist: db.prepare(
@@ -58,7 +58,16 @@ FROM
 WHERE
     "FromUserID" = @userID;`
 	),
-	getPrivileges: db.prepare(`SELECT * FROM "PrivilegeRoles";`)
+	getPrivileges: db.prepare(`SELECT * FROM "PrivilegeRoles";`),
+	getSession: db.prepare(`
+SELECT 
+	Users.*,
+	Session.*
+FROM "Session" 
+	INNER JOIN "Users" 
+	ON Users.UserID = Sessions.UserID 
+WHERE 
+	Session.UserID = ?;`)
 } as const;
 
 export const isUsernameExist = (username: string) => {
@@ -83,6 +92,10 @@ export const getHiddenReferralCodes = (): ReferralCode[] => {
 
 export const getReferralCode = (code: string): ReferralCode => {
 	return statements.getReferralCode.get({ code }) as ReferralCode;
+};
+
+export const getSession = (SessionID: string): { Users: User; Sessions: Session } => {
+	return statements.getSession.get(SessionID) as { Users: User; Sessions: Session };
 };
 
 export const getReferralCodeCount = (userID: string): number => {

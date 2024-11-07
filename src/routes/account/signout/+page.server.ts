@@ -1,17 +1,13 @@
 import { fail, redirect, type Cookies } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { lucia } from '$lib/server/auth';
+import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth';
 
 const signOut = async (locals: App.Locals, cookies: Cookies) => {
 	if (!locals.session) {
 		return fail(401, { message: 'u no logged in' });
 	}
-	await lucia.invalidateSession(locals.session.id);
-	const sessionCookie = lucia.createBlankSessionCookie();
-	cookies.set(sessionCookie.name, sessionCookie.value, {
-		path: '.',
-		...sessionCookie.attributes
-	});
+	invalidateSession(locals.session.SessionID);
+	deleteSessionTokenCookie(cookies);
 };
 
 export const load: PageServerLoad = async (event) => {

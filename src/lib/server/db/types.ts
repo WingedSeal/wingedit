@@ -1,5 +1,3 @@
-import { type User as LuciaUser } from 'lucia';
-
 export type Agent = {
 	ID: number;
 	Name: string;
@@ -135,6 +133,8 @@ export type User = {
 	CreationTimestamp: number;
 };
 
+export type UserInfo = Omit<User, 'HashedPassword'>;
+
 export type Session = {
 	SessionID: string;
 	ExpiresAt: number;
@@ -151,11 +151,4 @@ export type PrivilegeRole = {
 	Privilege: number;
 	RoleName: string;
 	Description: string;
-};
-
-export type UserInfo = Omit<LuciaUser, 'id'>;
-
-export const toUserInfo = (user: LuciaUser): UserInfo => {
-	const { id: _, ...attributes } = user;
-	return { ...attributes };
 };

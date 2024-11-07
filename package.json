@@ -43,6 +43,7 @@
 		"image-size": "^1.1.1",
 		"jimp": "^1.6.0",
 		"lucia": "^3.2.1",
+		"oslo": "^1.2.1",
 		"sharp": "^0.33.5",
 		"wingedit": "file:"
 	}

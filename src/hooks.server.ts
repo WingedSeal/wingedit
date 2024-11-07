@@ -1,7 +1,12 @@
-import { lucia } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
 import { IMAGES_PATH, DB_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
 import { PUBLIC_REQUIRE_ALL_IMAGES } from '$env/static/public';
+import {
+	deleteSessionTokenCookie,
+	SESSION_COOKIE_NAME,
+	setSessionTokenCookie,
+	validateSessionToken
+} from '$lib/server/auth';
 
 if (!IMAGES_PATH || !DB_PATH || !PUBLIC_REQUIRE_ALL_IMAGES || !VALIDATE_IMAGE_SIZE) {
 	throw Error('Missing .env');
@@ -21,29 +26,18 @@ const _simulateLatency = (ms: number) => {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	// await _simulateLatency(2000);
-	const sessionId = event.cookies.get(lucia.sessionCookieName);
-	if (!sessionId) {
+	const sessionToken = event.cookies.get(SESSION_COOKIE_NAME);
+	if (!sessionToken) {
 		event.locals.user = null;
 		event.locals.session = null;
 		return resolve(event);
 	}
 
-	const { session, user } = await lucia.validateSession(sessionId);
-	if (session && session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		// sveltekit types deviates from the de-facto standard
-		// you can use 'as any' too
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
-	}
-	if (!session) {
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
+	const { session, user } = validateSessionToken(sessionToken);
+	if (session) {
+		setSessionTokenCookie(event.cookies, sessionToken, session.ExpiresAt);
+	} else {
+		deleteSessionTokenCookie(event.cookies);
 	}
 	event.locals.user = user;
 	event.locals.session = session;

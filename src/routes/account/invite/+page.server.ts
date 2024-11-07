@@ -1,11 +1,9 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { generateIdFromEntropySize } from 'lucia';
 import type { PageServerLoad } from './$types';
 import {
 	addReferralCode,
 	deleteReferralCode,
 	getHiddenReferralCodes,
-	getPrivileges,
 	getReferralCodeCount,
 	getReferralCodes
 } from '$lib/server/db/auth';
@@ -14,6 +12,7 @@ import { fail, message, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import Privilege from '$lib/privilege';
 import { inviteSchema as schema } from '$lib/schema';
+import { generateIdFromEntropySize } from '$lib/server/auth';
 
 const MAX_CODE_COUNT = 4;
 
@@ -26,15 +25,15 @@ export const actions: Actions = {
 		if (!form.valid) {
 			return fail(400, { form });
 		}
-		if (form.data.privilege > locals.user.privilege) {
+		if (form.data.privilege > locals.user.Privilege) {
 			return error(403, 'Not enough privilege');
 		}
-		if (form.data.isHideSource && locals.user.privilege < Privilege.Admin) {
+		if (form.data.isHideSource && locals.user.Privilege < Privilege.Admin) {
 			return error(403, 'Not enough privilege');
 		}
 		const referralCode = generateIdFromEntropySize(10); // 16 characters long
-		const codeCount = getReferralCodeCount(locals.user.id);
-		if (locals.user.privilege < Privilege.Admin && codeCount >= MAX_CODE_COUNT) {
+		const codeCount = getReferralCodeCount(locals.user.UserID);
+		if (locals.user.Privilege < Privilege.Admin && codeCount >= MAX_CODE_COUNT) {
 			return message(
 				form,
 				{ message: `Maximum active referral count of ${MAX_CODE_COUNT} is reached` },
@@ -45,7 +44,7 @@ export const actions: Actions = {
 		}
 		const code: ReferralCode = {
 			Code: referralCode,
-			FromUserID: form.data.isHideSource ? null : locals.user.id,
+			FromUserID: form.data.isHideSource ? null : locals.user.UserID,
 			Privilege: form.data.privilege
 		};
 		addReferralCode(code);
@@ -60,12 +59,12 @@ export const actions: Actions = {
 		}
 		const data = await request.formData();
 		const deleteCode = data.get('code')! as string;
-		if (locals.user.privilege >= Privilege.Admin) {
+		if (locals.user.Privilege >= Privilege.Admin) {
 			deleteReferralCode(deleteCode);
 			return;
 		}
 
-		const codes = getReferralCodes(locals.user.id);
+		const codes = getReferralCodes(locals.user.UserID);
 		if (!codes.map((code) => code.Code).includes(deleteCode)) {
 			return error(403, 'Unowned code');
 		}
@@ -82,10 +81,10 @@ export const load = async (event: Parameters<PageServerLoad>[0]) => {
 	if (!event.locals.user) {
 		redirect(303, '/');
 	}
-	const canHideSource = event.locals.user.privilege >= Privilege.Admin;
+	const canHideSource = event.locals.user.Privilege >= Privilege.Admin;
 	return {
 		form: await superValidate<Infer<typeof schema>, FormMessage>(zod(schema)),
-		codes: getReferralCodes(event.locals.user.id),
+		codes: getReferralCodes(event.locals.user.UserID),
 		hiddenCodes: canHideSource ? getHiddenReferralCodes() : null,
 		canHideSource
 	};

@@ -1,4 +1,3 @@
-import { lucia } from '$lib/server/auth';
 import { verify } from 'argon2';
 import type { Actions, PageServerLoad } from './$types';
 import { getUser } from '$lib/server/db/auth';
@@ -6,6 +5,7 @@ import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from '@sveltejs/kit';
 import { signinSchema as schema } from '$lib/schema';
+import { createSession, generateSessionToken, setSessionTokenCookie } from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {
@@ -43,12 +43,10 @@ export const actions: Actions = {
 			return setError(form, 'password', 'Password is invalid.');
 		}
 
-		const session = await lucia.createSession(existingUser.UserID, {});
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
+		const sessionToken = generateSessionToken();
+		const session = createSession(sessionToken, existingUser.UserID);
+		setSessionTokenCookie(cookies, sessionToken, session.ExpiresAt);
+
 		redirect(302, '/' + (url.searchParams.get('redirect') || ''));
 	}
 };
