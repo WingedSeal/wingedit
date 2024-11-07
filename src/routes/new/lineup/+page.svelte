@@ -41,7 +41,8 @@
 	const {
 		form: lineupForm,
 		errors: lineupErrors,
-		enhance: lineupEnhance
+		enhance: lineupEnhance,
+		message: lineupMessage
 	} = superForm(data.lineupForm, {
 		validators: zodClient(lineupSchema),
 		taintedMessage: 'Changes you made may not be saved.',
@@ -735,9 +736,15 @@
 				<div class="mt-auto mb-8 h-20 flex">
 					<button
 						type="submit"
+						name="confirm"
 						class="m-auto px-16 py-6 rounded-lg bg-green-900 text-white font-bold text-4xl"
 						>Confirm</button
 					>
+					<label for="confirm" class:error={$lineupErrors} class:success={!$lineupErrors}>
+						{#if $lineupMessage}
+							{$lineupMessage}
+						{/if}
+					</label>
 				</div>
 			</div>
 		</section>

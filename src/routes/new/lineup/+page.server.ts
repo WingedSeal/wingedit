@@ -47,7 +47,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
 	return {
-		lineupForm: await superValidate(zod(lineupSchema)),
+		lineupForm: await superValidate<Infer<typeof lineupSchema>, string>(zod(lineupSchema)),
 		mapPositionForm: await superValidate<
 			Infer<typeof mapPositionSchema>,
 			{ message: string; newMapPosition: MapPosition; mapID: number }
