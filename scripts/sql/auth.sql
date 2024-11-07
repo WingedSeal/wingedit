@@ -17,7 +17,41 @@ VALUES
         'Can directly interact with database.'
     );
 
+-- INSERT INTO
+--     "ReferralCodes" ("Code", "Privilege")
+-- VALUES
+--     ('1234567890123456', 3);
 INSERT INTO
-    "ReferralCodes" ("Code", "Privilege")
+    "Users" (
+        "UserID",
+        "Username",
+        "HashedPassword",
+        "Privilege",
+        "ReferredByUserID",
+        "CreationTimestamp"
+    )
 VALUES
-    ('1234567890123456', 3);
+    (
+        'q7edhzkh623wxgx7',
+        'admin',
+        '$argon2id$v=19$m=65536,t=3,p=4$/i44WHdWKfI5GzNn1+y6Pw$gAg2XKQoU5ePTWqovCJhuJSThGR5roS9LMpmndcdlfc',
+        3,
+        null,
+        1730994127411
+    ),
+    (
+        'zx5mmsrqusd7oxc3',
+        'moderator',
+        '$argon2id$v=19$m=65536,t=3,p=4$cVkHCZOKhSZxWG3jL1WvIQ$In9+SNfMuWLCRV8oMT3vylQvWdwq3wxkP2oN0JXhBxs',
+        2,
+        null,
+        1730995229695
+    ),
+    (
+        'rwdcifg3h53nfrlx',
+        'member',
+        '$argon2id$v=19$m=65536,t=3,p=4$s6T0Shi7K4CweXba3ceFPw$67x8Sq9dwt1D2Aw08sF+L9WUfYp5GwwAGcWNwGlu6Hs',
+        1,
+        null,
+        1730995250593
+    );
