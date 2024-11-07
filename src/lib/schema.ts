@@ -127,8 +127,16 @@ export const getLineupSchema = (
 			sub1Y: decimalSchema.nullable(),
 			sub2X: decimalSchema.nullable(),
 			sub2Y: decimalSchema.nullable(),
-			from: z.number().int().min(1, 'Please select map position.'),
-			to: z.number().int().min(1, 'Please select map position.'),
+			from: z
+				.number({ message: 'Please select map position.' })
+				.int()
+				.min(0)
+				.default(null as unknown as number),
+			to: z
+				.number({ message: 'Please select map position.' })
+				.int()
+				.min(0)
+				.default(null as unknown as number),
 			fromX: decimalSchema.default(0),
 			fromY: decimalSchema.default(0),
 			toX: decimalSchema.default(0),

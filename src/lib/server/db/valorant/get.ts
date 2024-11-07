@@ -58,6 +58,14 @@ WHERE
 			MapPositions.ID = Lineups.ToMapPositionID
 	);`
 	),
+	getMapPosition: db.prepare(
+		`
+SELECT 
+	*
+FROM "MapPositions"
+WHERE 
+	ID = ?;`
+	),
 	getMapPositions: db.prepare(
 		`
 SELECT 
@@ -153,6 +161,10 @@ export const getAgentAbilities = (agentID: number) => {
 
 export const isMapPositionUsed = (mapPositionID: number) => {
 	return statements.isMapPositionUsed.get(mapPositionID) as boolean;
+};
+
+export const getMapPosition = (mapPositionID: number) => {
+	return statements.getMapPosition.get(mapPositionID) as MapPosition;
 };
 
 export const getMapPositions = () => {

@@ -32,6 +32,13 @@ INSERT INTO
 VALUES
 	(${lineupKeys.map((key) => '@' + key).join(', ')});
 `
+	),
+	deleteMapPosition: db.prepare(
+		`
+DELETE FROM
+	"MapPositions"
+WHERE
+	ID = ?;`
 	)
 } as const;
 
@@ -74,7 +81,27 @@ export const addMapPosition = (
 	}
 };
 
-export const addLineup = (lineup: Lineup): number => {
+export const deleteMapPosition = (mapPositionID: number): boolean => {
+	try {
+		statements.deleteMapPosition.run(mapPositionID);
+		return true;
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
+		return false;
+	}
+};
+
+export const addLineup = (lineup: Lineup): { success: boolean; lineupID: number } => {
 	if (lineup.ID) throw Error('Expected lineup without ID');
-	return statements.addLineup.run(lineup).lastInsertRowid as number;
+	try {
+		const ID = statements.addLineup.run(lineup).lastInsertRowid as number;
+		return { success: true, lineupID: ID };
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
+		return { success: false, lineupID: -1 };
+	}
 };

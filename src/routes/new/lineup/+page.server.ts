@@ -10,8 +10,9 @@ import { error, redirect } from '@sveltejs/kit';
 import Privilege from '$lib/privilege';
 import { getLineupSchema, mapPositionSchema } from '$lib/schema';
 import sharp from 'sharp';
-import { isMapPositionExist } from '$lib/server/db/valorant/get';
-import { addMapPosition } from '$lib/server/db/valorant/post';
+import { getMapPosition, isMapPositionExist, isMapPositionUsed } from '$lib/server/db/valorant/get';
+import { addMapPosition, deleteMapPosition } from '$lib/server/db/valorant/post';
+import { mapPositionDeleteSchema } from '$lib/hidden-schema';
 
 const lineupSchema =
 	VALIDATE_IMAGE_SIZE === 'true'
@@ -44,6 +45,10 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 			Infer<typeof mapPositionSchema>,
 			{ message: string; newMapPosition: MapPosition; mapID: number }
 		>(zod(mapPositionSchema)),
+		mapPositionDeleteForm: await superValidate<
+			Infer<typeof mapPositionDeleteSchema>,
+			{ message: string; deletedMapPosition: MapPosition }
+		>(zod(mapPositionDeleteSchema)),
 		gameInfo: getGameInfo(),
 		abilities: getAbilities()
 	};
@@ -56,7 +61,7 @@ export const actions = {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
-		if (locals.user.privilege < Privilege.Moderator) {
+		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
 		const form = await superValidate(request, zod(lineupSchema));
@@ -88,7 +93,11 @@ export const actions = {
 			DrawOverSub2Y: form.data.sub2Y
 		};
 
-		const lineupID = addLineup(lineup).toString();
+		const { success, lineupID: _lineupID } = addLineup(lineup);
+		if (!success) {
+			return message(form, 'Something went wrong while adding lineup.', { status: 400 });
+		}
+		const lineupID = _lineupID.toString();
 		fs.mkdirSync(path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID), { recursive: true });
 		await Promise.all([
 			writeWebp(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.webp')),
@@ -107,13 +116,13 @@ export const actions = {
 			)
 		]);
 
-		return message(form, 'Sucess');
+		return message(form, 'Lineup is successfully added.');
 	},
 	addMapPosition: async ({ request, locals }) => {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
-		if (locals.user.privilege < Privilege.Moderator) {
+		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
 		const form = await superValidate(request, zod(mapPositionSchema));
@@ -145,6 +154,43 @@ export const actions = {
 			message: 'Callout was added successfully.',
 			newMapPosition,
 			mapID: form.data.mapID
+		});
+	},
+	deleteMapPosition: async ({ request, locals }) => {
+		if (!locals.user) {
+			return error(401, 'Invalid or missing session');
+		}
+		if (locals.user.privilege < Privilege.Member) {
+			return error(403, 'Not enough privilege');
+		}
+		const form = await superValidate(request, zod(mapPositionDeleteSchema));
+		if (!form.valid) {
+			return fail(400);
+		}
+		const mapPositionID = form.data.mapPositionID;
+		const mapPosition = getMapPosition(mapPositionID);
+		if (!mapPosition) {
+			return setError(form, 'mapPositionID', 'This map position has already been deleted!');
+		}
+
+		if (isMapPositionUsed(mapPositionID)) {
+			return setError(
+				form,
+				'mapPositionID',
+				`This map position ${JSON.stringify(mapPosition.Callout)} has already been used!`
+			);
+		}
+
+		if (!deleteMapPosition(mapPositionID)) {
+			return setError(
+				form,
+				'mapPositionID',
+				`Something went wrong while deleting ${JSON.stringify(mapPosition.Callout)}.`
+			);
+		}
+		return message(form, {
+			message: `${JSON.stringify(mapPosition.Callout)} has successfully been deleted.`,
+			deletedMapPosition: mapPosition
 		});
 	}
 };

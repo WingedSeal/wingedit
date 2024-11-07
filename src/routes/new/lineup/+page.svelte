@@ -17,6 +17,27 @@
 	let mapPositions = $state(data.gameInfo.mapPositions);
 
 	const {
+		errors: mapPositionDeleteErrors,
+		message: mapPositionDeleteMessage,
+		enhance: mapPositionDeleteEnhance
+	} = superForm(data.mapPositionDeleteForm, {
+		invalidateAll: false,
+		applyAction: false,
+		multipleSubmits: 'abort',
+		resetForm: false,
+		onUpdate: ({ form }) => {
+			const deletedMapPosition = form.message!.deletedMapPosition;
+			delete mapPositions[deletedMapPosition.MapID][deletedMapPosition.ID];
+			if (deletedMapPosition.ID === $lineupForm.from) {
+				$lineupForm.from = null as unknown as number;
+			}
+			if (deletedMapPosition.ID === $lineupForm.to) {
+				$lineupForm.to = null as unknown as number;
+			}
+		}
+	});
+
+	const {
 		form: lineupForm,
 		errors: lineupErrors,
 		enhance: lineupEnhance
@@ -33,7 +54,6 @@
 		message: mapPositionMessage
 	} = superForm(data.mapPositionForm, {
 		validators: zodClient(mapPositionSchema),
-		taintedMessage: 'Changes you made may not be saved.',
 		resetForm: false,
 		invalidateAll: false,
 		onUpdate: (event) => {
@@ -201,8 +221,8 @@
 							bind:value={$lineupForm.map}
 							aria-invalid={$lineupErrors.map ? 'true' : undefined}
 							onchange={() => {
-								$lineupForm.from = 0;
-								$lineupForm.to = 0;
+								$lineupForm.from = null as unknown as number;
+								$lineupForm.to = null as unknown as number;
 							}}
 						>
 							<option hidden selected value={0}>- Select a Map -</option>
@@ -643,7 +663,7 @@
 					aria-invalid={$lineupErrors.from ? 'true' : undefined}
 				>
 					{#if $lineupForm.map}
-						<option hidden selected value={0}>- Select From Position -</option>
+						<option hidden selected value={null}>- Select From Position -</option>
 						{#if mapPositions[$lineupForm.map]}
 							{#each Object.values(mapPositions[$lineupForm.map]) as mapPosition}
 								<option value={mapPosition.ID}>{mapPosition.Callout}</option>
@@ -670,7 +690,7 @@
 					aria-invalid={$lineupErrors.to ? 'true' : undefined}
 				>
 					{#if $lineupForm.map}
-						<option hidden selected value={0}>- Select To Position -</option>
+						<option hidden selected value={null}>- Select To Position -</option>
 						{#if mapPositions[$lineupForm.map]}
 							{#each Object.values(mapPositions[$lineupForm.map]) as mapPosition}
 								<option value={mapPosition.ID}>{mapPosition.Callout}</option>
@@ -764,11 +784,33 @@
 			</div>
 		</form>
 		<div class="flex flex-col bg-sky-100 h-full p-12 rounded-md">
-			<ul>
-				{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition (mapPosition.ID)}
-					<li>{mapPosition.Callout} <button type="button">DELETE</button></li>
-				{/each}
-			</ul>
+			<form
+				action="?/deleteMapPosition"
+				id="deleteMapPosition"
+				method="post"
+				use:mapPositionDeleteEnhance
+			>
+				<label
+					for="deleteMapPosition"
+					class:error={$mapPositionDeleteErrors}
+					class:success={$mapPositionDeleteMessage}
+				>
+					{#if $mapPositionDeleteErrors.mapPositionID}
+						{$mapPositionDeleteErrors.mapPositionID[0]}
+					{/if}
+					{#if $mapPositionDeleteMessage}
+						{$mapPositionDeleteMessage.message}
+					{/if}
+				</label>
+				<ul>
+					{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition (mapPosition.ID)}
+						<li>
+							<span>{mapPosition.Callout}</span>
+							<button type="submit" name="mapPositionID" value={mapPosition.ID}>DEL </button>
+						</li>
+					{/each}
+				</ul>
+			</form>
 		</div>
 	</div>
 </Popup>
