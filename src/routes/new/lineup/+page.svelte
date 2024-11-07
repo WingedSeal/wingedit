@@ -4,12 +4,12 @@
 	import { getLineupSchema, mapPositionSchema } from '$lib/schema';
 	import '$lib/styles/form.scss';
 	import type { Ability } from '$lib/server/db/types.js';
-	import { FromToMode, OverlayMode } from './enum.js';
+	import { FromToMode, OverlayMode } from './modes.js';
 	import Clickable from './Clickable.svelte';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { onMount } from 'svelte';
-	import RenderEmptyLine from './RenderEmptyLine.svelte';
+	import RenderEmptyLine from './EmptyLineupLineOverlay.svelte';
 
 	const lineupSchema = getLineupSchema();
 
