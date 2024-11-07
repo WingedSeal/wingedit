@@ -564,45 +564,46 @@
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
 			<div class="w-3/4 bg-green-300 p-4 flex">
-				<div class="bg-black h-full w-full flex m-auto" bind:this={mimimapContainer}>
-					{#if $lineupForm.map}
-						<Clickable
-							buttonClass="w-full h-full relative"
-							onClick={(x, y) => {
-								switch (selectedFromToMode) {
-									case FromToMode.From:
-										$lineupForm.fromX = x;
-										$lineupForm.fromY = y;
-										break;
-									case FromToMode.To:
-										$lineupForm.toX = x;
-										$lineupForm.toY = y;
-										break;
-								}
-							}}
-						>
-							<img
-								src="/api/image/maps/{$lineupForm.map}/minimap.webp"
-								alt="bg.webp"
-								class="w-full h-full"
-								draggable="false"
-								onload={(e) => {
-									const image = e.target as HTMLImageElement;
-									minimapAspectRatio = image.naturalWidth / image.naturalHeight;
-									resizeMinimap();
+				<div class="bg-black h-full w-full flex">
+					<div class="bg-black h-full w-full flex m-auto" bind:this={mimimapContainer}>
+						{#if $lineupForm.map}
+							<Clickable
+								buttonClass="w-full h-full relative"
+								onClick={(x, y) => {
+									switch (selectedFromToMode) {
+										case FromToMode.From:
+											$lineupForm.fromX = x;
+											$lineupForm.fromY = y;
+											break;
+										case FromToMode.To:
+											$lineupForm.toX = x;
+											$lineupForm.toY = y;
+											break;
+									}
 								}}
-							/>
-							{#if $lineupForm.fromX !== null && $lineupForm.fromY !== null && $lineupForm.toX !== null && $lineupForm.toY !== null}
-								<RenderEmptyLine
-									fromCenter={[$lineupForm.fromX, $lineupForm.fromY]}
-									toCenter={[$lineupForm.toX, $lineupForm.toY]}
-									lineColor={data.gameInfo.grades[$lineupForm.grade]?.Color || '#FFFFFF'}
+							>
+								<img
+									src="/api/image/maps/{$lineupForm.map}/minimap.webp"
+									alt="bg.webp"
+									class="w-full h-full"
+									draggable="false"
+									onload={(e) => {
+										const image = e.target as HTMLImageElement;
+										minimapAspectRatio = image.naturalWidth / image.naturalHeight;
+										resizeMinimap();
+									}}
 								/>
-							{/if}
-						</Clickable>
-					{/if}
+								{#if $lineupForm.fromX !== null && $lineupForm.fromY !== null && $lineupForm.toX !== null && $lineupForm.toY !== null}
+									<RenderEmptyLine
+										fromCenter={[$lineupForm.fromX, $lineupForm.fromY]}
+										toCenter={[$lineupForm.toX, $lineupForm.toY]}
+										lineColor={data.gameInfo.grades[$lineupForm.grade]?.Color || '#FFFFFF'}
+									/>
+								{/if}
+							</Clickable>
+						{/if}
+					</div>
 				</div>
-
 				<div class="grow flex flex-col select-overlay-mode justify-around ml-5">
 					<input
 						type="radio"
