@@ -25,7 +25,8 @@
 		applyAction: false,
 		multipleSubmits: 'abort',
 		resetForm: false,
-		onUpdate: ({ form }) => {
+		onUpdate: ({ form, result }) => {
+			if (result.type !== 'success') return;
 			const deletedMapPosition = form.message!.deletedMapPosition;
 			delete mapPositions[deletedMapPosition.MapID][deletedMapPosition.ID];
 			if (deletedMapPosition.ID === $lineupForm.from) {

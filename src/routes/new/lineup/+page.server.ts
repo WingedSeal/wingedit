@@ -3,7 +3,14 @@ import { addLineup, getAbilities, getGameInfo, getMaps } from '$lib/server/db/va
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
-import { superValidate, fail, message, setError, type Infer } from 'sveltekit-superforms';
+import {
+	superValidate,
+	fail,
+	message,
+	setError,
+	type Infer,
+	setMessage
+} from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Lineup, MapPosition } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
