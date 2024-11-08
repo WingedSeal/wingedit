@@ -676,7 +676,7 @@
 						{/if}
 						<option value={ADD_MAP_POSITION_VALUE}>- Add Map Position -</option>
 					{:else}
-						<option selected value={0}>- Please select a Map. -</option>
+						<option selected value={null}>- Please select a Map. -</option>
 					{/if}
 				</select>
 				<label for="from" class="error">
@@ -703,7 +703,7 @@
 						{/if}
 						<option value={ADD_MAP_POSITION_VALUE}>- Add Map Position -</option>
 					{:else}
-						<option selected value={0}>- Please select a Map. -</option>
+						<option selected value={null}>- Please select a Map. -</option>
 					{/if}
 				</select>
 				<label for="to" class="error">

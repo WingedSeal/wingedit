@@ -12,7 +12,7 @@
 </script>
 
 <nav class="w-full h-nav bg-blue-900 sticky flex flex-row p-2 z-10">
-	<a href="/" class="mr-4 ml-12 aspect-square">
+	<a href="/" class="mr-4 ml-12 aspect-square rounded-lg">
 		<img src={icon} alt="wingedit icon" class="h-full aspect-square rounded-lg bg-slate-100" />
 	</a>
 	<a
