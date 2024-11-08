@@ -6,7 +6,7 @@ import type { User } from '$lib/server/db/types';
 import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { redirect } from '@sveltejs/kit';
-import { signupSchema as schema } from '$lib/schema';
+import { registerSchema as schema } from '$lib/schema';
 import {
 	createSession,
 	generateIdFromEntropySize,

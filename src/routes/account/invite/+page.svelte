@@ -14,7 +14,7 @@
 		validators: zodClient(schema)
 	});
 	const copyCode = (code: string) => {
-		return navigator.clipboard.writeText($page.url.origin + '/account/signup?code=' + code);
+		return navigator.clipboard.writeText($page.url.origin + '/account/register?code=' + code);
 	};
 	$effect(() => {
 		if ($message?.code) {

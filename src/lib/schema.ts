@@ -21,7 +21,7 @@ export const signinSchema = z.object({
 	password: z.string().min(4).max(255).trim()
 });
 
-export const signupSchema = z
+export const registerSchema = z
 	.object({
 		username: z
 			.string()

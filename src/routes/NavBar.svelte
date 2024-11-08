@@ -97,7 +97,7 @@
 				{:else}
 					<div class="p-4">
 						<a href="/account/signin" class="inline-block text-nowrap">SIGN IN</a>
-						<a href="/account/signup" class="inline-block text-nowrap">SIGN UP</a>
+						<a href="/account/register" class="inline-block text-nowrap">Register</a>
 					</div>
 				{/if}
 			</div>

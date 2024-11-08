@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { signupSchema as schema } from '$lib/schema';
+	import { registerSchema as schema } from '$lib/schema';
 	let { data } = $props();
 
 	const { form, errors, message, enhance } = superForm(data.form, {
@@ -13,7 +13,7 @@
 
 <div class="flex items-center justify-center h-dvh-nav bg-slate-600">
 	<div class="bg-gray-50 rounded-md p-9 space-y-10 font-medium">
-		<h1 class="text-center font-bold">Sign up</h1>
+		<h1 class="text-center font-bold">Register</h1>
 		<form method="post" class="flex flex-col m-5" use:enhance>
 			<label for="username">Username</label>
 			<input

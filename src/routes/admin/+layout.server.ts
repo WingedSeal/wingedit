@@ -1,8 +1,8 @@
 import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from '../account/signup/$types';
 import Privilege from '$lib/privilege';
+import type { LayoutServerLoad } from './$types';
 
-export const load: PageServerLoad = async (event) => {
+export const load: LayoutServerLoad = async (event) => {
 	if (!event.locals.user)
 		throw redirect(303, `/account/signin?redirect=${event.url.pathname.slice(1)}`);
 	if (event.locals.user.privilege < Privilege.Admin) throw redirect(303, '/');

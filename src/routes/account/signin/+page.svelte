@@ -50,7 +50,7 @@
 			<div class="text-red-500 mt-4">{$errors._errors}</div>
 		{/if} -->
 		<a
-			href={'/account/signup' + $page.url.search}
+			href={'/account/register' + $page.url.search}
 			class="text-blue-500 mt-4 inline-block hover:underline"
 		>
 			Don't have account? Sign up
