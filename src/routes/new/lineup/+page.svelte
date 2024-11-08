@@ -10,7 +10,7 @@
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { onMount } from 'svelte';
 	import RenderEmptyLine from './EmptyLineupLineOverlay.svelte';
-	import emptyBox from '$lib/assets/empty-box.webp';
+	import emptyBox from '$lib/assets/images/empty-box.webp';
 
 	const lineupSchema = getLineupSchema();
 
