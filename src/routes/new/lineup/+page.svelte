@@ -10,6 +10,7 @@
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import { onMount } from 'svelte';
 	import RenderEmptyLine from './EmptyLineupLineOverlay.svelte';
+	import emptyBox from '$lib/assets/empty-box.webp';
 
 	const lineupSchema = getLineupSchema();
 
@@ -62,7 +63,9 @@
 			if (event.result.type !== 'success') return;
 			if (!event.form.message) return;
 			const mapPosition = event.form.message.newMapPosition;
+			mapPositions[event.form.message.mapID] ??= {};
 			mapPositions[event.form.message.mapID][mapPosition.ID] = { IsUsed: false, ...mapPosition };
+			console.log('HEH?');
 			switch (mapPositionSource) {
 				case 'from':
 					$lineupForm.from = mapPosition.ID;
@@ -659,7 +662,7 @@
 				<select
 					name="from"
 					onchange={(e) => {
-						if (onMapPositionChange(e, 'from')) $lineupForm.from = 0;
+						if (onMapPositionChange(e, 'from')) $lineupForm.from = null as unknown as number;
 					}}
 					bind:value={$lineupForm.from}
 					aria-invalid={$lineupErrors.from ? 'true' : undefined}
@@ -686,7 +689,7 @@
 				<select
 					name="to"
 					onchange={(e) => {
-						if (onMapPositionChange(e, 'to')) $lineupForm.to = 0;
+						if (onMapPositionChange(e, 'to')) $lineupForm.to = null as unknown as number;
 					}}
 					bind:value={$lineupForm.to}
 					aria-invalid={$lineupErrors.to ? 'true' : undefined}
@@ -752,54 +755,69 @@
 </main>
 
 <Popup title="Add new position">
-	<div class="h-full w-full flex flex-col py-6 px-20">
-		<form action="?/addMapPosition" class="main-form" method="post" use:mapPositionEnhance>
+	<div class="h-full w-full flex">
+		<form
+			action="?/addMapPosition"
+			class="main-form w-1/2 p-12 pr-6"
+			method="post"
+			use:mapPositionEnhance
+		>
 			<input type="text" name="map" class="hidden" value={$lineupForm.map} />
+			<div class="flex p-12 w-full h-full bg-sky-200 rounded-lg">
+				<div class="flex flex-col m-auto p-6 w-full">
+					<input type="hidden" name="mapID" bind:value={$mapPositionForm.mapID} />
 
-			<div class="flex flex-col bg-sky-100 mb-6 py-12 px-40 rounded-md">
-				<input type="hidden" name="mapID" bind:value={$mapPositionForm.mapID} />
-
-				<label for="callout" class="main-label">
-					Callout
-					{#if $mapPositionForm.mapID}
-						({data.gameInfo.maps[$mapPositionForm.mapID].Name})
-					{/if}
-				</label>
-				<input
-					type="text"
-					name="callout"
-					placeholder="New Map Position"
-					bind:value={$mapPositionForm.callout}
-					aria-invalid={$mapPositionErrors.callout || $mapPositionErrors.mapID ? 'true' : undefined}
-				/>
-				<label for="callout" class:error={$mapPositionErrors} class:success={$mapPositionMessage}>
-					{#if $mapPositionErrors.callout}
-						{$mapPositionErrors.callout[0]}
-					{/if}
-					{#if $mapPositionErrors.callout && $mapPositionErrors.mapID}
-						<br />
-					{/if}
-					{#if $mapPositionErrors.mapID}
-						{$mapPositionErrors.mapID[0]}
-					{/if}
-					{#if $mapPositionMessage}
-						{$mapPositionMessage.message}
-					{/if}
-				</label>
-				<button type="submit" class="py-4 px-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto">
-					Add
-				</button>
+					<label for="callout" class="main-label">
+						Callout
+						{#if $mapPositionForm.mapID}
+							({data.gameInfo.maps[$mapPositionForm.mapID].Name})
+						{/if}
+					</label>
+					<input
+						type="text"
+						name="callout"
+						placeholder="New Map Position"
+						bind:value={$mapPositionForm.callout}
+						aria-invalid={$mapPositionErrors.callout || $mapPositionErrors.mapID
+							? 'true'
+							: undefined}
+					/>
+					<label for="callout" class:error={$mapPositionErrors} class:success={$mapPositionMessage}>
+						{#if $mapPositionErrors.callout}
+							{$mapPositionErrors.callout[0]}
+						{/if}
+						{#if $mapPositionErrors.callout && $mapPositionErrors.mapID}
+							<br />
+						{/if}
+						{#if $mapPositionErrors.mapID}
+							{$mapPositionErrors.mapID[0]}
+						{/if}
+						{#if $mapPositionMessage}
+							{$mapPositionMessage.message}
+						{/if}
+					</label>
+					<button
+						type="submit"
+						class="py-4 px-12 mt-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto"
+					>
+						Add
+					</button>
+				</div>
 			</div>
 		</form>
-		<div class="flex flex-col bg-sky-100 h-full p-12 rounded-md">
-			<form
-				action="?/deleteMapPosition"
-				id="deleteMapPosition"
-				method="post"
-				use:mapPositionDeleteEnhance
-			>
+
+		<form
+			action="?/deleteMapPosition"
+			id="deleteMapPosition"
+			class="w-1/2 flex flex-col p-12 pl-6"
+			method="post"
+			use:mapPositionDeleteEnhance
+		>
+			<div class="w-full h-full p-12 bg-green-200 rounded-lg flex flex-col">
+				<h1 class="font-bold text-2xl">Unused Map Positions</h1>
 				<label
 					for="deleteMapPosition"
+					class="block"
 					class:error={$mapPositionDeleteErrors}
 					class:success={$mapPositionDeleteMessage}
 				>
@@ -810,16 +828,33 @@
 						{$mapPositionDeleteMessage.message}
 					{/if}
 				</label>
-				<ul>
-					{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition (mapPosition.ID)}
-						<li>
-							<span>{mapPosition.Callout}</span>
-							<button type="submit" name="mapPositionID" value={mapPosition.ID}>DEL </button>
-						</li>
-					{/each}
-				</ul>
-			</form>
-		</div>
+				{#if Object.values(mapPositions[$mapPositionForm.mapID] ?? []).some((pos) => !pos.IsUsed)}
+					<div class=" h-max-full overflow-y-auto mt-2">
+						<table class="delete-map-position-table">
+							<tbody>
+								{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition (mapPosition.ID)}
+									<tr>
+										<td class="w-full py-2 px-8">{mapPosition.Callout}</td>
+										<td class="p-2">
+											<button
+												type="submit"
+												name="mapPositionID"
+												value={mapPosition.ID}
+												aria-label="delete"
+											>
+												<i class="fa-solid fa-trash"></i>
+											</button>
+										</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</div>
+				{:else}
+					<img src={emptyBox} alt="empty box" class="w-full h-full object-contain" />
+				{/if}
+			</div>
+		</form>
 	</div>
 </Popup>
 
@@ -874,5 +909,12 @@
 		position: absolute;
 		margin: -1px;
 		overflow: hidden;
+	}
+
+	.delete-map-position-table {
+		&,
+		& td {
+			border: 0.2rem solid black;
+		}
 	}
 </style>
