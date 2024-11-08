@@ -50,25 +50,25 @@
 	});
 </script>
 
-<div class="w-full flex flex-row bg-green-500 my-4">
+<div class="w-full flex flex-row my-4">
 	<input
 		type="text"
 		oninput={sort}
 		bind:value={agentSearch}
-		class="w-2/3 rounded-lg p-2 mr-2 h-full"
+		class="w-2/3 rounded-lg p-2 mr-2 h-full bg-primary-dark text-plain-light placeholder:text-plain-light placeholder:opacity-70"
 		placeholder="Search Agent..."
 	/>
 	<select
-		class="w-1/3 h-full my-auto rounded-lg mx-auto block"
+		class="w-1/3 h-full my-auto rounded-lg mx-auto block text-plain-light bg-primary-dark"
 		bind:value={modeSelect}
 		onchange={sort}
 	>
-		<option value="default">default</option>
-		<option value="">favourite</option>
+		<option value="default">Default</option>
+		<option value="">Favourite</option>
 	</select>
 </div>
-<div class="bg-blue-400 flex overflow-y-scroll mb-2 flex-grow">
-	<div class="bg-blue-200 agent-grid w-full mb-auto">
+<div class=" flex overflow-y-scroll mb-2 flex-grow border-4 rounded border-primary-dark p-2">
+	<div class=" agent-grid w-full mb-auto">
 		{#if mainAgent}
 			<AgentDisplay agent={mainAgent} {favouriteAgentIDs} isMain />
 		{/if}
@@ -83,7 +83,7 @@
 	</div>
 </div>
 <button
-	class="mt-auto bg-yellow-200 disabled:bg-yellow-900 mx-auto py-4 px-12"
+	class="mt-auto bg-primary-dark text-plain-light rounded-3xl disabled:bg-primary-contrast mx-auto py-4 px-12"
 	onclick={() => {
 		if ($mainAgentID === $selectedAgent) {
 			$mainAgentID = 0;

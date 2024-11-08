@@ -16,15 +16,15 @@
 
 <input
 	type="text"
-	class="w-full rounded-lg p-2 my-4 mx-auto"
+	class="w-full rounded-lg p-2 my-4 mx-auto text-plain-light bg-secondary-dark placeholder:text-plain-light placeholder:opacity-70"
 	bind:value={mapSearch}
 	placeholder="Search Map..."
 />
-<div class="bg-blue-400 agent-grid overflow-y-scroll mb-2 flex flex-col gap-4 flex-grow">
+<div class="agent-grid overflow-y-scroll mb-2 flex flex-col gap-4 flex-grow">
 	{#each mapsList as map (map.ID)}
 		<button
 			class="flex rounded-lg aspect-video relative bg-black w-full {$selectedMap === map.ID
-				? 'border-8 border-white'
+				? 'border-8 border-secondary-dark'
 				: ''}"
 			onclick={() => {
 				$selectedMap = map.ID;
@@ -37,7 +37,7 @@
 				draggable="false"
 			/>
 			<h2
-				class="absolute bottom-[5%] left-1/2 -translate-x-1/2 text-3xl uppercase font-bold text-slate-100"
+				class="absolute bottom-[5%] left-1/2 -translate-x-1/2 text-3xl uppercase font-bold text-secondary-contrast text-outline"
 			>
 				{maps[map.ID].Name}
 			</h2>

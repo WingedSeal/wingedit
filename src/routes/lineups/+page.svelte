@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex h-dvh-nav">
-	<div class="max-w-[30%] min-w-[22%] bg-purple-500 p-8 flex flex-col">
+	<div class="w-[30%] min-w-[22%] bg-primary p-8 flex flex-col">
 		<SelectAgent agents={data.agents} />
 	</div>
 	<div class="flex-grow flex flex-col relative">
@@ -31,7 +31,7 @@
 			/>
 		{/if}
 		<button
-			class="bg-green-900 enabled:bg-green-300 mt-auto mx-auto mb-4 py-4 px-16 z-10"
+			class="bg-green-900 enabled:bg-green-300 text-plain-dark text-3xl mt-auto mx-auto mb-4 py-4 px-16 z-10 rounded-3xl font-bold"
 			disabled={!$selectedAgent || !$selectedMap}
 			onclick={() => {
 				goto(
@@ -43,7 +43,7 @@
 		</button>
 	</div>
 
-	<div class="max-w-[20%] w-80 h-full bg-purple-500 p-8 flex flex-col">
+	<div class="max-w-[20%] w-80 h-full bg-secondary p-8 flex flex-col">
 		<SelectMap maps={data.maps} />
 	</div>
 </div>

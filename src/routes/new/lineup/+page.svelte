@@ -891,19 +891,6 @@
 		}
 	}
 
-	.text-outline {
-		--outline-size: 0.1rem;
-		--outline-size-neg: calc(var(--outline-size) * -1);
-		--outline-color: #ffffff;
-		--outline-blur: 0;
-
-		text-shadow:
-			var(--outline-size-neg) var(--outline-size-neg) var(--outline-blur) var(--outline-color),
-			var(--outline-size-neg) var(--outline-size) var(--outline-blur) var(--outline-color),
-			var(--outline-size) var(--outline-size-neg) var(--outline-blur) var(--outline-color),
-			var(--outline-size) var(--outline-size) var(--outline-blur) var(--outline-color);
-	}
-
 	.sr-only {
 		clip: rect(0, 0, 0, 0);
 		position: absolute;

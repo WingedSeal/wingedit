@@ -26,28 +26,33 @@
 		favouriteAgentIDs.delete(agent.ID);
 		isFavourite = false;
 	};
-	const { starButtonOnClick, startButtonClasses, ariaLabel } = $derived.by(() => {
+	const { starButtonOnClick, ariaLabel } = $derived.by(() => {
 		if (isFavourite) {
 			return {
 				starButtonOnClick: unfavourite,
-				startButtonClasses: 'fa-solid',
 				ariaLabel: 'unfavourite'
 			};
 		} else {
 			return {
 				starButtonOnClick: favourite,
-				startButtonClasses: 'fa-regular',
 				ariaLabel: 'favourite'
 			};
 		}
 	});
 
-	const selectButtonClasses = $derived($selectedAgent === agent.ID ? 'bg-red-700' : 'bg-red-300');
-	const mainAgentClasses = $derived(isMain ? 'border-8 border-orange-400 ' : '');
+	const selectButtonClasses = $derived(
+		$selectedAgent === agent.ID ? 'bg-secondary-contrast' : 'bg-plain-light'
+	);
+	const mainAgentClasses = $derived(
+		isMain ? 'border-8 border-primary-dark border-double' : 'border-secondary-contrast border-4'
+	);
 </script>
 
 <div class="aspect-square relative">
-	<button class="w-full h-full {selectButtonClasses} {mainAgentClasses}" onclick={selectAgent}>
+	<button
+		class="w-full h-full rounded {selectButtonClasses} {mainAgentClasses}"
+		onclick={selectAgent}
+	>
 		<img src="/api/image/agents/{agent.ID}/icon.webp" alt={agent.Name} />
 	</button>
 
@@ -57,7 +62,15 @@
 			onclick={starButtonOnClick}
 			aria-label={ariaLabel}
 		>
-			<i class="{startButtonClasses} fa-star text-amber-600 fa-fw text-xl block m-auto"></i>
+			<i
+				class="absolute fa-star fa-regular text-secondary-contrast text-xl left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+			>
+			</i>
+			{#if isFavourite}
+				<i
+					class="absolute fa-star fa-solid text-secondary text-xl left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+				></i>
+			{/if}
 		</button>
 	{/if}
 </div>

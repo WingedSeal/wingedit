@@ -4,10 +4,18 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				primary: '#FFFFFF', // white
-				secondary: '#CCCCCC', // white
-				error: '#CC0033', // red
-				success: '#16a34a' // green
+				primary: '#a6e1fa',
+				'primary-contrast': '#40679E',
+				'primary-dark': '#0b132b',
+				'primary-light': '#C0D6E8',
+				secondary: '#ffd166',
+				'secondary-contrast': '#ff8925',
+				'secondary-dark': '#ee7814',
+				'secondary-light': '#FFDFC2',
+				'plain-light': '#ECDFCC',
+				'plain-dark': '#1E201E',
+				error: '#FF6D60', // red
+				success: '#98D8AA' // green
 			}
 		}
 	},
