@@ -2,6 +2,7 @@
 	import Privilege from '$lib/privilege';
 	import type { PrivilegeRole, UserInfo } from '$lib/server/db/types';
 	import '@fortawesome/fontawesome-free/css/all.min.css';
+	import icon from '$lib/assets/images/wingedit.webp';
 
 	type Props = {
 		user: UserInfo | null;
@@ -12,7 +13,7 @@
 
 <nav class="w-full h-nav bg-blue-900 sticky flex flex-row p-2 z-10">
 	<a href="/" class="mr-4 ml-12 aspect-square">
-		<img src="/favicon-512.png" alt="wingedit icon" class="h-full aspect-square rounded-lg" />
+		<img src={icon} alt="wingedit icon" class="h-full aspect-square rounded-lg bg-slate-100" />
 	</a>
 	<a
 		href="/"
