@@ -23,7 +23,7 @@
 }
 
 .text-outline {
-	--outline-size: 0.1rem;
+	--outline-size: 0.05em;
 	--outline-size-neg: calc(var(--outline-size) * -1);
 	--outline: #ffffff;
 	--outline-blur: 0;
@@ -33,6 +33,13 @@
 		var(--outline-size-neg) var(--outline-size) var(--outline-blur) var(--outline),
 		var(--outline-size) var(--outline-size-neg) var(--outline-blur) var(--outline),
 		var(--outline-size) var(--outline-size) var(--outline-blur) var(--outline);
+}
+
+.sr-only {
+	clip: rect(0, 0, 0, 0);
+	position: absolute;
+	margin: -1px;
+	overflow: hidden;
 }
 
 @tailwind base;

@@ -891,13 +891,6 @@
 		}
 	}
 
-	.sr-only {
-		clip: rect(0, 0, 0, 0);
-		position: absolute;
-		margin: -1px;
-		overflow: hidden;
-	}
-
 	.delete-map-position-table {
 		&,
 		& td {
