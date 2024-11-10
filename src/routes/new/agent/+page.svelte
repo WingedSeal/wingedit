@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { superForm } from 'sveltekit-superforms';
+	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { getAgentSchema, DEFAULT_ABILITY_COUNT } from '$lib/schema';
 	import { writable } from 'svelte/store';
@@ -50,6 +50,37 @@
 	<label for={_for} class="error absolute bottom-1 left-1 z-20 text-outline">
 		{#if $errors[_for]}
 			{$errors[_for][0]}
+		{/if}
+	</label>
+{/snippet}
+
+{#snippet uploadAbilityFile(i: number, text: string)}
+	<label for="abilities[{i}].abilityIcon" class="absolute top-2 left-2 main-label z-30 text-outline"
+		>{text}</label
+	>
+	<input
+		type="file"
+		name="abilities[{i}].abilityIcon"
+		id="abilities[{i}].abilityIcon"
+		oninput={(e) => ($form.abilities[i].abilityIcon = e.currentTarget.files?.item(0) as File)}
+		accept="image/jpeg, image/png, image/webp"
+		class="sr-only"
+		aria-invalid={$errors.abilities?.[i]?.abilityIcon ? 'true' : undefined}
+	/>
+	<label
+		for="abilities[{i}].abilityIcon"
+		class="absolute top-0 left-0 w-full h-full cursor-pointer z-20"
+	></label>
+	{#if $form.abilities[i]?.abilityIcon}
+		<img
+			class="absolute top-0 left-0 w-full h-full z-10"
+			src={URL.createObjectURL($form.abilities[i].abilityIcon)}
+			alt={text}
+		/>
+	{/if}
+	<label for="abilities[{i}].abilityIcon" class="error absolute bottom-1 left-1 z-20 text-outline">
+		{#if $errors.abilities?.[i]?.abilityIcon}
+			{$errors.abilities[i]?.abilityIcon[0]}
 		{/if}
 	</label>
 {/snippet}
@@ -130,7 +161,9 @@
 						type="button"
 						class="bg-green-300"
 						aria-label="increase"
-						onclick={() => $abilityCount++}>+</button
+						onclick={() => {
+							$abilityCount++;
+						}}>+</button
 					>
 					<button
 						type="button"
@@ -147,5 +180,33 @@
 			<button type="submit" class="m-auto py-4 px-12 rounded-xl bg-green-300"> CONFIRM </button>
 		</div>
 	</div>
-	<div class=""></div>
+	<div
+		class="grid grid-cols-2 grid-rows-subgrid ml-12 gap-12 grow overflow-y-auto mb-auto max-h-full"
+	>
+		{#each { length: $abilityCount } as _, i}
+			<div class="bg-blue-300 p-12 py-24 flex flex-col">
+				<div class="flex">
+					<div class="aspect-square relative max-h-full max-w-full w-1/4 bg-black">
+						{@render uploadAbilityFile(i, `Ability Icon ${i}`)}
+					</div>
+					<h2 class="main-label">Ability ID: {i}</h2>
+				</div>
+				<label for="abilities[{i}].abilityName" class="main-label">Ability Name</label>
+				<input
+					type="text"
+					name="abilities[{i}].abilityName"
+					bind:value={$form.abilities[i].abilityName}
+					aria-invalid={$errors.abilities?.[i]?.abilityName ? 'true' : undefined}
+				/>
+				<label for="abilities[{i}].abilityName" class="error">
+					{#if $errors.abilities?.[i]?.abilityName}
+						{$errors.abilities[i].abilityName[0]}
+					{/if}
+				</label>
+			</div>
+		{/each}
+	</div>
 </form>
+<div class="w-1/2">
+	<SuperDebug data={form} />
+</div>

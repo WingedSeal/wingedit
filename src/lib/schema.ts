@@ -39,7 +39,7 @@ export const registerSchema = z
 	});
 
 export const DEFAULT_ABILITY_COUNT = 4;
-const defaultAbilities = Array(DEFAULT_ABILITY_COUNT).fill({});
+const defaultAbilities = Array(DEFAULT_ABILITY_COUNT).fill({ abilityName: '', abilityIcon: null });
 export const getAgentSchema = (
 	refines: {
 		refineAgentImage: (f: File) => Promise<boolean>;
