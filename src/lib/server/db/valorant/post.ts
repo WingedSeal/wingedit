@@ -45,30 +45,45 @@ WHERE
 export const addAgentAndAbilities = (
 	agent: Agent,
 	abilities: Ability[]
-): { errorPath: string; errorMessage: string } | null => {};
-
-export const addAgent = (agent: Agent): boolean => {
+): { errorPath: 'agentID' | `abilities[${number}].abilityName`; errorMessage: string } | null => {
+	let returnValue;
 	try {
-		statements.addAgent.run(agent);
+		db.transaction(() => {
+			try {
+				statements.addAgent.run(agent);
+			} catch (error) {
+				if (!(error instanceof SqliteError)) {
+					throw error;
+				}
+				returnValue = {
+					errorPath: 'agentID',
+					errorMessage: 'Fail to add agent. (AgentID possibly already exists.)'
+				};
+				throw error;
+			}
+
+			abilities.forEach((ability, i) => {
+				try {
+					statements.addAbility.run(ability);
+				} catch (error) {
+					if (!(error instanceof SqliteError)) {
+						throw error;
+					}
+					returnValue = {
+						errorPath: `abilities[${i}].abilityName`,
+						errorMessage: `Fail to add ability: ${ability.Name}.`
+					};
+					throw error;
+				}
+			});
+		});
 	} catch (error) {
 		if (!(error instanceof SqliteError)) {
 			throw error;
 		}
-		return false;
+		return returnValue!;
 	}
-	return true;
-};
-
-export const addAbility = (ability: Ability): boolean => {
-	try {
-		statements.addAbility.run(ability);
-	} catch (error) {
-		if (!(error instanceof SqliteError)) {
-			throw error;
-		}
-		return false;
-	}
-	return true;
+	return null;
 };
 
 export const addMapPosition = (

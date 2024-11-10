@@ -11,4 +11,4 @@ export {
 	getMaps,
 	getThrowTypes
 } from './get';
-export { addAbility, addAgent, addLineup } from './post';
+export { addAgentAndAbilities, addLineup } from './post';

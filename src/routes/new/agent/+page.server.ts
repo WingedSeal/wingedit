@@ -1,4 +1,4 @@
-import { addAbility, addAgent, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
+import { addAgentAndAbilities, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
 import type { PageServerLoad } from './$types';
 import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -76,19 +76,11 @@ export const actions: Actions = {
 				Name: ability.abilityName
 			};
 		});
-
-		if (!addAgent(agent)) {
-			return setError(form, 'agentID', 'Fail to add agent. (AgentID possibly already exists.)');
+		const _error = addAgentAndAbilities(agent, abilities);
+		if (_error) {
+			const { errorPath, errorMessage } = _error;
+			return setError(form, errorPath, errorMessage);
 		}
-		abilities.forEach((ability, i) => {
-			if (!addAbility(ability)) {
-				return setError(
-					form,
-					`abilities[${i}].abilityName`,
-					`Fail to add ability: ${ability.Name}.`
-				);
-			}
-		});
 
 		const agentID = agent.ID.toString();
 		fs.mkdirSync(path.join(IMAGES_PATH, AGENT_DIRECTORY, agentID, ABILITY_DIRECTORY), {
