@@ -52,13 +52,12 @@ export const addAgentAndAbilities = (
 			try {
 				statements.addAgent.run(agent);
 			} catch (error) {
-				if (!(error instanceof SqliteError)) {
-					throw error;
+				if (error instanceof SqliteError) {
+					returnValue = {
+						errorPath: 'agentID',
+						errorMessage: 'Fail to add agent. (AgentID possibly already exists.)'
+					};
 				}
-				returnValue = {
-					errorPath: 'agentID',
-					errorMessage: 'Fail to add agent. (AgentID possibly already exists.)'
-				};
 				throw error;
 			}
 
@@ -66,17 +65,16 @@ export const addAgentAndAbilities = (
 				try {
 					statements.addAbility.run(ability);
 				} catch (error) {
-					if (!(error instanceof SqliteError)) {
-						throw error;
+					if (error instanceof SqliteError) {
+						returnValue = {
+							errorPath: `abilities[${i}].abilityName`,
+							errorMessage: `Fail to add ability: ${ability.Name}.`
+						};
 					}
-					returnValue = {
-						errorPath: `abilities[${i}].abilityName`,
-						errorMessage: `Fail to add ability: ${ability.Name}.`
-					};
 					throw error;
 				}
 			});
-		});
+		})();
 	} catch (error) {
 		if (!(error instanceof SqliteError)) {
 			throw error;
