@@ -1,11 +1,33 @@
 import { addAbility, addAgent, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
 import type { PageServerLoad } from './$types';
-import { fail, message, setError, superValidate, type Infer } from 'sveltekit-superforms';
+import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { Agent } from '$lib/server/db/types';
 import Privilege from '$lib/privilege';
-import { agentSchema as schema } from '$lib/schema';
+import { getAgentSchema } from '$lib/schema';
+import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
+import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
+import { SQUARE, writeWebp, writeWebpNoResize } from '$lib/server/file-system';
+
+const AGENT_DIRECTORY = 'agents';
+const ABILITY_DIRECTORY = 'abilities';
+
+const schema =
+	VALIDATE_IMAGE_SIZE === 'true'
+		? getAgentSchema({
+				refineImage: async (f) => {
+					const size = await sharp(await f.arrayBuffer()).metadata();
+					return (size.width &&
+						size.height &&
+						size.width === size.height &&
+						size.width >= 512) as boolean;
+				},
+				refineImageError: 'Please upload 512x512 image.'
+			})
+		: getAgentSchema();
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
@@ -34,7 +56,6 @@ export const actions: Actions = {
 			Name: form.data.agentName,
 			RoleID: form.data.agentRole
 		};
-
 		const abilities = form.data.abilities.map((ability, i) => {
 			return {
 				AbilityID: i + 1,
@@ -55,6 +76,23 @@ export const actions: Actions = {
 				);
 			}
 		});
+
+		const agentID = agent.ID.toString();
+		fs.mkdirSync(path.join(IMAGES_PATH, AGENT_DIRECTORY, agentID, ABILITY_DIRECTORY), {
+			recursive: true
+		});
+		await Promise.all([
+			writeWebp(form.data.agentIcon, path.join(AGENT_DIRECTORY, agentID, 'icon.webp'), SQUARE),
+			writeWebpNoResize(form.data.agentImage, path.join(AGENT_DIRECTORY, agentID, 'full.webp')),
+			...form.data.abilities.map((ability, i) =>
+				writeWebp(
+					ability.abilityIcon,
+					path.join(AGENT_DIRECTORY, agentID, ABILITY_DIRECTORY, `${i + 1}.webp`),
+					SQUARE
+				)
+			)
+		]);
+
 		form.data = {
 			...(await superValidate(zod(schema))).data,
 			agentID: agent.ID + 1

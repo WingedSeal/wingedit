@@ -167,7 +167,7 @@
 	<form
 		method="post"
 		use:lineupEnhance
-		action="?/upload"
+		action="?/addLineup"
 		class="h-full w-full flex-col main-form"
 		enctype="multipart/form-data"
 	>

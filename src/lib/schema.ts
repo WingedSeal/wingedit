@@ -40,17 +40,33 @@ export const registerSchema = z
 
 export const DEFAULT_ABILITY_COUNT = 4;
 const defaultAbilities = Array(DEFAULT_ABILITY_COUNT).fill({});
-export const agentSchema = z.object({
-	agentID: z.number().int(),
-	agentName: z.string().min(1).max(16).trim(),
-	agentRole: z.number().int().min(1).max(4),
-	abilities: z
-		.object({
-			abilityName: z.string().min(1).max(16).trim()
-		})
-		.array()
-		.default(defaultAbilities)
-});
+export const getAgentSchema = (
+	refines: {
+		refineImage: (f: File) => Promise<boolean>;
+		refineImageError: string;
+	} | null = null
+) => {
+	let _imageSchema = refines
+		? imageSchema.refine(refines.refineImage, refines.refineImageError)
+		: imageSchema;
+	const require_all_images = PUBLIC_REQUIRE_ALL_IMAGES === 'true';
+	const refinedNullableImageSchema = require_all_images ? _imageSchema : _imageSchema.nullable();
+	const nullableImageSchema = require_all_images ? imageSchema : imageSchema.nullable();
+	return z.object({
+		agentID: z.number().int(),
+		agentIcon: refinedNullableImageSchema,
+		agentImage: nullableImageSchema,
+		agentName: z.string().min(1).max(16).trim(),
+		agentRole: z.number().int().min(1).max(4),
+		abilities: z
+			.object({
+				abilityName: z.string().min(1).max(16).trim(),
+				abilityIcon: refinedNullableImageSchema
+			})
+			.array()
+			.default(defaultAbilities)
+	});
+};
 
 const imageSchema = z
 	.instanceof(File, { message: 'Please upload a file.' })

@@ -3,14 +3,7 @@ import { addLineup, getAbilities, getGameInfo, getMaps } from '$lib/server/db/va
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
-import {
-	superValidate,
-	fail,
-	message,
-	setError,
-	type Infer,
-	setMessage
-} from 'sveltekit-superforms';
+import { superValidate, fail, message, setError, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Lineup, MapPosition } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
@@ -20,6 +13,7 @@ import sharp from 'sharp';
 import { getMapPosition, isMapPositionExist, isMapPositionUsed } from '$lib/server/db/valorant/get';
 import { addMapPosition, deleteMapPosition } from '$lib/server/db/valorant/post';
 import { mapPositionDeleteSchema } from '$lib/hidden-schema';
+import { FULL_HD, writeWebpNoResize, writeWebp, writeWebpAnimated } from '$lib/server/file-system';
 
 const lineupSchema =
 	VALIDATE_IMAGE_SIZE === 'true'
@@ -64,7 +58,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 const LINEUP_DIRECTORY = 'lineups';
 
 export const actions = {
-	upload: async ({ request, locals }) => {
+	addLineup: async ({ request, locals }) => {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
@@ -107,19 +101,33 @@ export const actions = {
 		const lineupID = _lineupID.toString();
 		fs.mkdirSync(path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID), { recursive: true });
 		await Promise.all([
-			writeWebp(form.data.throwLineup, path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.webp')),
-			writeWebpAnimated(form.data.throwGif, path.join(LINEUP_DIRECTORY, lineupID, 'throw.webp')),
-			writeWebp(form.data.landSpot, path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.webp')),
+			writeWebp(
+				form.data.throwLineup,
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.webp'),
+				FULL_HD
+			),
+			writeWebpAnimated(
+				form.data.throwGif,
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw.webp'),
+				FULL_HD
+			),
+			writeWebp(
+				form.data.landSpot,
+				path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.webp'),
+				FULL_HD
+			),
 			writeWebp(
 				form.data.throwSpotFirstPerson,
-				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.webp')
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.webp'),
+				FULL_HD
 			),
 			writeWebp(
 				form.data.throwSpotThirdPerson,
-				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.webp')
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.webp'),
+				FULL_HD
 			),
 			...form.data.extraImages.map((extraImage, i) =>
-				writeExtraImages(extraImage, path.join(LINEUP_DIRECTORY, lineupID, `${i + 1}.webp`))
+				writeWebpNoResize(extraImage, path.join(LINEUP_DIRECTORY, lineupID, `${i + 1}.webp`))
 			)
 		]);
 
@@ -200,28 +208,4 @@ export const actions = {
 			deletedMapPosition: mapPosition
 		});
 	}
-};
-
-const writeWebp = async (file: File | null, fileName: string) => {
-	if (file === null) return;
-	const buffer = await file.arrayBuffer();
-	sharp(buffer)
-		.resize(1980, 1080)
-		.webp({ minSize: true, effort: 6 })
-		.toFile(path.join(IMAGES_PATH, fileName));
-};
-
-const writeExtraImages = async (file: File | null, fileName: string) => {
-	if (file === null) return;
-	const buffer = await file.arrayBuffer();
-	sharp(buffer).webp({ minSize: true, effort: 6 }).toFile(path.join(IMAGES_PATH, fileName));
-};
-
-const writeWebpAnimated = async (file: File | null, fileName: string) => {
-	if (file === null) return;
-	const buffer = await file.arrayBuffer();
-	sharp(buffer, { animated: true })
-		.resize(1980, 1080)
-		.webp({ minSize: true, effort: 6 })
-		.toFile(path.join(IMAGES_PATH, fileName));
 };
