@@ -48,6 +48,7 @@
 		/>
 	{/if}
 	<label for={_for} class="error absolute bottom-1 left-1 z-20 text-outline">
+		TEST
 		{#if $errors[_for]}
 			{$errors[_for][0]}
 		{/if}
@@ -58,7 +59,7 @@
 	<div class="h-full flex flex-col">
 		<div class="flex flex-row gap-4 bg-blue-200 h-full">
 			<div class="flex flex-col h-full min-w-80">
-				<div class="aspect-square p-12">
+				<div class="aspect-square p-2">
 					<div class="w-full h-full relative bg-black">
 						{@render uploadFile('agentIcon', 'Agent Icon')}
 					</div>
