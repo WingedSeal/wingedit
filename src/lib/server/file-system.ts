@@ -31,4 +31,5 @@ export const writeWebpAnimated = async (
 };
 
 export const FULL_HD: [number, number] = [1920, 1080];
-export const SQUARE: [number, number] = [512, 512];
+export const AGENT_ICON_SIZE: [number, number] = [1000, 1000];
+export const ABILITY_ICON_SIZE: [number, number] = [128, 128];

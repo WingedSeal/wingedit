@@ -10,7 +10,12 @@ import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
 import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
-import { SQUARE, writeWebp, writeWebpNoResize } from '$lib/server/file-system';
+import {
+	ABILITY_ICON_SIZE,
+	AGENT_ICON_SIZE,
+	writeWebp,
+	writeWebpNoResize
+} from '$lib/server/file-system';
 
 const AGENT_DIRECTORY = 'agents';
 const ABILITY_DIRECTORY = 'abilities';
@@ -18,14 +23,22 @@ const ABILITY_DIRECTORY = 'abilities';
 const schema =
 	VALIDATE_IMAGE_SIZE === 'true'
 		? getAgentSchema({
-				refineImage: async (f) => {
+				refineAgentImage: async (f) => {
 					const size = await sharp(await f.arrayBuffer()).metadata();
 					return (size.width &&
 						size.height &&
 						size.width === size.height &&
-						size.width >= 512) as boolean;
+						size.width >= AGENT_ICON_SIZE[0]) as boolean;
 				},
-				refineImageError: 'Please upload 512x512 image.'
+				refineAgentImageError: 'Please upload 1000x1000 image.',
+				refineAbilityImage: async (f) => {
+					const size = await sharp(await f.arrayBuffer()).metadata();
+					return (size.width &&
+						size.height &&
+						size.width === size.height &&
+						size.width >= ABILITY_ICON_SIZE[0]) as boolean;
+				},
+				refineAbilityImageError: 'Please upload 128x128 image.'
 			})
 		: getAgentSchema();
 
@@ -82,13 +95,17 @@ export const actions: Actions = {
 			recursive: true
 		});
 		await Promise.all([
-			writeWebp(form.data.agentIcon, path.join(AGENT_DIRECTORY, agentID, 'icon.webp'), SQUARE),
+			writeWebp(
+				form.data.agentIcon,
+				path.join(AGENT_DIRECTORY, agentID, 'icon.webp'),
+				AGENT_ICON_SIZE
+			),
 			writeWebpNoResize(form.data.agentImage, path.join(AGENT_DIRECTORY, agentID, 'full.webp')),
 			...form.data.abilities.map((ability, i) =>
 				writeWebp(
 					ability.abilityIcon,
 					path.join(AGENT_DIRECTORY, agentID, ABILITY_DIRECTORY, `${i + 1}.webp`),
-					SQUARE
+					ABILITY_ICON_SIZE
 				)
 			)
 		]);

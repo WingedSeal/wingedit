@@ -42,26 +42,32 @@ export const DEFAULT_ABILITY_COUNT = 4;
 const defaultAbilities = Array(DEFAULT_ABILITY_COUNT).fill({});
 export const getAgentSchema = (
 	refines: {
-		refineImage: (f: File) => Promise<boolean>;
-		refineImageError: string;
+		refineAgentImage: (f: File) => Promise<boolean>;
+		refineAgentImageError: string;
+		refineAbilityImage: (f: File) => Promise<boolean>;
+		refineAbilityImageError: string;
 	} | null = null
 ) => {
-	let _imageSchema = refines
-		? imageSchema.refine(refines.refineImage, refines.refineImageError)
+	let _agentImageSchema = refines
+		? imageSchema.refine(refines.refineAgentImage, refines.refineAgentImageError)
+		: imageSchema;
+	let _abilityImageSchema = refines
+		? imageSchema.refine(refines.refineAbilityImage, refines.refineAbilityImageError)
 		: imageSchema;
 	const require_all_images = PUBLIC_REQUIRE_ALL_IMAGES === 'true';
-	const refinedNullableImageSchema = require_all_images ? _imageSchema : _imageSchema.nullable();
-	const nullableImageSchema = require_all_images ? imageSchema : imageSchema.nullable();
+	const agentIcon = require_all_images ? _agentImageSchema : _agentImageSchema.nullable();
+	const abilityIcon = require_all_images ? _abilityImageSchema : _abilityImageSchema.nullable();
+	const agentImage = require_all_images ? imageSchema : imageSchema.nullable();
 	return z.object({
 		agentID: z.number().int(),
-		agentIcon: refinedNullableImageSchema,
-		agentImage: nullableImageSchema,
+		agentIcon,
+		agentImage: agentImage,
 		agentName: z.string().min(1).max(16).trim(),
 		agentRole: z.number().int().min(1).max(4),
 		abilities: z
 			.object({
 				abilityName: z.string().min(1).max(16).trim(),
-				abilityIcon: refinedNullableImageSchema
+				abilityIcon
 			})
 			.array()
 			.default(defaultAbilities)
