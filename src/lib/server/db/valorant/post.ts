@@ -42,6 +42,11 @@ WHERE
 	)
 } as const;
 
+export const addAgentAndAbilities = (
+	agent: Agent,
+	abilities: Ability[]
+): { errorPath: string; errorMessage: string } | null => {};
+
 export const addAgent = (agent: Agent): boolean => {
 	try {
 		statements.addAgent.run(agent);

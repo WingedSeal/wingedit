@@ -3,7 +3,7 @@ import type { PageServerLoad } from './$types';
 import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import type { Agent } from '$lib/server/db/types';
+import type { Ability, Agent } from '$lib/server/db/types';
 import Privilege from '$lib/privilege';
 import { getAgentSchema } from '$lib/schema';
 import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
@@ -69,7 +69,7 @@ export const actions: Actions = {
 			Name: form.data.agentName,
 			RoleID: form.data.agentRole
 		};
-		const abilities = form.data.abilities.map((ability, i) => {
+		const abilities: Ability[] = form.data.abilities.map((ability, i) => {
 			return {
 				AbilityID: i + 1,
 				AgentID: agent.ID,
