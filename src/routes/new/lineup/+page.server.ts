@@ -131,7 +131,7 @@ export const actions = {
 			)
 		]);
 
-		return message(form, 'Lineup is successfully added.');
+		return message(form, 'Lineup has been successfully added.');
 	},
 	addMapPosition: async ({ request, locals }) => {
 		if (!locals.user) {
@@ -140,7 +140,8 @@ export const actions = {
 		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
-		const form = await superValidate(request, zod(mapPositionSchema));
+		let form = await superValidate(request, zod(mapPositionSchema));
+		form.data.callout = cleanupCallout(form.data.callout);
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -164,9 +165,10 @@ export const actions = {
 			MapID: form.data.mapID,
 			Callout: form.data.callout
 		};
+		const callout = form.data.callout;
 		form.data.callout = '';
 		return message(form, {
-			message: 'Callout was added successfully.',
+			message: `Callout '${callout}' was added successfully.`,
 			newMapPosition,
 			mapID: form.data.mapID
 		});
@@ -208,4 +210,17 @@ export const actions = {
 			deletedMapPosition: mapPosition
 		});
 	}
+};
+
+const cleanupCallout = (callout: string): string => {
+	return callout
+		.split(/\s+/)
+		.map((text) => {
+			text = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+			if (text === 'Ct') {
+				return 'CT';
+			}
+			return text;
+		})
+		.join(' ');
 };

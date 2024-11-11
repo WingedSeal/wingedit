@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.scss';
-	import { type Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import type { PageData } from './$types';
 	import NavBar from './NavBar.svelte';
 

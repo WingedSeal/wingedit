@@ -11,6 +11,7 @@
 	import { onMount } from 'svelte';
 	import RenderEmptyLine from './EmptyLineupLineOverlay.svelte';
 	import emptyBox from '$lib/assets/images/empty-box.webp';
+	import { isEmpty } from '$lib/utils.js';
 
 	const lineupSchema = getLineupSchema();
 
@@ -65,7 +66,6 @@
 			const mapPosition = event.form.message.newMapPosition;
 			mapPositions[event.form.message.mapID] ??= {};
 			mapPositions[event.form.message.mapID][mapPosition.ID] = { IsUsed: false, ...mapPosition };
-			console.log('HEH?');
 			switch (mapPositionSource) {
 				case 'from':
 					$lineupForm.from = mapPosition.ID;
@@ -736,17 +736,22 @@
 				{@render input('toX', 'To (X-axis)')}
 				{@render input('toY', 'To (Y-axis)')}
 
-				<div class="mt-auto mb-8 h-20 flex">
+				<div class="mt-auto mb-8 h-20 flex flex-col">
 					<button
 						type="submit"
 						name="confirm"
 						class="m-auto px-16 py-6 rounded-lg bg-green-900 text-white font-bold text-4xl"
 						>Confirm</button
 					>
-					<label for="confirm" class:error={$lineupErrors} class:success={!$lineupErrors}>
+					<label
+						for="confirm"
+						class:error={!isEmpty($lineupErrors)}
+						class:success={isEmpty($lineupErrors)}
+					>
 						{#if $lineupMessage}
 							{$lineupMessage}
 						{/if}
+						{JSON.stringify($lineupErrors)}
 					</label>
 				</div>
 			</div>
@@ -782,7 +787,11 @@
 							? 'true'
 							: undefined}
 					/>
-					<label for="callout" class:error={$mapPositionErrors} class:success={$mapPositionMessage}>
+					<label
+						for="callout"
+						class:error={!isEmpty($mapPositionErrors)}
+						class:success={isEmpty($mapPositionErrors)}
+					>
 						{#if $mapPositionErrors.callout}
 							{$mapPositionErrors.callout[0]}
 						{/if}
@@ -818,8 +827,8 @@
 				<label
 					for="deleteMapPosition"
 					class="block"
-					class:error={$mapPositionDeleteErrors}
-					class:success={$mapPositionDeleteMessage}
+					class:error={!isEmpty($mapPositionDeleteErrors)}
+					class:success={isEmpty($mapPositionDeleteErrors)}
 				>
 					{#if $mapPositionDeleteErrors.mapPositionID}
 						{$mapPositionDeleteErrors.mapPositionID[0]}
