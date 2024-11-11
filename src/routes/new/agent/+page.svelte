@@ -55,8 +55,9 @@
 {/snippet}
 
 {#snippet uploadAbilityFile(i: number, text: string)}
-	<label for="abilities[{i}].abilityIcon" class="absolute top-2 left-2 main-label z-30 text-outline"
-		>{text}</label
+	<label
+		for="abilities[{i}].abilityIcon"
+		class="absolute top-2 left-2 main-label z-30 text-outline !text-lg">{text}</label
 	>
 	<input
 		type="file"
@@ -85,7 +86,12 @@
 	</label>
 {/snippet}
 
-<form method="post" use:enhance class="h-dvh-nav w-dvw p-12 flex" enctype="multipart/form-data">
+<form
+	method="post"
+	use:enhance
+	class="h-dvh-nav w-dvw p-12 flex main-form"
+	enctype="multipart/form-data"
+>
 	<div class="h-full flex flex-col">
 		<div class="flex flex-row gap-4 bg-blue-200 h-full">
 			<div class="flex flex-col h-full min-w-80">
@@ -182,14 +188,17 @@
 	</div>
 	<div
 		class="grid grid-cols-2 grid-rows-subgrid ml-12 gap-12 grow overflow-y-auto mb-auto max-h-full"
+		style="scrollbar-gutter: stable;"
 	>
 		{#each { length: $abilityCount } as _, i}
-			<div class="bg-blue-300 p-12 py-24 flex flex-col">
-				<div class="flex">
-					<div class="aspect-square relative max-h-full max-w-full w-1/4 bg-black">
+			<div class="bg-blue-300 p-12 flex flex-col rounded-3xl">
+				<div class="flex mb-4">
+					<div class="aspect-square relative max-h-full max-w-full w-1/3 bg-black">
 						{@render uploadAbilityFile(i, `Ability Icon ${i}`)}
 					</div>
-					<h2 class="main-label">Ability ID: {i}</h2>
+					<div class="flex h-full">
+						<h2 class="main-label ml-4 !my-auto">Ability ID: {i}</h2>
+					</div>
 				</div>
 				<label for="abilities[{i}].abilityName" class="main-label">Ability Name</label>
 				<input
@@ -207,6 +216,3 @@
 		{/each}
 	</div>
 </form>
-<div class="w-1/2">
-	<SuperDebug data={form} />
-</div>

@@ -883,26 +883,8 @@
 </Popup>
 
 <style lang="postcss">
-	.main-form {
-		select,
-		input {
-			@apply p-2 mb-1 border-2 border-black rounded-md text-lg;
-		}
-
-		& .main-label {
-			@apply font-bold text-2xl mb-2;
-		}
-	}
-
 	.section {
 		@apply flex snap-center w-full;
-	}
-
-	.select-file {
-		input[type='file']:focus + label {
-			outline: 2px solid Highlight;
-			outline: 5px auto -webkit-focus-ring-color;
-		}
 	}
 
 	.select-overlay-mode {
