@@ -101,9 +101,7 @@
 			? 'Select Main Agent'
 			: 'Deselect Main Agent'}
 		<div class="absolute -right-1 top-1/2 translate-x-full -translate-y-1/2 pb-[0.1rem]">
-			<ToolTip direction="right" color="theme('colors.secondary')"
-				>Automatically select this agent upon visit.</ToolTip
-			>
+			<ToolTip direction="right">Automatically select this agent upon visit.</ToolTip>
 		</div>
 	</span>
 </button>

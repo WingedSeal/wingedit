@@ -4,10 +4,9 @@
 	type Direciton = 'left' | 'right' | 'up' | 'down';
 	type Props = {
 		direction: Direciton;
-		color: string;
 		children: Snippet;
 	};
-	const { direction, color, children }: Props = $props();
+	const { direction, children }: Props = $props();
 </script>
 
 <div class="tooltip {direction}">
