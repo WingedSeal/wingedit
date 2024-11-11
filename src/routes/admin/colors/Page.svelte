@@ -31,9 +31,9 @@
 			</select>
 		</div>
 		<div class="min-w-24 bg-{background} text-{foreground} p-8">
-			<span>Foreground: {foreground}</span>
+			<span>Foreground: {foreground} - {colors[foreground]}</span>
 			<br />
-			<span class="font-bold">Background: {foreground}</span>
+			<span class="font-bold">Background: {background} - {colors[background]}</span>
 		</div>
 	</div>
 </main>
