@@ -1,3 +1,4 @@
+/** @type {Object.<string, string>} */
 const colors = require('./src/lib/colors');
 
 /** @type {import('tailwindcss').Config} */
