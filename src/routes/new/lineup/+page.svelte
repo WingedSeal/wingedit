@@ -882,6 +882,10 @@
 	</div>
 </Popup>
 
+<svelte:head>
+	<title>WingedIT • New Lineup</title>
+</svelte:head>
+
 <style lang="postcss">
 	.section {
 		@apply flex snap-center w-full;

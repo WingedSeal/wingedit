@@ -47,3 +47,8 @@
 		<SelectMap maps={data.maps} />
 	</div>
 </div>
+
+<svelte:head>
+	<title>WingedIT • Lineups</title>
+	<meta name="description" content="Select your agent and map to search for lineups." />
+</svelte:head>

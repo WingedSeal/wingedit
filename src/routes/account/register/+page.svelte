@@ -89,3 +89,7 @@
 		>
 	</div>
 </div>
+
+<svelte:head>
+	<title>WingedIT • Register</title>
+</svelte:head>

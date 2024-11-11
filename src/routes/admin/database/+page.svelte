@@ -298,6 +298,10 @@
 	{/if}
 {/if}
 
+<svelte:head>
+	<title>ADMIN • Database - WingedIT</title>
+</svelte:head>
+
 <style lang="css">
 	table,
 	th,

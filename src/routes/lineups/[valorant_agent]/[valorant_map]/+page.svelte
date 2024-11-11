@@ -92,3 +92,8 @@
 		<LineupShow lineup={selectedLineup} gameInfo={data.gameInfo} />
 	</Popup>
 {/if}
+
+<svelte:head>
+	<title>{data.valorant.agent.Name} • {data.valorant.map.Name} - WingedIT</title>
+	<meta name="description" content="Select your agent and map to search for lineups." />
+</svelte:head>

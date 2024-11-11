@@ -216,3 +216,7 @@
 		{/each}
 	</div>
 </form>
+
+<svelte:head>
+	<title>WingedIT • New Agent</title>
+</svelte:head>

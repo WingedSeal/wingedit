@@ -57,3 +57,7 @@
 		</a>
 	</div>
 </div>
+
+<svelte:head>
+	<title>WingedIT • Signin</title>
+</svelte:head>
