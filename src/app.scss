@@ -26,7 +26,7 @@
 	--outline-size: 0.05em;
 	--outline-size-neg: calc(var(--outline-size) * -1);
 	--outline: #ffffff;
-	--outline-blur: 0.1em;
+	--outline-blur: 0.01em;
 
 	text-shadow:
 		var(--outline-size-neg) var(--outline-size-neg) var(--outline-blur) var(--outline),
