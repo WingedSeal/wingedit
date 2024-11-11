@@ -172,7 +172,22 @@
 		enctype="multipart/form-data"
 	>
 		<section class="bg-red-100 section h-dvh-nav">
-			<div class="w-1/3 bg-red-300"></div>
+			<div class="w-1/3 bg-red-300 relative">
+				{#if $lineupForm.map}
+					<img
+						class="absolute w-full h-full object-cover"
+						src="/api/image/maps/{$lineupForm.map}/bg.webp"
+						alt="map"
+					/>
+				{/if}
+				{#if $lineupForm.agent}
+					<img
+						class="absolute w-full h-full object-contain"
+						src="/api/image/agents/{$lineupForm.agent}/full.webp"
+						alt="agent"
+					/>
+				{/if}
+			</div>
 			<div class="w-2/3 flex px-12 pt-12 pb-6 flex-col">
 				<div class="w-full flex gap-8">
 					<div class="w-1/2 flex flex-col">
