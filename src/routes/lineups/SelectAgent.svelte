@@ -9,6 +9,7 @@
 		updateMainAgentID
 	} from './stores';
 	import { afterNavigate } from '$app/navigation';
+	import ToolTip from '$lib/components/ToolTip.svelte';
 
 	interface Props {
 		agents: {
@@ -95,9 +96,16 @@
 	}}
 	disabled={$selectedAgent === 0}
 >
-	{$mainAgentID !== $selectedAgent || $selectedAgent === 0
-		? 'Select Main Agent'
-		: 'Deselect Main Agent'}
+	<span class="mx-auto relative block text-xl">
+		{$mainAgentID !== $selectedAgent || $selectedAgent === 0
+			? 'Select Main Agent'
+			: 'Deselect Main Agent'}
+		<div class="absolute -right-1 top-1/2 translate-x-full -translate-y-1/2 pb-[0.1rem]">
+			<ToolTip direction="right" color="theme('colors.secondary')"
+				>Automatically select this agent upon visit.</ToolTip
+			>
+		</div>
+	</span>
 </button>
 
 <style lang="scss">

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SuperDebug, { superForm } from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { getAgentSchema, DEFAULT_ABILITY_COUNT } from '$lib/schema';
 	import { writable } from 'svelte/store';
