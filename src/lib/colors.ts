@@ -1,4 +1,4 @@
-export default {
+const colors = {
 	primary: '#A6E1FA',
 	'primary-contrast': '#40679E',
 	'primary-dark': '#0B132B',
@@ -12,3 +12,6 @@ export default {
 	error: '#FF6D60',
 	success: '#98D8AA'
 } as const;
+
+export type Color = keyof typeof colors;
+export default colors;
