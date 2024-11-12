@@ -1,5 +1,4 @@
-/** @type {Object.<string, string>} */
-const colors = require('./src/lib/colors');
+import colors from './src/lib/colors';
 
 /** @type {import('tailwindcss').Config} */
 export default {
