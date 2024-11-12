@@ -1,8 +1,8 @@
 <script lang="ts">
-	import colors from '$lib/colors';
+	import colors, { type Color } from '$lib/colors';
 	// let colors = { ..._colors, white: '#FFFFFF', black: '#000000' };
-	let foreground = $state<keyof typeof colors>(Object.keys(colors)[0] as keyof typeof colors);
-	let background = $state<keyof typeof colors>(Object.keys(colors)[0] as keyof typeof colors);
+	let foreground = $state<Color>(Object.keys(colors)[0] as Color);
+	let background = $state<Color>(Object.keys(colors)[0] as Color);
 	let opacity = $state(100);
 </script>
 
