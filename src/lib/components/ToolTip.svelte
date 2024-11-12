@@ -1,17 +1,19 @@
 <script lang="ts">
+	import colors, { type Color } from '$lib/colors';
 	import type { Snippet } from 'svelte';
 
 	type Direciton = 'left' | 'right' | 'up' | 'down';
 	type Props = {
+		color: Color;
 		direction: Direciton;
 		children: Snippet;
 	};
-	const { direction, children }: Props = $props();
+	const { direction, children, color = 'plain-light' }: Props = $props();
 </script>
 
 <div class="tooltip {direction}">
 	<i class="fa-regular fa-circle-question text-sm opacity-70"></i>
-	<div class="tooltiptext text-sm text-plain-dark {direction}">
+	<div class="tooltiptext text-sm text-plain-dark {direction}" style="--color: {colors[color]};">
 		{@render children()}
 	</div>
 </div>
@@ -21,7 +23,6 @@
 		position: relative;
 		display: inline-block;
 		.tooltiptext {
-			--color: theme('colors.plain-light');
 			--arrow-width: 1rem;
 			--margin: 0.5rem;
 			transition: opacity 200ms ease-out;

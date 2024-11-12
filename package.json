@@ -38,10 +38,10 @@
 	"type": "module",
 	"dependencies": {
 		"@fortawesome/fontawesome-free": "^6.6.0",
-		"@lucia-auth/adapter-sqlite": "^3.0.2",
+		"@oslojs/crypto": "^1.0.1",
+		"@oslojs/encoding": "^1.1.0",
 		"argon2": "^0.41.1",
 		"image-size": "^1.1.1",
-		"oslo": "^1.2.1",
 		"sharp": "^0.33.5",
 		"wingedit": "file:"
 	}
