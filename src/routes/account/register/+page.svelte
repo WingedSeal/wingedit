@@ -12,14 +12,14 @@
 </script>
 
 <div class="flex items-center justify-center h-dvh-nav bg-slate-600">
-	<div class="bg-gray-50 rounded-md p-9 space-y-10 font-medium">
+	<div class="bg-gray-50 rounded-lg p-7 space-y-8 font-medium max-w-md w-full">
 		<h1 class="text-center font-bold">Register</h1>
-		<form method="post" class="flex flex-col m-5" use:enhance>
+		<form method="post" class="flex flex-col m-8 space-y-5" use:enhance>
 			<label for="username">Username</label>
 			<input
 				name="username"
 				id="username"
-				class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-3"
+				class="border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 				placeholder="Username"
 				bind:value={$form.username}
 			/>
@@ -32,7 +32,7 @@
 				type="password"
 				name="password"
 				id="password"
-				class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-3"
+				class="border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 				placeholder="Password"
 				bind:value={$form.password}
 			/>
@@ -45,7 +45,7 @@
 				type="password"
 				name="confirmPassword"
 				id="confirmPassword"
-				class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-3"
+				class="border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 				placeholder="Confirm Password"
 				bind:value={$form.confirmPassword}
 			/>
@@ -58,7 +58,7 @@
 				type="text"
 				name="referralCode"
 				id="referralCode"
-				class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-3"
+				class="border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 				placeholder="ReferralCode"
 				bind:value={$form.referralCode}
 			/>
