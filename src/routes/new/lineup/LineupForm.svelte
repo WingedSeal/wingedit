@@ -22,7 +22,6 @@
 	};
 	const { _data }: Props = $props();
 	let mapPositions = $state(_data.gameInfo.mapPositions);
-
 	const {
 		errors: mapPositionDeleteErrors,
 		message: mapPositionDeleteMessage,
@@ -196,7 +195,7 @@
 			<div class="w-2/3 flex px-12 pt-12 pb-6 flex-col">
 				<div class="w-full flex gap-8">
 					<div class="w-1/2 flex flex-col">
-						<label for="agent" class="main-label">Agent</label>
+						<label for="agent" class="main-label font-mono">Agent</label>
 						<select
 							name="agent"
 							bind:value={$lineupForm.agent}
