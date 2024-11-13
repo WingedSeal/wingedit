@@ -12,8 +12,8 @@
 </script>
 
 <div class="flex items-center justify-center h-dvh-nav bg-slate-600">
-	<div class="bg-gray-50 rounded-lg p-7 space-y-8 font-medium max-w-md w-full">
-		<h1 class="text-center font-bold">Register</h1>
+	<div class="bg-gray-50 rounded-lg p-8 font-medium max-w-md w-full">
+		<h1 class="text-2xl font-semibold text-center">Register</h1>
 		<form method="post" class="flex flex-col m-8 space-y-5" use:enhance>
 			<label for="username">Username</label>
 			<input
@@ -66,9 +66,7 @@
 				<small>{$errors.referralCode[0]}</small>
 			{/if}
 
-			<button
-				class=" bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded mt-4"
-			>
+			<button class=" bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mt-4">
 				Continue
 			</button>
 		</form>
