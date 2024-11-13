@@ -37,10 +37,10 @@ const lineupSchema =
 			})
 		: getLineupSchema();
 
-export const load: PageServerLoad = async ({ locals, url }) => {
+export const load = (async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
-	return {
+	const data = {
 		lineupForm: await superValidate<Infer<typeof lineupSchema>, string>(zod(lineupSchema)),
 		mapPositionForm: await superValidate<
 			Infer<typeof mapPositionSchema>,
@@ -53,7 +53,10 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		gameInfo: getGameInfo(),
 		abilities: getAbilities()
 	};
-};
+	return data;
+}) satisfies PageServerLoad;
+
+export type DataType = Exclude<Awaited<ReturnType<typeof load>>, void>;
 
 const LINEUP_DIRECTORY = 'lineups';
 
