@@ -96,12 +96,21 @@
 		</div>
 	</section>
 </main>
-
+{#snippet titleRight()}
+	<a
+		class="my-auto mr-8 ml-auto text-xl cursor-pointer"
+		href="/edit/lineup/{selectedLineup.ID}"
+		aria-label="close"
+	>
+		<i class="fa-regular fa-pen-to-square"></i>
+	</a>
+{/snippet}
 {#if selectedLineup}
 	<Popup
 		title="({selectedLineup.ID}) {data.gameInfo.sides[selectedLineup.SideID].Name}: {data.gameInfo
 			.mapPositions[selectedLineup.MapID][selectedLineup.FromMapPositionID].Callout} to {data
 			.gameInfo.mapPositions[selectedLineup.MapID][selectedLineup.ToMapPositionID].Callout}"
+		{titleRight}
 	>
 		<LineupShow lineup={selectedLineup} gameInfo={data.gameInfo} />
 	</Popup>

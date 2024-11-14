@@ -10,9 +10,10 @@
 		title: string;
 		sizeX?: number;
 		sizeY?: number;
+		titleRight?: Snippet;
 		children?: Snippet;
 	}
-	let { title, sizeX = 80, sizeY = 80, children }: Props = $props();
+	let { title, sizeX = 80, sizeY = 80, children, titleRight }: Props = $props();
 	beforeNavigate(() => {
 		$isPopupShow = false;
 	});
@@ -24,16 +25,19 @@
 		onclick={() => {
 			$isPopupShow = false;
 		}}
-		aria-label="close"
+		aria-label="close popup"
 	></button>
 	<div
 		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation flex flex-col"
 		style="width: {sizeX}vw; height: {sizeY}vh;"
 	>
 		<div class="bg-slate-800 w-full h-[7%] rounded-xl text-primary p-1 flex">
-			<h1 class="my-auto ml-6 text-xl">{title}</h1>
+			<h1 class="my-auto ml-6 text-xl text-nowrap">{title}</h1>
+			<div class="w-full h-full flex">
+				{@render titleRight?.()}
+			</div>
 			<button
-				class="my-auto ml-auto mr-3 text-xl cursor-pointer"
+				class="my-auto mr-3 text-xl cursor-pointer"
 				onclick={() => {
 					$isPopupShow = false;
 				}}
