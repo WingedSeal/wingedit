@@ -81,7 +81,9 @@
 		}
 	});
 
-	let agentAbilities = $state<Ability[]>(Object.values(_data.abilities[$lineupForm.agent]));
+	let agentAbilities = $state<Ability[]>(
+		$lineupForm.agent ? Object.values(_data.abilities[$lineupForm.agent]) : []
+	);
 	let selectedOverlayMode = $state<OverlayMode>(OverlayMode.Main);
 	let selectedFromToMode = $state<FromToMode>(FromToMode.From);
 
