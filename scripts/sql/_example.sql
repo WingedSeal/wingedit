@@ -27,7 +27,8 @@ INSERT INTO
         "DrawOverSub1X",
         "DrawOverSub1Y",
         "DrawOverSub2X",
-        "DrawOverSub2Y"
+        "DrawOverSub2Y",
+        "Description"
     )
 VALUES
     (
@@ -53,7 +54,8 @@ VALUES
         null,
         null,
         null,
-        null
+        null,
+        "1"
     ),
     (
         2,
@@ -78,5 +80,6 @@ VALUES
         null,
         null,
         null,
-        null
+        null,
+        "2"
     );
