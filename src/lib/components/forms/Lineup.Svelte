@@ -52,7 +52,7 @@
 	} = superForm(_data.lineupForm, {
 		validators: zodClient(lineupSchema),
 		taintedMessage: 'Changes you made may not be saved.',
-		scrollToError: { behavior: 'smooth', block: 'start', inline: 'nearest' }
+		scrollToError: { behavior: 'smooth', block: 'end', inline: 'nearest' }
 	});
 
 	const {
