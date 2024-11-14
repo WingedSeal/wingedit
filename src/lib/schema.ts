@@ -111,7 +111,8 @@ export const getLineupSchema = (
 		refineImageError: string;
 		refineGif: (f: File) => Promise<boolean>;
 		refineGifError: string;
-	} | null = null
+	} | null = null,
+	require_images = true
 ) => {
 	let _imageSchema = refines
 		? imageSchema.refine(refines.refineImage, refines.refineImageError)
@@ -119,14 +120,14 @@ export const getLineupSchema = (
 	let _gifSchema = refines
 		? gifSchema.refine(refines.refineGif, refines.refineGifError)
 		: gifSchema;
-	const require_all_images = PUBLIC_REQUIRE_ALL_IMAGES === 'true';
+	const require_all_images = require_images ? PUBLIC_REQUIRE_ALL_IMAGES === 'true' : false;
 	const nullableImageSchema = require_all_images ? _imageSchema : _imageSchema.nullable();
 	return z
 		.object({
 			agent: z.number().int().min(1, 'Please select an agent.'),
 			map: z.number().int().min(1, 'Please select a map.'),
 			ability: z.number().int().min(1, 'Please select an agent ability.'),
-			throwLineup: imageSchema,
+			throwLineup: require_images ? _imageSchema : _imageSchema.nullable(),
 			throwGif: require_all_images ? _gifSchema : _gifSchema.nullable(),
 			landSpot: nullableImageSchema,
 			throwSpotFirstPerson: nullableImageSchema,

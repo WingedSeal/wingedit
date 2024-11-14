@@ -54,6 +54,7 @@ export type DataType = {
 	>;
 	gameInfo: GameInfo;
 	abilities: ReturnType<typeof getAbilities>;
+	lineupID?: number;
 };
 
 export const LINEUP_DIRECTORY = 'lineups';

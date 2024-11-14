@@ -14,13 +14,13 @@
 	import { isEmpty } from './../../utils';
 	import type { DataType } from './../../server/forms/lineup';
 
-	const lineupSchema = getLineupSchema();
-
 	type Props = {
 		_data: DataType;
-		lineupID?: number;
 	};
 	const { _data }: Props = $props();
+
+	const lineupSchema = _data.lineupID ? getLineupSchema(null, false) : getLineupSchema();
+
 	let mapPositions = $state(_data.gameInfo.mapPositions);
 	const {
 		errors: mapPositionDeleteErrors,
@@ -140,6 +140,7 @@
 
 {#snippet uploadFile(
 	_for: 'throwLineup' | 'throwGif' | 'landSpot' | 'throwSpotFirstPerson' | 'throwSpotThirdPerson',
+	oldImage: string,
 	text: string
 )}
 	<label for={_for} class="absolute top-2 left-2 main-label z-20 text-outline">{text}</label>
@@ -159,7 +160,14 @@
 			src={URL.createObjectURL($lineupForm[_for])}
 			alt={text}
 		/>
+	{:else if _data.lineupID}
+		<img
+			class="absolute top-0 left-0 w-full h-full z-10"
+			src="/api/image/lineups/{_data.lineupID}/{oldImage}.webp"
+			alt={text}
+		/>
 	{/if}
+
 	<label for={_for} class="error absolute bottom-1 left-1 z-20 text-outline">
 		{#if $lineupErrors[_for]}
 			{$lineupErrors[_for][0]}
@@ -386,20 +394,28 @@
 					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9 select-file"
 				>
 					<div class="row-span-2 col-span-2 relative bg-purple-200">
-						{@render uploadFile('throwLineup', 'How to Lineup')}
+						{@render uploadFile('throwLineup', 'throw-lineup', 'How to Lineup')}
 					</div>
 					<div class=" bg-sky-100 relative">
-						{@render uploadFile('throwGif', 'Throw Gif')}
+						{@render uploadFile('throwGif', 'throw', 'Throw Gif')}
 					</div>
 					<div class=" bg-green-100 relative">
-						{@render uploadFile('landSpot', 'Land Spot')}
+						{@render uploadFile('landSpot', 'land-spot', 'Land Spot')}
 					</div>
 					<div class=" bg-yellow-100 relative">TODO: Upload extra images</div>
 					<div class=" bg-orange-100 relative">
-						{@render uploadFile('throwSpotFirstPerson', 'Throw Spot First Person')}
+						{@render uploadFile(
+							'throwSpotFirstPerson',
+							'throw-spot-first-person',
+							'Throw Spot First Person'
+						)}
 					</div>
 					<div class=" bg-red-100 relative">
-						{@render uploadFile('throwSpotThirdPerson', 'Throw Spot Third Person')}
+						{@render uploadFile(
+							'throwSpotThirdPerson',
+							'throw-spot-third-person',
+							'Throw Spot Third Person'
+						)}
 					</div>
 				</div>
 			</div>
