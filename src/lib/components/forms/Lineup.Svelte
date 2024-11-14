@@ -52,7 +52,7 @@
 	} = superForm(_data.lineupForm, {
 		validators: zodClient(lineupSchema),
 		taintedMessage: 'Changes you made may not be saved.',
-		scrollToError: { behavior: 'smooth', block: 'end', inline: 'nearest' }
+		scrollToError: { behavior: 'smooth', block: 'center', inline: 'nearest' }
 	});
 
 	const {
@@ -181,7 +181,7 @@
 	<form
 		method="post"
 		use:lineupEnhance
-		action="?/addLineup"
+		action={_data.lineupID ? '?/editLineup' : '?/addLineup'}
 		class="h-full w-full flex-col main-form"
 		enctype="multipart/form-data"
 	>

@@ -88,14 +88,15 @@ export const load = (async ({ locals, url, params }) => {
 
 export const actions = {
 	...lineupActions,
-	addLineup: async ({ request, locals }) => {
+	editLineup: async ({ request, locals }) => {
+		console.log('here');
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
 		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
-		const form = await superValidate(request, zod(lineupSchema));
+		const form = await superValidate(request, zod(noImageLineupSchema));
 		if (!form.valid) {
 			return fail(400, { form });
 		}
@@ -124,7 +125,6 @@ export const actions = {
 			DrawOverSub2Y: form.data.sub2Y,
 			Description: form.data.description
 		};
-
 		return message(form, 'lineup was sent to server');
 	}
 };
