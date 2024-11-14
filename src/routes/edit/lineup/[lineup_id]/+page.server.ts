@@ -1,5 +1,12 @@
 import { IMAGES_PATH } from '$env/static/private';
-import { addLineup, getAbilities, getGameInfo, getLineup } from '$lib/server/db/valorant';
+import {
+	addLineup,
+	getAbilities,
+	getAgents,
+	getGameInfo,
+	getLineup,
+	getMaps
+} from '$lib/server/db/valorant';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
@@ -88,7 +95,7 @@ export const load = (async ({ locals, url, params }) => {
 
 export const actions = {
 	...lineupActions,
-	editLineup: async ({ request, locals }) => {
+	editLineup: async ({ request, locals, params }) => {
 		console.log('here');
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
@@ -125,6 +132,10 @@ export const actions = {
 			DrawOverSub2Y: form.data.sub2Y,
 			Description: form.data.description
 		};
-		return message(form, 'lineup was sent to server');
+		throw redirect(
+			302,
+			`/lineups/${getAgents()[form.data.agent].Name.toLowerCase()}/${getMaps()[form.data.map].Name.toLowerCase()}?lineup=${params.lineup_id}`
+		);
+		// return message(form, 'lineup was sent to server');
 	}
 };
