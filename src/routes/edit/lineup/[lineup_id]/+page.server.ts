@@ -19,8 +19,9 @@ import { mapPositionSchema } from '$lib/schema';
 import { mapPositionDeleteSchema } from '$lib/hidden-schema';
 import { lineupActions, noImageLineupSchema, type DataType } from '$lib/server/forms/lineup';
 
-export const load = (async ({ params, parent }) => {
-	await parent();
+export const load: PageServerLoad = async ({ locals, url, params }) => {
+	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
+	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
 	let lineupID: number;
 	try {
 		lineupID = parseInt(params.lineup_id);
@@ -33,6 +34,9 @@ export const load = (async ({ params, parent }) => {
 	if (!lineup) {
 		throw error(404, `Lineup id ${params.lineup_id}  does not exist.`);
 	}
+
+	if (locals.user.privilege < Privilege.Moderator && locals.user.id !== lineup.CreatedBy)
+		throw redirect(303, '/');
 
 	let lineupForm = await superValidate<Infer<typeof noImageLineupSchema>, string>(
 		zod(noImageLineupSchema)
@@ -83,7 +87,7 @@ export const load = (async ({ params, parent }) => {
 		lineupID
 	};
 	return data;
-}) satisfies PageServerLoad;
+};
 
 export const actions = {
 	...lineupActions,

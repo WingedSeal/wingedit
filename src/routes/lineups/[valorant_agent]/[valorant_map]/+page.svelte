@@ -10,6 +10,7 @@
 	import { writable, type Writable } from 'svelte/store';
 	import Sides from './Sides.svelte';
 	import { page } from '$app/stores';
+	import Privilege from '$lib/privilege';
 	interface Props {
 		data: PageData;
 	}
@@ -97,13 +98,15 @@
 	</section>
 </main>
 {#snippet titleRight()}
-	<a
-		class="my-auto mr-8 ml-auto text-xl cursor-pointer"
-		href="/edit/lineup/{selectedLineup.ID}"
-		aria-label="close"
-	>
-		<i class="fa-regular fa-pen-to-square"></i>
-	</a>
+	{#if data.user && (data.user.privilege >= Privilege.Moderator || selectedLineup.CreatedBy === data.user.id)}
+		<a
+			class="my-auto mr-8 ml-auto text-xl cursor-pointer"
+			href="/edit/lineup/{selectedLineup.ID}"
+			aria-label="close"
+		>
+			<i class="fa-regular fa-pen-to-square"></i>
+		</a>
+	{/if}
 {/snippet}
 {#if selectedLineup}
 	<Popup
