@@ -42,8 +42,9 @@ const schema =
 			})
 		: getAgentSchema();
 
-export const load: PageServerLoad = async ({ parent }) => {
-	await parent();
+export const load: PageServerLoad = async ({ locals, url }) => {
+	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
+	if (locals.user.privilege < Privilege.Moderator) throw redirect(303, '/');
 	return {
 		form: await superValidate<Infer<typeof schema>, { newID: number }>(zod(schema)),
 		agentRoles: getAgentRoles(),
