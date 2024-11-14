@@ -1,46 +1,27 @@
-import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
-import { addLineup, getAbilities, getGameInfo, getMaps } from '$lib/server/db/valorant';
+import { IMAGES_PATH } from '$env/static/private';
+import { addLineup, getAbilities, getGameInfo } from '$lib/server/db/valorant';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
-import { superValidate, fail, message, setError, type Infer } from 'sveltekit-superforms';
+import { superValidate, fail, message, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { Lineup, MapPosition } from '$lib/server/db/types';
 import { error, redirect } from '@sveltejs/kit';
 import Privilege from '$lib/privilege';
-import { getLineupSchema, mapPositionSchema } from '$lib/schema';
-import sharp from 'sharp';
-import { getMapPosition, isMapPositionExist, isMapPositionUsed } from '$lib/server/db/valorant/get';
-import { addMapPosition, deleteMapPosition } from '$lib/server/db/valorant/post';
+import { mapPositionSchema } from '$lib/schema';
 import { mapPositionDeleteSchema } from '$lib/hidden-schema';
 import { FULL_HD, writeWebpNoResize, writeWebp, writeWebpAnimated } from '$lib/server/file-system';
-
-const lineupSchema =
-	VALIDATE_IMAGE_SIZE === 'true'
-		? getLineupSchema({
-				refineImage: async (f) => {
-					const size = await sharp(await f.arrayBuffer()).metadata();
-					return (size.width &&
-						size.height &&
-						size.width * 9 === size.height * 16 &&
-						size.width >= 1920) as boolean;
-				},
-				refineImageError: 'Please upload 1920x1080 image.',
-				refineGif: async (f) => {
-					const size = await sharp(await f.arrayBuffer()).metadata();
-					return (size.width &&
-						size.height &&
-						size.width * 9 === size.height * 16 &&
-						size.width >= 1920) as boolean;
-				},
-				refineGifError: 'Please upload 1920x1080 gif.'
-			})
-		: getLineupSchema();
+import {
+	LINEUP_DIRECTORY,
+	lineupActions,
+	lineupSchema,
+	type DataType
+} from '$lib/server/forms/lineup';
 
 export const load = (async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
-	const data = {
+	const data: DataType = {
 		lineupForm: await superValidate<Infer<typeof lineupSchema>, string>(zod(lineupSchema)),
 		mapPositionForm: await superValidate<
 			Infer<typeof mapPositionSchema>,
@@ -56,11 +37,8 @@ export const load = (async ({ locals, url }) => {
 	return data;
 }) satisfies PageServerLoad;
 
-export type DataType = Exclude<Awaited<ReturnType<typeof load>>, void>;
-
-const LINEUP_DIRECTORY = 'lineups';
-
 export const actions = {
+	...lineupActions,
 	addLineup: async ({ request, locals }) => {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
@@ -135,95 +113,5 @@ export const actions = {
 		]);
 
 		return message(form, 'Lineup has been successfully added.');
-	},
-	addMapPosition: async ({ request, locals }) => {
-		if (!locals.user) {
-			return error(401, 'Invalid or missing session');
-		}
-		if (locals.user.privilege < Privilege.Member) {
-			return error(403, 'Not enough privilege');
-		}
-		let form = await superValidate(request, zod(mapPositionSchema));
-		form.data.callout = cleanupCallout(form.data.callout);
-		if (!form.valid) {
-			return fail(400, { form });
-		}
-		if (isMapPositionExist(form.data.callout, form.data.mapID))
-			return setError(
-				form,
-				'callout',
-				`Callout '${form.data.callout}' already exists in map '${getMaps()[form.data.mapID].Name}'`
-			);
-
-		const { success, newID } = addMapPosition(form.data.callout, form.data.mapID);
-		if (!success) {
-			return setError(
-				form,
-				'callout',
-				`Something went wrong. Failed to add new map position '${form.data.callout}'.`
-			);
-		}
-		const newMapPosition: MapPosition = {
-			ID: newID,
-			MapID: form.data.mapID,
-			Callout: form.data.callout
-		};
-		const callout = form.data.callout;
-		form.data.callout = '';
-		return message(form, {
-			message: `Callout '${callout}' was added successfully.`,
-			newMapPosition,
-			mapID: form.data.mapID
-		});
-	},
-	deleteMapPosition: async ({ request, locals }) => {
-		if (!locals.user) {
-			return error(401, 'Invalid or missing session');
-		}
-		if (locals.user.privilege < Privilege.Member) {
-			return error(403, 'Not enough privilege');
-		}
-		const form = await superValidate(request, zod(mapPositionDeleteSchema));
-		if (!form.valid) {
-			return fail(400);
-		}
-		const mapPositionID = form.data.mapPositionID;
-		const mapPosition = getMapPosition(mapPositionID);
-		if (!mapPosition) {
-			return setError(form, 'mapPositionID', 'This map position has already been deleted!');
-		}
-
-		if (isMapPositionUsed(mapPositionID)) {
-			return setError(
-				form,
-				'mapPositionID',
-				`This map position ${JSON.stringify(mapPosition.Callout)} has already been used!`
-			);
-		}
-
-		if (!deleteMapPosition(mapPositionID)) {
-			return setError(
-				form,
-				'mapPositionID',
-				`Something went wrong while deleting ${JSON.stringify(mapPosition.Callout)}.`
-			);
-		}
-		return message(form, {
-			message: `${JSON.stringify(mapPosition.Callout)} has successfully been deleted.`,
-			deletedMapPosition: mapPosition
-		});
 	}
-};
-
-const cleanupCallout = (callout: string): string => {
-	return callout
-		.split(/\s+/)
-		.map((text) => {
-			text = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-			if (text === 'Ct') {
-				return 'CT';
-			}
-			return text;
-		})
-		.join(' ');
 };

@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { getLineupSchema, mapPositionSchema } from '$lib/schema';
+	import { getLineupSchema, mapPositionSchema } from '../../schema';
 	import '$lib/styles/form.scss';
-	import type { Ability } from '$lib/server/db/types.js';
-	import { FromToMode, OverlayMode } from './modes.js';
+	import type { Ability } from '../../server/db/types';
+	import { FromToMode, OverlayMode } from './modes';
 	import Clickable from './Clickable.svelte';
-	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
-	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
+	import LineupShowOverlay from '../LineupShowOverlay.svelte';
+	import Popup, { isPopupShow } from '../Popup.svelte';
 	import { onMount } from 'svelte';
 	import RenderEmptyLine from './EmptyLineupLineOverlay.svelte';
 	import emptyBox from '$lib/assets/images/empty-box.webp';
-	import { isEmpty } from '$lib/utils.js';
-	import type { DataType } from './+page.server.js';
+	import { isEmpty } from './../../utils';
+	import type { DataType } from './../../server/forms/lineup';
 
 	const lineupSchema = getLineupSchema();
 

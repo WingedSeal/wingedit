@@ -1,7 +1,6 @@
 <script lang="ts">
-	import LineupForm from './LineupForm.svelte';
-
+	import { Lineup } from '$lib/components/forms/';
 	const { data } = $props();
 </script>
 
-<LineupForm _data={data} />
+<Lineup _data={data} />
