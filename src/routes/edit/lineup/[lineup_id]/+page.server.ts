@@ -32,7 +32,7 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
 	const lineup = getLineup(lineupID);
 
 	if (!lineup) {
-		throw error(404, `Lineup id ${params.lineup_id}  does not exist.`);
+		throw error(404, `Lineup id ${params.lineup_id} does not exist.`);
 	}
 
 	if (locals.user.privilege < Privilege.Moderator && locals.user.id !== lineup.CreatedBy)
@@ -91,6 +91,18 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
 
 export const actions = {
 	...lineupActions,
+	deleteLineup: async ({ request, locals, params }) => {
+		if (!locals.user) {
+			return error(401, 'Invalid or missing session');
+		}
+		if (locals.user.privilege < Privilege.Member) {
+			return error(403, 'Not enough privilege');
+		}
+		const form = await superValidate(request, zod(noImageLineupSchema));
+		if (!form.valid) {
+			return fail(400, { form });
+		}
+	},
 	editLineup: async ({ request, locals, params }) => {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
@@ -98,6 +110,22 @@ export const actions = {
 		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
+		let lineupID: number;
+		try {
+			lineupID = parseInt(params.lineup_id);
+		} catch {
+			throw error(400, `${params.lineup_id} is not a valid lineup id.`);
+		}
+
+		const oldLineup = getLineup(lineupID);
+
+		if (!oldLineup) {
+			throw error(400, `Lineup id ${params.lineup_id} does not exist.`);
+		}
+		if (locals.user.privilege < Privilege.Moderator && locals.user.id !== oldLineup.CreatedBy) {
+			return error(403, 'User id does not match lineup creator');
+		}
+
 		const form = await superValidate(request, zod(noImageLineupSchema));
 		if (!form.valid) {
 			return fail(400, { form });
