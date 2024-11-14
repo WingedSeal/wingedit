@@ -947,7 +947,6 @@
 				<button
 					name="deleteLineup"
 					id="deleteLineup"
-					value={_data.lineupID}
 					disabled
 					class="hover:enabled:px-24 active:enabled:px-16 transition-all disabled:bg-red-950 disabled:text-plain-dark uppercase bg-red-900 text-plain-light py-12 px-20 rounded-full font-bold text-3xl tracking-widest"
 				>

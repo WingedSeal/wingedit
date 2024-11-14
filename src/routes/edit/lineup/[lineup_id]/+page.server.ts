@@ -91,17 +91,35 @@ export const load: PageServerLoad = async ({ locals, url, params }) => {
 
 export const actions = {
 	...lineupActions,
-	deleteLineup: async ({ request, locals, params }) => {
+	deleteLineup: async ({ locals, params }) => {
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
 		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
-		const form = await superValidate(request, zod(noImageLineupSchema));
-		if (!form.valid) {
-			return fail(400, { form });
+		let lineupID: number;
+		try {
+			lineupID = parseInt(params.lineup_id);
+		} catch {
+			throw error(400, `${params.lineup_id} is not a valid lineup id.`);
 		}
+
+		const lineup = getLineup(lineupID);
+
+		if (!lineup) {
+			throw error(400, `Lineup id ${params.lineup_id} does not exist.`);
+		}
+		if (locals.user.privilege < Privilege.Moderator && locals.user.id !== lineup.CreatedBy) {
+			return error(403, 'User id does not match lineup creator');
+		}
+
+		// TODO: DELETE
+
+		throw redirect(
+			302,
+			`/lineups/${getAgents()[lineup.AgentID].Name.toLowerCase()}/${getMaps()[lineup.MapID].Name.toLowerCase()}`
+		);
 	},
 	editLineup: async ({ request, locals, params }) => {
 		if (!locals.user) {
@@ -155,10 +173,12 @@ export const actions = {
 			DrawOverSub2Y: form.data.sub2Y,
 			Description: form.data.description
 		};
+
+		// TODO: ADD
+
 		throw redirect(
 			302,
 			`/lineups/${getAgents()[form.data.agent].Name.toLowerCase()}/${getMaps()[form.data.map].Name.toLowerCase()}?lineup=${params.lineup_id}`
 		);
-		// return message(form, 'lineup was sent to server');
 	}
 };
