@@ -9,8 +9,19 @@
 <script lang="ts">
 </script>
 
+<noscript>
+	<style>
+		.noscript-hide {
+			display: none;
+		}
+	</style>
+</noscript>
+
 {#if !$isLoaded}
-	<div transition:fade={{ delay: 0, duration: 300, easing: circIn }} class="relative z-50">
+	<div
+		transition:fade={{ delay: 0, duration: 300, easing: circIn }}
+		class="relative z-50 noscript-hide"
+	>
 		<div class="w-screen h-screen fixed bg-slate-900 flex loading-screen">
 			<div id="wrapper" class="scale-[1.2] md:scale-[2.1] m-auto absolute">
 				<div class="profile-main-loader">
