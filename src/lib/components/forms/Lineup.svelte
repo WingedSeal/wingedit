@@ -13,6 +13,7 @@
 	import emptyBox from '$lib/assets/images/empty-box.webp';
 	import { isEmpty } from './../../utils';
 	import type { DataType } from './../../server/forms/lineup';
+	import { enhance } from '$app/forms';
 
 	type Props = {
 		_data: DataType;
@@ -93,6 +94,7 @@
 		let target = event.target! as HTMLSelectElement;
 		if (target.value === ADD_MAP_POSITION_VALUE) {
 			mapPositionSource = source;
+			popupContent = 'mapPosition';
 			$isPopupShow = true;
 			return true;
 		}
@@ -111,6 +113,8 @@
 			mimimapContainer.style.height = mimimapContainer.clientWidth / minimapAspectRatio + 'px';
 		}
 	};
+
+	let popupContent = $state<'mapPosition' | 'deleteLineup'>('mapPosition');
 
 	onMount(() => {
 		window.addEventListener('resize', resizeMinimap);
@@ -802,116 +806,158 @@
 				</div>
 			</div>
 		</section>
+		{#if _data.lineupID}
+			<section class="bg-plain-dark section h-dvh-nav">
+				<div class="flex flex-col m-auto gap-4">
+					<button
+						class="mx-auto hover:px-48 active:px-36 transition-all uppercase bg-red-900 text-plain-light py-12 px-40 rounded-full font-bold text-5xl tracking-widest"
+						type="button"
+						onclick={() => {
+							popupContent = 'deleteLineup';
+							$isPopupShow = true;
+							setTimeout(() => {
+								const button = document.getElementById('deleteLineup') as HTMLButtonElement | null;
+								if (button) button.disabled = false;
+							}, 3000);
+						}}
+					>
+						delete
+					</button>
+					<h2 class="text-error text-lg tracking-wide">
+						Clicking this button will make the lineup disappear forever. (A very long time!)
+					</h2>
+				</div>
+			</section>
+		{/if}
 	</form>
 </main>
 
-<Popup title="Add new position">
-	<div class="h-full w-full flex">
-		<form
-			action="?/addMapPosition"
-			class="main-form w-1/2 p-12 pr-6"
-			method="post"
-			use:mapPositionEnhance
-		>
-			<input type="text" name="map" class="hidden" value={$lineupForm.map} />
-			<div class="flex p-12 w-full h-full bg-sky-200 rounded-lg">
-				<div class="flex flex-col m-auto p-6 w-full">
-					<input type="hidden" name="mapID" bind:value={$mapPositionForm.mapID} />
+{#if !_data.lineupID || popupContent === 'mapPosition'}
+	<Popup title="Add new position">
+		<div class="h-full w-full flex">
+			<form
+				action="?/addMapPosition"
+				class="main-form w-1/2 p-12 pr-6"
+				method="post"
+				use:mapPositionEnhance
+			>
+				<input type="text" name="map" class="hidden" value={$lineupForm.map} />
+				<div class="flex p-12 w-full h-full bg-sky-200 rounded-lg">
+					<div class="flex flex-col m-auto p-6 w-full">
+						<input type="hidden" name="mapID" bind:value={$mapPositionForm.mapID} />
 
-					<label for="callout" class="main-label">
-						Callout
-						{#if $mapPositionForm.mapID}
-							({_data.gameInfo.maps[$mapPositionForm.mapID].Name})
-						{/if}
-					</label>
-					<input
-						type="text"
-						name="callout"
-						placeholder="New Map Position"
-						bind:value={$mapPositionForm.callout}
-						aria-invalid={$mapPositionErrors.callout || $mapPositionErrors.mapID
-							? 'true'
-							: undefined}
-					/>
-					<label
-						for="callout"
-						class:error={!isEmpty($mapPositionErrors)}
-						class:success={isEmpty($mapPositionErrors)}
-					>
-						{#if $mapPositionErrors.callout}
-							{$mapPositionErrors.callout[0]}
-						{/if}
-						{#if $mapPositionErrors.callout && $mapPositionErrors.mapID}
-							<br />
-						{/if}
-						{#if $mapPositionErrors.mapID}
-							{$mapPositionErrors.mapID[0]}
-						{/if}
-						{#if $mapPositionMessage}
-							{$mapPositionMessage.message}
-						{/if}
-					</label>
-					<button
-						type="submit"
-						class="py-4 px-12 mt-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto"
-					>
-						Add
-					</button>
-				</div>
-			</div>
-		</form>
-
-		<form
-			action="?/deleteMapPosition"
-			id="deleteMapPosition"
-			class="w-1/2 flex flex-col p-12 pl-6"
-			method="post"
-			use:mapPositionDeleteEnhance
-		>
-			<div class="w-full h-full p-12 bg-green-200 rounded-lg flex flex-col">
-				<h1 class="font-bold text-2xl">Unused Map Positions</h1>
-				<label
-					for="deleteMapPosition"
-					class="block"
-					class:error={!isEmpty($mapPositionDeleteErrors)}
-					class:success={isEmpty($mapPositionDeleteErrors)}
-				>
-					{#if $mapPositionDeleteErrors.mapPositionID}
-						{$mapPositionDeleteErrors.mapPositionID[0]}
-					{/if}
-					{#if $mapPositionDeleteMessage}
-						{$mapPositionDeleteMessage.message}
-					{/if}
-				</label>
-				{#if Object.values(mapPositions[$mapPositionForm.mapID] ?? []).some((pos) => !pos.IsUsed)}
-					<div class=" h-max-full overflow-y-auto mt-2">
-						<table class="delete-map-position-table">
-							<tbody>
-								{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition (mapPosition.ID)}
-									<tr>
-										<td class="w-full py-2 px-8">{mapPosition.Callout}</td>
-										<td class="p-2">
-											<button
-												type="submit"
-												name="mapPositionID"
-												value={mapPosition.ID}
-												aria-label="delete"
-											>
-												<i class="fa-solid fa-trash"></i>
-											</button>
-										</td>
-									</tr>
-								{/each}
-							</tbody>
-						</table>
+						<label for="callout" class="main-label">
+							Callout
+							{#if $mapPositionForm.mapID}
+								({_data.gameInfo.maps[$mapPositionForm.mapID].Name})
+							{/if}
+						</label>
+						<input
+							type="text"
+							name="callout"
+							placeholder="New Map Position"
+							bind:value={$mapPositionForm.callout}
+							aria-invalid={$mapPositionErrors.callout || $mapPositionErrors.mapID
+								? 'true'
+								: undefined}
+						/>
+						<label
+							for="callout"
+							class:error={!isEmpty($mapPositionErrors)}
+							class:success={isEmpty($mapPositionErrors)}
+						>
+							{#if $mapPositionErrors.callout}
+								{$mapPositionErrors.callout[0]}
+							{/if}
+							{#if $mapPositionErrors.callout && $mapPositionErrors.mapID}
+								<br />
+							{/if}
+							{#if $mapPositionErrors.mapID}
+								{$mapPositionErrors.mapID[0]}
+							{/if}
+							{#if $mapPositionMessage}
+								{$mapPositionMessage.message}
+							{/if}
+						</label>
+						<button
+							type="submit"
+							class="py-4 px-12 mt-12 text-lg font-bold rounded-lg bg-blue-200 mx-auto"
+						>
+							Add
+						</button>
 					</div>
-				{:else}
-					<img src={emptyBox} alt="empty box" class="w-full h-full object-contain" />
-				{/if}
-			</div>
-		</form>
-	</div>
-</Popup>
+				</div>
+			</form>
+
+			<form
+				action="?/deleteMapPosition"
+				id="deleteMapPosition"
+				class="w-1/2 flex flex-col p-12 pl-6"
+				method="post"
+				use:mapPositionDeleteEnhance
+			>
+				<div class="w-full h-full p-12 bg-green-200 rounded-lg flex flex-col">
+					<h1 class="font-bold text-2xl">Unused Map Positions</h1>
+					<label
+						for="deleteMapPosition"
+						class="block"
+						class:error={!isEmpty($mapPositionDeleteErrors)}
+						class:success={isEmpty($mapPositionDeleteErrors)}
+					>
+						{#if $mapPositionDeleteErrors.mapPositionID}
+							{$mapPositionDeleteErrors.mapPositionID[0]}
+						{/if}
+						{#if $mapPositionDeleteMessage}
+							{$mapPositionDeleteMessage.message}
+						{/if}
+					</label>
+					{#if Object.values(mapPositions[$mapPositionForm.mapID] ?? []).some((pos) => !pos.IsUsed)}
+						<div class=" h-max-full overflow-y-auto mt-2">
+							<table class="delete-map-position-table">
+								<tbody>
+									{#each Object.values(mapPositions[$mapPositionForm.mapID] ?? []).filter((pos) => !pos.IsUsed) as mapPosition (mapPosition.ID)}
+										<tr>
+											<td class="w-full py-2 px-8">{mapPosition.Callout}</td>
+											<td class="p-2">
+												<button
+													type="submit"
+													name="mapPositionID"
+													value={mapPosition.ID}
+													aria-label="delete"
+												>
+													<i class="fa-solid fa-trash"></i>
+												</button>
+											</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						</div>
+					{:else}
+						<img src={emptyBox} alt="empty box" class="w-full h-full object-contain" />
+					{/if}
+				</div>
+			</form>
+		</div>
+	</Popup>
+{:else if popupContent === 'deleteLineup'}
+	<Popup title="Are you sure about that?">
+		<div class="h-full w-full flex">
+			<form action="?/deleteLineup" class="flex flex-col gap-4 m-auto" method="post" use:enhance>
+				<button
+					name="deleteLineup"
+					id="deleteLineup"
+					value={_data.lineupID}
+					disabled
+					class="hover:enabled:px-24 active:enabled:px-16 transition-all disabled:bg-red-950 disabled:text-plain-dark uppercase bg-red-900 text-plain-light py-12 px-20 rounded-full font-bold text-3xl tracking-widest"
+				>
+					delete
+				</button>
+				<h1 class="text-secondary text-2xl mx-auto">This action is irreversible!</h1>
+			</form>
+		</div>
+	</Popup>
+{/if}
 
 <svelte:head>
 	<title>WingedIT • New Lineup</title>
