@@ -92,6 +92,15 @@ WHERE
 	"AgentID" = @agentID
 	AND "MapID" = @mapID;`
 	),
+	getLineup: db.prepare(
+		`
+SELECT
+	*
+FROM
+	"Lineups"
+WHERE
+	ID = ?;`
+	),
 	getAllLineups: db.prepare(`SELECT * FROM "Lineups";`)
 } as const;
 
@@ -220,6 +229,11 @@ export const getLineups = (agentID: number, mapID: number): { [abilityID: number
 		lineups[lineup.AbilityID].push(lineup);
 	});
 	return lineups;
+};
+
+export const getLineup = (lineupID: number): Lineup | undefined => {
+	const lineup = statements.getLineup.get(lineupID) as Lineup;
+	return lineup;
 };
 
 export const getAllLineups = () => {

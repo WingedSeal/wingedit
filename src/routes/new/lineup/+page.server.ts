@@ -72,7 +72,8 @@ export const actions = {
 			DrawOverSub1X: form.data.sub1X,
 			DrawOverSub1Y: form.data.sub1Y,
 			DrawOverSub2X: form.data.sub2X,
-			DrawOverSub2Y: form.data.sub2Y
+			DrawOverSub2Y: form.data.sub2Y,
+			Description: form.data.description
 		};
 
 		const { success, lineupID: _lineupID } = addLineup(lineup);

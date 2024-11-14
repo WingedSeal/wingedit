@@ -1,5 +1,5 @@
 import { IMAGES_PATH } from '$env/static/private';
-import { addLineup, getAbilities, getGameInfo } from '$lib/server/db/valorant';
+import { addLineup, getAbilities, getGameInfo, getLineup } from '$lib/server/db/valorant';
 import fs from 'fs';
 import path from 'path';
 import type { PageServerLoad } from './$types';
@@ -15,6 +15,7 @@ import {
 	LINEUP_DIRECTORY,
 	lineupActions,
 	lineupSchema,
+	noImageLineupSchema,
 	type DataType
 } from '$lib/server/forms/lineup';
 
@@ -27,8 +28,49 @@ export const load = (async ({ locals, url, params }) => {
 	} catch {
 		throw error(404, `${params.lineup_id} is not a valid lineup id.`);
 	}
+
+	const lineup = getLineup(lineupID);
+
+	if (!lineup) {
+		throw error(404, `Lineup id ${params.lineup_id}  does not exist.`);
+	}
+
+	let lineupForm = await superValidate<Infer<typeof noImageLineupSchema>, string>(
+		zod(noImageLineupSchema)
+	);
+
+	lineupForm.data = {
+		ability: lineup.AbilityID,
+		agent: lineup.AgentID,
+		description: lineup.Description,
+		difficulty: lineup.Difficulty,
+		extraImages: [],
+		from: lineup.FromMapPositionID,
+		fromX: lineup.FromX,
+		fromY: lineup.FromY,
+		grade: lineup.GradeID,
+		landSpot: null,
+		mainX: lineup.DrawOverMainX,
+		mainY: lineup.DrawOverMainY,
+		map: lineup.MapID,
+		side: lineup.SideID,
+		sub1X: lineup.DrawOverSub1X,
+		sub1Y: lineup.DrawOverSub1Y,
+		sub2X: lineup.DrawOverSub2X,
+		sub2Y: lineup.DrawOverSub2Y,
+		throwGif: null,
+		throwLineup: null,
+		throwSpotFirstPerson: null,
+		throwSpotThirdPerson: null,
+		throwType: lineup.ThrowTypeID,
+		timeToLand: lineup.TimeToLand,
+		to: lineup.ToMapPositionID,
+		toX: lineup.ToX,
+		toY: lineup.ToY
+	};
+
 	const data: DataType = {
-		lineupForm: await superValidate<Infer<typeof lineupSchema>, string>(zod(lineupSchema)),
+		lineupForm,
 		mapPositionForm: await superValidate<
 			Infer<typeof mapPositionSchema>,
 			{ message: string; newMapPosition: MapPosition; mapID: number }
@@ -79,7 +121,8 @@ export const actions = {
 			DrawOverSub1X: form.data.sub1X,
 			DrawOverSub1Y: form.data.sub1Y,
 			DrawOverSub2X: form.data.sub2X,
-			DrawOverSub2Y: form.data.sub2Y
+			DrawOverSub2Y: form.data.sub2Y,
+			Description: form.data.description
 		};
 
 		return message(form, 'lineup was sent to server');

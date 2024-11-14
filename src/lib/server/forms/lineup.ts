@@ -40,8 +40,14 @@ export const lineupSchema =
 			})
 		: getLineupSchema();
 
+export const noImageLineupSchema = getLineupSchema(null, false);
+
 export type DataType = {
-	lineupForm: SuperValidated<Infer<typeof lineupSchema>, string, Infer<typeof lineupSchema>>;
+	lineupForm: SuperValidated<
+		Infer<typeof lineupSchema> | Infer<typeof noImageLineupSchema>,
+		string,
+		Infer<typeof lineupSchema> | Infer<typeof noImageLineupSchema>
+	>;
 	mapPositionForm: SuperValidated<
 		Infer<typeof mapPositionSchema>,
 		{ message: string; newMapPosition: MapPosition; mapID: number },

@@ -68,6 +68,7 @@ export type Lineup = {
 	DrawOverSub1Y: number | null;
 	DrawOverSub2X: number | null;
 	DrawOverSub2Y: number | null;
+	Description: string;
 };
 
 export const lineupKeys: (keyof Lineup)[] = [

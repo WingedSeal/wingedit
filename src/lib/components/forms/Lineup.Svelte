@@ -81,7 +81,7 @@
 		}
 	});
 
-	let agentAbilities = $state<Ability[]>();
+	let agentAbilities = $state<Ability[]>(Object.values(_data.abilities[$lineupForm.agent]));
 	let selectedOverlayMode = $state<OverlayMode>(OverlayMode.Main);
 	let selectedFromToMode = $state<FromToMode>(FromToMode.From);
 
@@ -429,7 +429,7 @@
 					<div class="h-dvh w-[75dvw] invisible"></div>
 
 					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
-						{#if $lineupForm.throwLineup}
+						{#if _data.lineupID || $lineupForm.throwLineup}
 							<div class="w-full h-full relative">
 								<LineupShowOverlay
 									DrawOverMainX={$lineupForm.mainX}
@@ -458,12 +458,21 @@
 										}
 									}}
 								>
-									<img
-										class="h-full w-full"
-										src={URL.createObjectURL($lineupForm.throwLineup)}
-										alt={`Preview image of "Throw Lineup"`}
-										draggable="false"
-									/>
+									{#if $lineupForm.throwLineup}
+										<img
+											class="h-full w-full"
+											src={URL.createObjectURL($lineupForm.throwLineup)}
+											alt={`Preview image of "Throw Lineup"`}
+											draggable="false"
+										/>
+									{:else if _data.lineupID}
+										<img
+											class="h-full w-full"
+											src="/api/image/lineups/{_data.lineupID}/throw-lineup.webp"
+											alt={`Preview image of "Throw Lineup"`}
+											draggable="false"
+										/>
+									{/if}
 								</Clickable>
 							</div>
 						{/if}
