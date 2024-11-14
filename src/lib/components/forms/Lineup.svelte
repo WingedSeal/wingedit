@@ -388,31 +388,31 @@
 		</section>
 
 		<section
-			class="bg-blue-100 section h-dvh-nav flex flex-col justify-center items-center py-12 pt-12 pb-6"
+			class="bg-pastel-blue section h-dvh-nav flex flex-col justify-center items-center py-12 pt-12 pb-6"
 		>
 			<div class="aspect-video max-h-[calc(100%-5rem)] max-w-full overflow-hidden relative">
 				<div class="h-screen w-screen invisible"></div>
 				<div
 					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9 select-file"
 				>
-					<div class="row-span-2 col-span-2 relative bg-purple-200">
+					<div class="row-span-2 col-span-2 relative bg-human">
 						{@render uploadFile('throwLineup', 'throw-lineup', 'How to Lineup')}
 					</div>
-					<div class=" bg-sky-100 relative">
+					<div class=" bg-human relative">
 						{@render uploadFile('throwGif', 'throw', 'Throw Gif')}
 					</div>
-					<div class=" bg-green-100 relative">
+					<div class=" bg-human relative">
 						{@render uploadFile('landSpot', 'land-spot', 'Land Spot')}
 					</div>
-					<div class=" bg-yellow-100 relative">TODO: Upload extra images</div>
-					<div class=" bg-orange-100 relative">
+					<div class=" bg-human relative">TODO: Upload extra images</div>
+					<div class=" bg-human relative">
 						{@render uploadFile(
 							'throwSpotFirstPerson',
 							'throw-spot-first-person',
 							'Throw Spot First Person'
 						)}
 					</div>
-					<div class=" bg-red-100 relative">
+					<div class=" bg-human relative">
 						{@render uploadFile(
 							'throwSpotThirdPerson',
 							'throw-spot-third-person',
@@ -426,7 +426,7 @@
 			</div>
 		</section>
 		<section class="bg-yellow-100 section h-dvh-nav">
-			<div class="w-3/4 bg-yellow-300 p-4 flex flex-col">
+			<div class="w-3/4 bg-lemon p-4 flex flex-col">
 				<div class="max-w-full max-h-[calc(100%-7rem)] grow-0 aspect-video relative m-auto">
 					<div class="h-dvh w-[75dvw] invisible"></div>
 
@@ -481,7 +481,7 @@
 					</div>
 				</div>
 
-				<div class="grow flex select-overlay-mode justify-around mt-5 relative">
+				<div class="grow flex select-overlay-mode justify-around mt-5 relative bg-lemon">
 					<input
 						type="radio"
 						form="none"
@@ -638,7 +638,7 @@
 			</div>
 		</section>
 		<section class="bg-green-100 section h-dvh-nav">
-			<div class="w-3/4 bg-green-300 p-4 flex">
+			<div class="w-3/4 bg-success p-4 flex">
 				<div class="bg-black h-full w-full flex">
 					<div class="bg-black h-full w-full flex m-auto" bind:this={mimimapContainer}>
 						{#if $lineupForm.map}
@@ -786,7 +786,7 @@
 					<button
 						type="submit"
 						name="confirm"
-						class="m-auto px-16 py-6 rounded-lg bg-green-900 text-white font-bold text-4xl"
+						class="m-auto px-16 py-6 rounded-xl bg-green-800 text-white font-bold text-4xl hover:bg-green-950"
 						>Confirm</button
 					>
 					<label

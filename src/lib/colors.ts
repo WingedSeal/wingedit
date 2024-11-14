@@ -9,6 +9,11 @@ const colors = {
 	'secondary-light': '#FFDFC2',
 	'plain-light': '#ECDFCC',
 	'plain-dark': '#1E201E',
+	'gray-beb': '#EEEEEE',
+	'pastel-blue': '#A2D2DF',
+	'human': '#FEF9F2',
+	'brick': '#FD8B51',
+	'lemon': '#FFEB55',
 	error: '#FF6D60',
 	success: '#98D8AA'
 } as const;
