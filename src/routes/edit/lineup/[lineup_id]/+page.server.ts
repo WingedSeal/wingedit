@@ -26,9 +26,8 @@ import {
 	type DataType
 } from '$lib/server/forms/lineup';
 
-export const load = (async ({ locals, url, params }) => {
-	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
-	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
+export const load = (async ({ params, parent }) => {
+	await parent();
 	let lineupID: number;
 	try {
 		lineupID = parseInt(params.lineup_id);

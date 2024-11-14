@@ -18,9 +18,8 @@ import {
 	type DataType
 } from '$lib/server/forms/lineup';
 
-export const load = (async ({ locals, url }) => {
-	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
-	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
+export const load = (async ({ parent }) => {
+	await parent();
 	const data: DataType = {
 		lineupForm: await superValidate<Infer<typeof lineupSchema>, string>(zod(lineupSchema)),
 		mapPositionForm: await superValidate<
