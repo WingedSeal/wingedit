@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Popup from '$lib/components/Popup.svelte';
+	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
 	import type { PageData } from './$types';
 	import Abilities from './Abilities.svelte';
 	import LineupList from './LineupList.svelte';
@@ -9,12 +9,12 @@
 	import Grades from './Grades.svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import Sides from './Sides.svelte';
+	import { page } from '$app/stores';
 	interface Props {
 		data: PageData;
 	}
 
 	let { data }: Props = $props();
-	let lineupIndex = $state(0);
 	const allLineupList = Object.values(data.lineups).flat();
 
 	let selectedAbilityID = $state<number | null>(null);
@@ -32,6 +32,20 @@
 					!$filterdOutSideIDs.has(lineup.SideID)
 			)
 	);
+
+	let lineupParam: number | null = null;
+	try {
+		const _lineupParam = $page.url.searchParams.get('lineup');
+		if (_lineupParam) {
+			lineupParam = parseInt(_lineupParam);
+		}
+	} catch {}
+	let lineupIndex = $state(
+		lineupParam ? allLineupList.findIndex((lineup) => lineup.ID === lineupParam) : 0
+	);
+	if (lineupParam) {
+		$isPopupShow = true;
+	}
 	let selectedLineup = $derived(allLineupList[lineupIndex]);
 	$isLoaded = false;
 </script>

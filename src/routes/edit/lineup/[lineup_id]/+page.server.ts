@@ -96,7 +96,6 @@ export const load = (async ({ locals, url, params }) => {
 export const actions = {
 	...lineupActions,
 	editLineup: async ({ request, locals, params }) => {
-		console.log('here');
 		if (!locals.user) {
 			return error(401, 'Invalid or missing session');
 		}
