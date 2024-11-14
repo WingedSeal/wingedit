@@ -17,14 +17,7 @@ import { error, redirect } from '@sveltejs/kit';
 import Privilege from '$lib/privilege';
 import { mapPositionSchema } from '$lib/schema';
 import { mapPositionDeleteSchema } from '$lib/hidden-schema';
-import { FULL_HD, writeWebpNoResize, writeWebp, writeWebpAnimated } from '$lib/server/file-system';
-import {
-	LINEUP_DIRECTORY,
-	lineupActions,
-	lineupSchema,
-	noImageLineupSchema,
-	type DataType
-} from '$lib/server/forms/lineup';
+import { lineupActions, noImageLineupSchema, type DataType } from '$lib/server/forms/lineup';
 
 export const load = (async ({ params, parent }) => {
 	await parent();

@@ -1,9 +1,10 @@
 import { dev } from '$app/environment';
 import { error } from '@sveltejs/kit';
+import type { PageLoad } from './$types';
 
 export const prerender = true;
 
-export const load = dev
+export const load: PageLoad = dev
 	? async ({ parent }) => {
 			await parent();
 		}
