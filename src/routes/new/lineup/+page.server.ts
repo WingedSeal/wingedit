@@ -85,34 +85,31 @@ export const actions = {
 		await Promise.all([
 			writeWebp(
 				form.data.throwLineup,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID, 'throw-lineup.webp'),
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-lineup.webp'),
 				FULL_HD
 			),
 			writeWebpAnimated(
 				form.data.throwGif,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID, 'throw.webp'),
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw.webp'),
 				FULL_HD
 			),
 			writeWebp(
 				form.data.landSpot,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID, 'land-spot.webp'),
+				path.join(LINEUP_DIRECTORY, lineupID, 'land-spot.webp'),
 				FULL_HD
 			),
 			writeWebp(
 				form.data.throwSpotFirstPerson,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.webp'),
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-first-person.webp'),
 				FULL_HD
 			),
 			writeWebp(
 				form.data.throwSpotThirdPerson,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.webp'),
+				path.join(LINEUP_DIRECTORY, lineupID, 'throw-spot-third-person.webp'),
 				FULL_HD
 			),
 			...form.data.extraImages.map((extraImage, i) =>
-				writeWebpNoResize(
-					extraImage,
-					path.join(IMAGES_PATH, LINEUP_DIRECTORY, lineupID, `${i + 1}.webp`)
-				)
+				writeWebpNoResize(extraImage, path.join(LINEUP_DIRECTORY, lineupID, `${i + 1}.webp`))
 			)
 		]);
 

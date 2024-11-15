@@ -93,7 +93,8 @@ export const lineupKeys: (keyof Lineup)[] = [
 	'DrawOverSub1X',
 	'DrawOverSub1Y',
 	'DrawOverSub2X',
-	'DrawOverSub2Y'
+	'DrawOverSub2Y',
+	'Description'
 ] as const;
 
 export type ThrowType = {

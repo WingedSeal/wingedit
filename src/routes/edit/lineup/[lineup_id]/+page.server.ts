@@ -198,8 +198,9 @@ export const actions = {
 		}
 
 		await Promise.all([
-			fs.readdir(path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id), (err, files) => {
-				Promise.all(
+			(async () => {
+				const files = fs.readdirSync(path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id));
+				await Promise.all(
 					files.map((fileName) => {
 						let fileNumber: number;
 						try {
@@ -208,43 +209,43 @@ export const actions = {
 							return;
 						}
 						if (fileNumber > form.data.extraImages.length) {
-							return fs.unlink(
-								path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, fileName),
-								() => {}
+							return fs.promises.unlink(
+								path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, fileName)
 							);
 						}
 					})
 				);
-			}),
+			})(),
+
 			writeWebp(
 				form.data.throwLineup,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw-lineup.webp'),
+				path.join(LINEUP_DIRECTORY, params.lineup_id, 'throw-lineup.webp'),
 				FULL_HD
 			),
 			writeWebpAnimated(
 				form.data.throwGif,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw.webp'),
+				path.join(LINEUP_DIRECTORY, params.lineup_id, 'throw.webp'),
 				FULL_HD
 			),
 			writeWebp(
 				form.data.landSpot,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'land-spot.webp'),
+				path.join(LINEUP_DIRECTORY, params.lineup_id, 'land-spot.webp'),
 				FULL_HD
 			),
 			writeWebp(
 				form.data.throwSpotFirstPerson,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw-spot-first-person.webp'),
+				path.join(LINEUP_DIRECTORY, params.lineup_id, 'throw-spot-first-person.webp'),
 				FULL_HD
 			),
 			writeWebp(
 				form.data.throwSpotThirdPerson,
-				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw-spot-third-person.webp'),
+				path.join(LINEUP_DIRECTORY, params.lineup_id, 'throw-spot-third-person.webp'),
 				FULL_HD
 			),
 			...form.data.extraImages.map((extraImage, i) =>
 				writeWebpNoResize(
 					extraImage,
-					path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, `${i + 1}.webp`)
+					path.join(LINEUP_DIRECTORY, params.lineup_id, `${i + 1}.webp`)
 				)
 			)
 		]);
