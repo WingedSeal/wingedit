@@ -189,8 +189,8 @@
 		class="h-full w-full flex-col main-form"
 		enctype="multipart/form-data"
 	>
-		<section class="bg-red-100 section h-dvh-nav">
-			<div class="w-1/3 bg-red-300 relative">
+		<section class="bg-primary section h-dvh-nav">
+			<div class="w-1/3 bg-plain-light relative">
 				{#if $lineupForm.map}
 					<img
 						class="absolute w-full h-full object-cover"
@@ -392,31 +392,31 @@
 		</section>
 
 		<section
-			class="bg-pastel-blue section h-dvh-nav flex flex-col justify-center items-center py-12 pt-12 pb-6"
+			class="bg-secondary section h-dvh-nav flex flex-col justify-center items-center py-12 pt-12 pb-6"
 		>
 			<div class="aspect-video max-h-[calc(100%-5rem)] max-w-full overflow-hidden relative">
 				<div class="h-screen w-screen invisible"></div>
 				<div
 					class="absolute h-full w-full top-0 left-0 grid grid-cols-3 grid-rows-3 gap-x-16 gap-y-9 select-file"
 				>
-					<div class="row-span-2 col-span-2 relative bg-human">
+					<div class="row-span-2 col-span-2 relative bg-plain-dark">
 						{@render uploadFile('throwLineup', 'throw-lineup', 'How to Lineup')}
 					</div>
-					<div class=" bg-human relative">
+					<div class=" bg-plain-dark relative">
 						{@render uploadFile('throwGif', 'throw', 'Throw Gif')}
 					</div>
-					<div class=" bg-human relative">
+					<div class=" bg-plain-dark relative">
 						{@render uploadFile('landSpot', 'land-spot', 'Land Spot')}
 					</div>
-					<div class=" bg-human relative">TODO: Upload extra images</div>
-					<div class=" bg-human relative">
+					<div class=" bg-plain-dark relative text-white">TODO: Upload extra images</div>
+					<div class=" bg-plain-dark relative">
 						{@render uploadFile(
 							'throwSpotFirstPerson',
 							'throw-spot-first-person',
 							'Throw Spot First Person'
 						)}
 					</div>
-					<div class=" bg-human relative">
+					<div class=" bg-plain-dark relative">
 						{@render uploadFile(
 							'throwSpotThirdPerson',
 							'throw-spot-third-person',
@@ -429,12 +429,12 @@
 				{@render scrollDown(2)}
 			</div>
 		</section>
-		<section class="bg-yellow-100 section h-dvh-nav">
-			<div class="w-3/4 bg-lemon p-4 flex flex-col">
+		<section class="bg-plain-light section h-dvh-nav">
+			<div class="w-3/4 bg-primary p-4 flex flex-col">
 				<div class="max-w-full max-h-[calc(100%-7rem)] grow-0 aspect-video relative m-auto">
 					<div class="h-dvh w-[75dvw] invisible"></div>
 
-					<div class="aspect-video bg-black h-full w-full absolute top-0 left-0">
+					<div class="aspect-video bg-plain-dark h-full w-full absolute top-0 left-0">
 						{#if _data.lineupID || $lineupForm.throwLineup}
 							<div class="w-full h-full relative">
 								<LineupShowOverlay
@@ -485,7 +485,7 @@
 					</div>
 				</div>
 
-				<div class="grow flex select-overlay-mode justify-around mt-5 relative bg-lemon">
+				<div class="grow flex select-overlay-mode justify-around mt-5 relative bg-primary">
 					<input
 						type="radio"
 						form="none"
@@ -641,10 +641,10 @@
 				</div>
 			</div>
 		</section>
-		<section class="bg-green-100 section h-dvh-nav">
-			<div class="w-3/4 bg-success p-4 flex">
+		<section class="bg-primary-light section h-dvh-nav">
+			<div class="w-3/4 bg-secondary p-4 flex">
 				<div class="bg-black h-full w-full flex">
-					<div class="bg-black h-full w-full flex m-auto" bind:this={mimimapContainer}>
+					<div class="bg-plain-dark h-full w-full flex m-auto" bind:this={mimimapContainer}>
 						{#if $lineupForm.map}
 							<Clickable
 								buttonClass="w-full h-full relative"
@@ -801,7 +801,6 @@
 						{#if $lineupMessage}
 							{$lineupMessage}
 						{/if}
-						{JSON.stringify($lineupErrors)}
 					</label>
 				</div>
 			</div>
@@ -969,11 +968,11 @@
 
 	.select-overlay-mode {
 		label {
-			@apply font-bold text-2xl my-auto block bg-white px-4 py-1 rounded-md;
+			@apply font-bold text-2xl my-auto block  bg-plain-light px-6 py-2 rounded-md active:border-black active:border-x-2 active:border-y-2;
 		}
 
 		input[type='radio']:checked + label {
-			@apply text-red-600;
+			@apply text-[#FF9B56];
 		}
 	}
 
