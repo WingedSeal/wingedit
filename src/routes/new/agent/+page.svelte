@@ -93,8 +93,8 @@
 	enctype="multipart/form-data"
 >
 	<div class="h-full flex flex-col">
-		<div class="flex flex-row gap-4 bg-blue-200 h-full">
-			<div class="flex flex-col h-full min-w-80">
+		<div class="flex flex-row gap-4 h-full justify-between">
+			<div class="flex flex-col h-full min-w-80 justify-between">
 				<div class="px-16">
 					<div class="aspect-square w-full h-full relative bg-black">
 						{@render uploadFile('agentIcon', 'Agent Icon')}
@@ -182,24 +182,20 @@
 				{@render uploadFile('agentImage', 'Agent Image')}
 			</div>
 		</div>
-		<div class="bg-red-200 mt-2 flex">
+		<div class="mt-4 flex">
 			<button type="submit" class="m-auto py-4 px-12 rounded-xl bg-green-300"> CONFIRM </button>
 		</div>
 	</div>
 	<div
-		class="grid grid-cols-2 grid-rows-subgrid ml-12 gap-12 grow overflow-y-auto mb-auto max-h-full"
+		class="grid grid-cols-2 grid-rows-subgrid ml-12 gap-12 grow overflow-y-auto mb-auto h-full"
 		style="scrollbar-gutter: stable;"
 	>
 		{#each { length: $abilityCount } as _, i}
-			<div class="bg-blue-300 p-12 flex flex-col rounded-3xl">
-				<div class="flex mb-4">
-					<div class="aspect-square relative max-h-full max-w-full w-1/3 bg-black">
-						{@render uploadAbilityFile(i, `Ability Icon ${i}`)}
-					</div>
-					<div class="flex h-full">
-						<h2 class="main-label ml-4 !my-auto">Ability ID: {i}</h2>
-					</div>
+			<div class="bg-blue-300 px-12 pt-6 pb-4 flex flex-col rounded-3xl gap-1 justify-center">
+				<div class="aspect-square mx-auto relative max-h-full max-w-full w-1/3 bg-black mb-2">
+					{@render uploadAbilityFile(i, `Ability Icon ${i}`)}
 				</div>
+				<h2 class="main-label">Ability ID: {i}</h2>
 				<label for="abilities[{i}].abilityName" class="main-label">Ability Name</label>
 				<input
 					type="text"
