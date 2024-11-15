@@ -152,29 +152,29 @@
 				<div class="grid grid-rows-2 grid-cols-3 rounded-xl overflow-clip border-2 border-black">
 					<button
 						type="button"
-						class="bg-error border-r-2 border-b-2 border-black"
+						class="bg-error border-r-2 border-b-2 border-black active:bg-[#8C1C13] transition-all duration-100 font-bold"
 						aria-label="decrease"
 						onclick={() => {
 							$abilityCount = Math.max($abilityCount - 1, 0);
 						}}
 					>
-						-
+						<i class="fa-solid fa-minus"></i>
 					</button>
-					<div class="bg-white text-center py-1 border-b-2 border-black">
+					<div class="bg-white text-center py-1 border-b-2 border-black font-bold text-xl">
 						{$abilityCount}
 					</div>
 					<button
 						type="button"
-						class="bg-success border-black border-b-2 border-l-2"
+						class="bg-success border-black border-b-2 border-l-2 font-bold active:bg-[#226F54]"
 						aria-label="increase"
 						onclick={() => {
 							$abilityCount++;
-						}}>+</button
+						}}><i class="fa-solid fa-plus"></i></button
 					>
 					<button
 						type="button"
-						class="bg-[#FF9B56] col-span-3 active:bg-[#FF7F1A]"
-						onclick={() => ($abilityCount = DEFAULT_ABILITY_COUNT)}>RESET</button
+						class="bg-[#FF9B56] col-span-3 active:bg-[#FF7F1A] font-bold text-xl"
+						onclick={() => ($abilityCount = DEFAULT_ABILITY_COUNT)}>Reset</button
 					>
 				</div>
 			</div>
@@ -185,7 +185,7 @@
 		<div class="mt-4 flex">
 			<button
 				type="submit"
-				class="m-auto py-4 px-12 rounded-xl bg-confirm font-bold hover:bg-confirm-hover text-white"
+				class="m-auto py-4 px-12 rounded-xl bg-confirm font-bold hover:bg-confirm-hover text-white text-xl"
 			>
 				CONFIRM
 			</button>
