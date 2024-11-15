@@ -790,7 +790,7 @@
 					<button
 						type="submit"
 						name="confirm"
-						class="m-auto px-16 py-6 rounded-xl bg-green-800 text-white font-bold text-4xl hover:bg-green-950"
+						class="m-auto px-16 py-6 rounded-xl bg-green-800 text-white font-bold text-4xl hover:bg-green-950 transition-all"
 						>Confirm</button
 					>
 					<label

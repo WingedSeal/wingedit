@@ -95,7 +95,7 @@
 	<div class="h-full flex flex-col">
 		<div class="flex flex-row gap-4 h-full justify-between">
 			<div class="flex flex-col h-full min-w-80 justify-between">
-				<div class="px-16">
+				<div class="pr-32">
 					<div class="aspect-square w-full h-full relative bg-black">
 						{@render uploadFile('agentIcon', 'Agent Icon')}
 					</div>
