@@ -11,7 +11,7 @@
 		validators: zodClient(schema),
 		validationMethod: 'auto',
 		dataType: 'json',
-		resetForm: false
+		taintedMessage: true
 	});
 
 	const updateFormAbilities = (_abilityCount: number) => {

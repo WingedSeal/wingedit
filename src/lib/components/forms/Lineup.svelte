@@ -49,10 +49,11 @@
 		form: lineupForm,
 		errors: lineupErrors,
 		enhance: lineupEnhance,
-		message: lineupMessage
+		message: lineupMessage,
+		tainted: lineupFormTainted
 	} = superForm(_data.lineupForm, {
 		validators: zodClient(lineupSchema),
-		taintedMessage: 'Changes you made may not be saved.',
+		taintedMessage: true,
 		scrollToError: { behavior: 'smooth', block: 'center', inline: 'nearest' }
 	});
 
@@ -944,10 +945,14 @@
 		<div class="h-full w-full flex">
 			<form action="?/deleteLineup" class="flex flex-col gap-4 m-auto" method="post" use:enhance>
 				<button
+					type="submit"
 					name="deleteLineup"
 					id="deleteLineup"
 					disabled
 					class="hover:enabled:px-24 active:enabled:px-16 transition-all disabled:bg-red-950 disabled:text-plain-dark uppercase bg-red-900 text-plain-light py-12 px-20 rounded-full font-bold text-3xl tracking-widest"
+					onclick={() => {
+						$lineupFormTainted = undefined;
+					}}
 				>
 					delete
 				</button>
