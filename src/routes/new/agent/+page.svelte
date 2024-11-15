@@ -57,7 +57,7 @@
 {#snippet uploadAbilityFile(i: number, text: string)}
 	<label
 		for="abilities[{i}].abilityIcon"
-		class="absolute top-2 left-2 main-label z-30 text-outline !text-lg">{text}</label
+		class="absolute top-2 left-2 main-label text-outline !text-lg">{text}</label
 	>
 	<input
 		type="file"
