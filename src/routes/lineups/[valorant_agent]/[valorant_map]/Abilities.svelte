@@ -11,7 +11,8 @@
 <div class="flex flex-col gap-4 max-h-full overflow-y-auto overflow-x-clip pr-10">
 	{#each abilities as ability (ability.AbilityID)}
 		<button
-			class="flex flex-row bg-purple-500 p-4 {selectedAbilityID === ability.AbilityID
+			class="flex flex-row bg-purple-500 p-4 transition-transform duration-75 {selectedAbilityID ===
+			ability.AbilityID
 				? 'translate-x-12'
 				: ''}"
 			onclick={() => {
