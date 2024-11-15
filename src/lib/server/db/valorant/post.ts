@@ -41,6 +41,13 @@ SET
 WHERE
 	ID = @ID;`
 	),
+	deleteLineup: db.prepare(
+		`
+DELETE FROM
+	"Lineups"
+WHERE
+	ID = ?;`
+	),
 	deleteMapPosition: db.prepare(
 		`
 DELETE FROM
@@ -136,6 +143,18 @@ export const editLineup = (lineup: Lineup): boolean => {
 	if (!lineup.ID) throw Error('Expected lineup with ID');
 	try {
 		statements.editLineup.run(lineup);
+		return true;
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
+		return false;
+	}
+};
+
+export const deleteLineup = (lineupID: number): boolean => {
+	try {
+		statements.deleteLineup.run(lineupID);
 		return true;
 	} catch (error) {
 		if (!(error instanceof SqliteError)) {

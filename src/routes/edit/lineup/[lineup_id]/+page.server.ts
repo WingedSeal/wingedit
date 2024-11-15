@@ -1,6 +1,7 @@
 import { IMAGES_PATH } from '$env/static/private';
 import {
 	addLineup,
+	deleteLineup,
 	editLineup,
 	getAbilities,
 	getAgents,
@@ -121,7 +122,16 @@ export const actions = {
 			return error(403, 'User id does not match lineup creator');
 		}
 
-		// TODO: DELETE
+		deleteLineup(lineupID);
+
+		fs.rm(
+			path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id),
+			{
+				recursive: true,
+				force: true
+			},
+			() => {}
+		);
 
 		throw redirect(
 			302,
