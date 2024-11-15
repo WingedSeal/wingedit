@@ -1,6 +1,7 @@
 import { IMAGES_PATH } from '$env/static/private';
 import {
 	addLineup,
+	editLineup,
 	getAbilities,
 	getAgents,
 	getGameInfo,
@@ -17,7 +18,13 @@ import { error, redirect } from '@sveltejs/kit';
 import Privilege from '$lib/privilege';
 import { mapPositionSchema } from '$lib/schema';
 import { mapPositionDeleteSchema } from '$lib/hidden-schema';
-import { lineupActions, noImageLineupSchema, type DataType } from '$lib/server/forms/lineup';
+import {
+	LINEUP_DIRECTORY,
+	lineupActions,
+	noImageLineupSchema,
+	type DataType
+} from '$lib/server/forms/lineup';
+import { FULL_HD, writeWebp, writeWebpAnimated, writeWebpNoResize } from '$lib/server/file-system';
 
 export const load: PageServerLoad = async ({ locals, url, params }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
@@ -149,6 +156,7 @@ export const actions = {
 			return fail(400, { form });
 		}
 		const lineup: Lineup = {
+			ID: lineupID,
 			AgentID: form.data.agent,
 			AbilityID: form.data.ability,
 			MapID: form.data.map,
@@ -174,7 +182,62 @@ export const actions = {
 			Description: form.data.description
 		};
 
-		// TODO: ADD
+		const success = editLineup(lineup);
+		if (!success) {
+			return message(form, 'Something went wrong while editing lineup.', { status: 400 });
+		}
+
+		await Promise.all([
+			fs.readdir(path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id), (err, files) => {
+				Promise.all(
+					files.map((fileName) => {
+						let fileNumber: number;
+						try {
+							fileNumber = parseInt(fileName.split('.')[0]);
+						} catch {
+							return;
+						}
+						if (fileNumber > form.data.extraImages.length) {
+							return fs.unlink(
+								path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, fileName),
+								() => {}
+							);
+						}
+					})
+				);
+			}),
+			writeWebp(
+				form.data.throwLineup,
+				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw-lineup.webp'),
+				FULL_HD
+			),
+			writeWebpAnimated(
+				form.data.throwGif,
+				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw.webp'),
+				FULL_HD
+			),
+			writeWebp(
+				form.data.landSpot,
+				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'land-spot.webp'),
+				FULL_HD
+			),
+			writeWebp(
+				form.data.throwSpotFirstPerson,
+				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw-spot-first-person.webp'),
+				FULL_HD
+			),
+			writeWebp(
+				form.data.throwSpotThirdPerson,
+				path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, 'throw-spot-third-person.webp'),
+				FULL_HD
+			),
+			...form.data.extraImages.map((extraImage, i) =>
+				writeWebpNoResize(
+					extraImage,
+					path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, `${i + 1}.webp`)
+				)
+			)
+		]);
 
 		throw redirect(
 			302,

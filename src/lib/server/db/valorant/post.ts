@@ -30,8 +30,16 @@ VALUES
 INSERT INTO 
 	"Lineups" (${lineupKeys.join(', ')})
 VALUES
-	(${lineupKeys.map((key) => '@' + key).join(', ')});
-`
+	(${lineupKeys.map((key) => '@' + key).join(', ')});`
+	),
+	editLineup: db.prepare(
+		`
+UPDATE
+	"Lineups"
+SET
+	${lineupKeys.map((key) => key + ' = @' + key).join(', ')}
+WHERE
+	ID = @ID;`
 	),
 	deleteMapPosition: db.prepare(
 		`
@@ -121,5 +129,18 @@ export const addLineup = (lineup: Lineup): { success: boolean; lineupID: number 
 			throw error;
 		}
 		return { success: false, lineupID: -1 };
+	}
+};
+
+export const editLineup = (lineup: Lineup): boolean => {
+	if (!lineup.ID) throw Error('Expected lineup with ID');
+	try {
+		statements.editLineup.run(lineup);
+		return true;
+	} catch (error) {
+		if (!(error instanceof SqliteError)) {
+			throw error;
+		}
+		return false;
 	}
 };
