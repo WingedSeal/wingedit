@@ -643,7 +643,7 @@
 			</div>
 		</section>
 		<section class="bg-primary-light section h-dvh-nav">
-			<div class="w-3/4 bg-secondary p-4 flex">
+			<div class="w-3/4 bg-secondary p-8 pr-0 flex">
 				<div class="bg-black h-full w-full flex">
 					<div class="bg-plain-dark h-full w-full flex m-auto" bind:this={mimimapContainer}>
 						{#if $lineupForm.map}
@@ -684,7 +684,7 @@
 						{/if}
 					</div>
 				</div>
-				<div class="grow flex flex-col select-overlay-mode justify-around ml-5">
+				<div class="grow flex flex-col select-overlay-mode justify-around mx-12">
 					<input
 						type="radio"
 						form="none"
@@ -973,7 +973,11 @@
 
 	.select-overlay-mode {
 		label {
-			@apply font-bold text-2xl my-auto block  bg-plain-light px-6 py-2 rounded-md active:border-black active:border-x-2 active:border-y-2 text-center;
+			@apply font-bold text-2xl my-auto block  bg-plain-light px-6 select-none border-x-4
+			border-black py-2 rounded-md active:border-black text-center transition-all;
+			&:active {
+				box-shadow: inset 0 0 0 1px black;
+			}
 		}
 
 		input[type='radio']:checked + label {
