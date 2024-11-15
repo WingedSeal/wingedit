@@ -57,7 +57,7 @@
 {#snippet uploadAbilityFile(i: number, text: string)}
 	<label
 		for="abilities[{i}].abilityIcon"
-		class="absolute top-2 left-2 main-label text-outline !text-lg">{text}</label
+		class="absolute top-2 left-2 main-label text-outline z-20 !text-lg">{text}</label
 	>
 	<input
 		type="file"
@@ -89,14 +89,14 @@
 <form
 	method="post"
 	use:enhance
-	class="h-dvh-nav w-dvw p-12 flex main-form"
+	class="h-dvh-nav w-dvw p-12 flex main-form bg-plain-light"
 	enctype="multipart/form-data"
 >
 	<div class="h-full flex flex-col">
-		<div class="flex flex-row gap-4 h-full justify-between">
+		<div class="flex flex-row gap-4 h-full justify-between overflow-y-auto">
 			<div class="flex flex-col h-full min-w-80 justify-between">
 				<div class="pr-32">
-					<div class="aspect-square w-full h-full relative bg-black">
+					<div class="aspect-square w-full h-full relative bg-plain-dark">
 						{@render uploadFile('agentIcon', 'Agent Icon')}
 					</div>
 				</div>
@@ -149,10 +149,10 @@
 				</label>
 
 				<h2 class="main-label">Ability Count</h2>
-				<div class="grid grid-rows-2 grid-cols-3 rounded-xl overflow-clip">
+				<div class="grid grid-rows-2 grid-cols-3 rounded-xl overflow-clip border-2 border-black">
 					<button
 						type="button"
-						class="bg-red-300"
+						class="bg-error border-r-2 border-b-2 border-black"
 						aria-label="decrease"
 						onclick={() => {
 							$abilityCount = Math.max($abilityCount - 1, 0);
@@ -160,12 +160,12 @@
 					>
 						-
 					</button>
-					<div class="bg-blue-300 text-center py-1">
+					<div class="bg-white text-center py-1 border-b-2 border-black">
 						{$abilityCount}
 					</div>
 					<button
 						type="button"
-						class="bg-green-300"
+						class="bg-success border-black border-b-2 border-l-2"
 						aria-label="increase"
 						onclick={() => {
 							$abilityCount++;
@@ -173,17 +173,22 @@
 					>
 					<button
 						type="button"
-						class="bg-purple-300 col-span-3"
+						class="bg-[#FF9B56] col-span-3 active:bg-[#FF7F1A]"
 						onclick={() => ($abilityCount = DEFAULT_ABILITY_COUNT)}>RESET</button
 					>
 				</div>
 			</div>
-			<div class="aspect-[1/2] relative max-h-full max-w-full bg-black">
+			<div class="aspect-[1/2] relative max-h-full max-w-full bg-plain-dark">
 				{@render uploadFile('agentImage', 'Agent Image')}
 			</div>
 		</div>
 		<div class="mt-4 flex">
-			<button type="submit" class="m-auto py-4 px-12 rounded-xl bg-green-300"> CONFIRM </button>
+			<button
+				type="submit"
+				class="m-auto py-4 px-12 rounded-xl bg-confirm font-bold hover:bg-confirm-hover text-white"
+			>
+				CONFIRM
+			</button>
 		</div>
 	</div>
 	<div
@@ -191,8 +196,8 @@
 		style="scrollbar-gutter: stable;"
 	>
 		{#each { length: $abilityCount } as _, i}
-			<div class="bg-blue-300 px-12 pt-6 pb-4 flex flex-col rounded-3xl gap-1 justify-center">
-				<div class="aspect-square mx-auto relative max-h-full max-w-full w-1/3 bg-black mb-2">
+			<div class="bg-primary px-12 pt-6 pb-4 flex flex-col rounded-3xl gap-1 justify-center">
+				<div class="aspect-square mx-auto relative max-h-full max-w-full w-1/3 bg-plain-dark mb-2">
 					{@render uploadAbilityFile(i, `Ability Icon ${i}`)}
 				</div>
 				<h2 class="main-label">Ability ID: {i}</h2>

@@ -8,11 +8,14 @@ const colors = {
 	'secondary-dark': '#EE7814',
 	'secondary-light': '#FFDFC2',
 	'plain-light': '#FEF9F2',
+	// 'plain-light': '#FEF9F2',
 	'plain-dark': '#1E201E',
+
 	error: '#FF6D60',
 	success: '#98D8AA',
-	confirm: '#79AC78',
-	'confirm-hover': '#618264'
+	confirm: '#155d27',
+	'confirm-hover': '#10451d'
+
 } as const;
 
 export type Color = keyof typeof colors;
