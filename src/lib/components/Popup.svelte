@@ -21,14 +21,14 @@
 
 {#if $isPopupShow}
 	<button
-		class="fixed w-screen h-screen bg-slate-950 top-0 left-0 opacity-80 z-20 appear-animation-80"
+		class="fixed w-screen h-screen bg-slate-950 top-0 left-0 opacity-80 z-[39] appear-animation-80"
 		onclick={() => {
 			$isPopupShow = false;
 		}}
 		aria-label="close popup"
 	></button>
 	<div
-		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-30 appear-animation flex flex-col"
+		class="fixed bg-slate-700 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl z-40 appear-animation flex flex-col"
 		style="width: {sizeX}vw; height: {sizeY}vh;"
 	>
 		<div class="bg-slate-800 w-full h-[7%] rounded-xl text-primary p-1 flex">

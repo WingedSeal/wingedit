@@ -11,7 +11,7 @@
 	const { user, privileges }: Props = $props();
 </script>
 
-<nav class="w-full h-nav bg-plain-dark sticky flex flex-row p-2 z-10">
+<nav class="w-full h-nav bg-plain-dark sticky flex flex-row p-2 z-30">
 	<a href="/" class="mr-4 ml-12 aspect-square rounded-lg">
 		<img src={icon} alt="wingedit icon" class="h-full aspect-square rounded-lg bg-plain-light" />
 	</a>
@@ -34,7 +34,7 @@
 	</a>
 	{#if user && user.privilege >= Privilege.Member}
 		<div class="relative dropdown h-5/6 my-auto mr-4 flex">
-			<a href="/new" class="bg-secondary relative px-4 flex rounded-xl z-10">
+			<a href="/new" class="bg-secondary relative px-4 flex rounded-xl z-30">
 				<h2 class="text-2xl text-primary-dark tracking-wide my-auto font-bold">New</h2>
 			</a>
 			<div
