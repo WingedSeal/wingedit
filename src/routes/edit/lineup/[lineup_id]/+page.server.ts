@@ -30,12 +30,8 @@ import { FULL_HD, writeWebp, writeWebpAnimated, writeWebpNoResize } from '$lib/s
 export const load: PageServerLoad = async ({ locals, url, params }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Member) throw redirect(303, '/');
-	let lineupID: number;
-	try {
-		lineupID = parseInt(params.lineup_id);
-	} catch {
-		throw error(404, `${params.lineup_id} is not a valid lineup id.`);
-	}
+	let lineupID = parseInt(params.lineup_id);
+	if (isNaN(lineupID)) throw error(404, `${params.lineup_id} is not a valid lineup id.`);
 
 	const lineup = getLineup(lineupID);
 
@@ -106,12 +102,8 @@ export const actions = {
 		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
-		let lineupID: number;
-		try {
-			lineupID = parseInt(params.lineup_id);
-		} catch {
-			throw error(400, `${params.lineup_id} is not a valid lineup id.`);
-		}
+		let lineupID = parseInt(params.lineup_id);
+		if (isNaN(lineupID)) throw error(400, `${params.lineup_id} is not a valid lineup id.`);
 
 		const lineup = getLineup(lineupID);
 
@@ -145,12 +137,9 @@ export const actions = {
 		if (locals.user.privilege < Privilege.Member) {
 			return error(403, 'Not enough privilege');
 		}
-		let lineupID: number;
-		try {
-			lineupID = parseInt(params.lineup_id);
-		} catch {
-			throw error(400, `${params.lineup_id} is not a valid lineup id.`);
-		}
+		let lineupID = parseInt(params.lineup_id);
+
+		if (isNaN(lineupID)) throw error(400, `${params.lineup_id} is not a valid lineup id.`);
 
 		const oldLineup = getLineup(lineupID);
 
@@ -202,12 +191,8 @@ export const actions = {
 				const files = fs.readdirSync(path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id));
 				await Promise.all(
 					files.map((fileName) => {
-						let fileNumber: number;
-						try {
-							fileNumber = parseInt(fileName.split('.')[0]);
-						} catch {
-							return;
-						}
+						let fileNumber = parseInt(fileName.split('.')[0]);
+						if (isNaN(fileNumber)) return;
 						if (fileNumber > form.data.extraImages.length) {
 							return fs.promises.unlink(
 								path.join(IMAGES_PATH, LINEUP_DIRECTORY, params.lineup_id, fileName)

@@ -35,12 +35,12 @@
 	);
 
 	let lineupParam: number | null = null;
-	try {
-		const _lineupParam = $page.url.searchParams.get('lineup');
-		if (_lineupParam) {
-			lineupParam = parseInt(_lineupParam);
-		}
-	} catch {}
+
+	const _lineupParam = $page.url.searchParams.get('lineup');
+	if (_lineupParam) {
+		lineupParam = parseInt(_lineupParam) || null;
+	}
+
 	let lineupIndex = $state(
 		lineupParam ? allLineupList.findIndex((lineup) => lineup.ID === lineupParam) : 0
 	);
