@@ -968,7 +968,7 @@
 
 	.select-overlay-mode {
 		label {
-			@apply font-bold text-2xl my-auto block  bg-plain-light px-6 py-2 rounded-md active:border-black active:border-x-2 active:border-y-2;
+			@apply font-bold text-2xl my-auto block  bg-plain-light px-6 py-2 rounded-md active:border-black active:border-x-2 active:border-y-2 text-center;
 		}
 
 		input[type='radio']:checked + label {
