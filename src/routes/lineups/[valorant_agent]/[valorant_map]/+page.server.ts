@@ -9,6 +9,7 @@ import { error } from '@sveltejs/kit';
 import { type Agent, type ValorantMap } from '$lib/server/db/types';
 
 export const load = ({ params }) => {
+	console.log('refresh');
 	params.valorant_agent = params.valorant_agent.toLowerCase();
 	let agent: Agent | undefined;
 	let map: ValorantMap | undefined;

@@ -234,7 +234,7 @@ export const actions = {
 				)
 			)
 		]);
-
+		console.log('finished adding');
 		throw redirect(
 			302,
 			`/lineups/${getAgents()[form.data.agent].Name.toLowerCase()}/${getMaps()[form.data.map].Name.toLowerCase()}?lineup=${params.lineup_id}`
