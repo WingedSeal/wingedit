@@ -9,7 +9,6 @@
 	const { data } = $props();
 	const { form, errors, enhance } = superForm(data.form, {
 		validators: zodClient(schema),
-		validationMethod: 'auto',
 		dataType: 'json',
 		taintedMessage: true
 	});
@@ -23,8 +22,6 @@
 	updateFormAbilities(DEFAULT_ABILITY_COUNT);
 	const abilityCount = writable(DEFAULT_ABILITY_COUNT);
 	abilityCount.subscribe(updateFormAbilities);
-
-	if (!$form.agentID) $form.agentID = data.lastAgentId + 1;
 </script>
 
 {#snippet uploadFile(_for: 'agentIcon' | 'agentImage', text: string)}

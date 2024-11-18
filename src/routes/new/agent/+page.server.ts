@@ -5,7 +5,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { Ability, Agent } from '$lib/server/db/types';
 import Privilege from '$lib/privilege';
-import { getAgentSchema } from '$lib/schema';
+import { DEFAULT_ABILITY_COUNT, getAgentSchema } from '$lib/schema';
 import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
 import sharp from 'sharp';
 import fs from 'fs';
@@ -45,10 +45,11 @@ const schema =
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);
 	if (locals.user.privilege < Privilege.Moderator) throw redirect(303, '/');
+	let form = await superValidate<Infer<typeof schema>, { newID: number }>(zod(schema));
+	form.data.agentID = getLastAgentID() + 1;
 	return {
-		form: await superValidate<Infer<typeof schema>, { newID: number }>(zod(schema)),
-		agentRoles: getAgentRoles(),
-		lastAgentId: getLastAgentID()
+		form,
+		agentRoles: getAgentRoles()
 	};
 };
 
