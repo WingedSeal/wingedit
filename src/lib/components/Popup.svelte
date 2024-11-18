@@ -14,6 +14,7 @@
 		children?: Snippet;
 	}
 	let { title, sizeX = 80, sizeY = 80, children, titleRight }: Props = $props();
+	$isPopupShow = false;
 	beforeNavigate(() => {
 		$isPopupShow = false;
 	});
