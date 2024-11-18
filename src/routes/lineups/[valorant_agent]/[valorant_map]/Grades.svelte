@@ -13,7 +13,7 @@
 	{#each grades as grade}
 		<button
 			class="flex flex-row p-4 aspect-square {!$filterdOutGradeIDs.has(grade.ID)
-				? 'bg-blue-800'
+				? 'bg-primary-dark'
 				: 'bg-blue-500'}"
 			onclick={() => {
 				if ($filterdOutGradeIDs.has(grade.ID)) {

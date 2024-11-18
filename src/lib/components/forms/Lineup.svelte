@@ -434,7 +434,7 @@
 				{@render scrollDown(2)}
 			</div>
 		</section>
-		<section class="bg-plain-light section h-dvh-nav">
+		<section class="bg-primary-light section h-dvh-nav">
 			<div class="w-3/4 bg-primary p-4 flex flex-col">
 				<div class="max-w-full max-h-[calc(100%-7rem)] grow-0 aspect-video relative m-auto">
 					<div class="h-dvh w-[75dvw] invisible"></div>
@@ -646,7 +646,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="bg-primary-light section h-dvh-nav">
+		<section class="bg-secondary-light section h-dvh-nav">
 			<div class="w-3/4 bg-secondary p-8 pr-0 flex">
 				<div class="bg-black h-full w-full flex">
 					<div class="bg-plain-dark h-full w-full flex m-auto" bind:this={mimimapContainer}>

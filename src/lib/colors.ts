@@ -6,7 +6,7 @@ const colors = {
 	secondary: '#FFD166',
 	'secondary-contrast': '#FF8925',
 	'secondary-dark': '#EE7814',
-	'secondary-light': '#FADFA1',
+	'secondary-light': '#ffeecf',
 	'plain-light': '#FEF9F2',
 	// 'plain-light': '#FEF9F2',
 	'plain-dark': '#1E201E',
