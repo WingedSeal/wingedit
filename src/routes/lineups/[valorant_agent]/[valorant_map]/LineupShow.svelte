@@ -14,7 +14,6 @@
 			const images = document.getElementsByClassName(
 				'refresh-img'
 			) as HTMLCollectionOf<HTMLImageElement>;
-			console.log([...images]);
 			[...images].forEach((img) => {
 				const currentSrc = img.src;
 				img.src = '';
