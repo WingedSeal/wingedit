@@ -98,8 +98,7 @@
 					</div>
 					<a
 						href="/account/invite"
-						class="rounded-md mt-4 mx-2 text-center bg-primary-dark text-plain-light transition-all duration-300 hover:scale-110"
-						>Invite</a
+						class="rounded-md mt-4 mx-2 text-center bg-primary-dark text-plain-light">Invite</a
 					>
 					{#if user.privilege >= Privilege.Admin}
 						<ul class="flex flex-col p-2 m-auto w-full">

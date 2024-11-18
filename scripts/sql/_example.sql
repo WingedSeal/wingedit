@@ -55,7 +55,7 @@ VALUES
         null,
         null,
         null,
-        "1"
+        '1'
     ),
     (
         2,
@@ -81,5 +81,5 @@ VALUES
         null,
         null,
         null,
-        "2"
+        '2'
     );
