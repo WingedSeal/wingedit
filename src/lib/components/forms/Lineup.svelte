@@ -239,7 +239,7 @@
 							bind:value={$lineupForm.ability}
 							aria-invalid={$lineupErrors.ability ? 'true' : undefined}
 						>
-							{#if agentAbilities}
+							{#if agentAbilities.length}
 								<option hidden selected value={0}>- Select an Ability -</option>
 								{#each agentAbilities as ability}
 									<option value={ability.AbilityID}>{ability.Name}</option>
