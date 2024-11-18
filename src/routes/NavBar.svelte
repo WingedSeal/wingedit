@@ -22,12 +22,18 @@
 	>
 		<h1 class="my-auto block tracking-[0.2em] font-bold">WingedIT</h1>
 	</a>
-	<a href="/lineups" class="bg-secondary text-primary-dark rounded-xl h-full px-20 flex mr-8">
+	<a
+		href="/lineups"
+		class="bg-gradient-to-tr from-secondary-contrast via-secondary-dark via-20% to-secondary hover:bg-gradient-to-r rounded-xl h-full px-20 flex mr-8 hover:via-80%"
+	>
 		<h2 class="my-auto text-3xl font-bold px-4 rounded-lg tracking-widest">Lineups</h2>
 	</a>
 	{#if user && user.privilege >= Privilege.Member}
 		<div class="relative dropdown h-5/6 my-auto mr-4 flex">
-			<a href="/new" class="bg-secondary relative px-4 flex rounded-xl z-30">
+			<a
+				href="/new"
+				class="bg-secondary relative px-4 flex rounded-xl z-30 transition-all duration-100 hover:bg-secondary-dark"
+			>
 				<h2 class="text-2xl text-primary-dark tracking-wide my-auto font-bold">New</h2>
 			</a>
 			<div
@@ -41,7 +47,7 @@
 				{#snippet newButton(href: string, name: string)}
 					<a
 						{href}
-						class="w-full text-center py-4 px-20 bg-primary font-bold tracking-wide text-lg text-primary-dark rounded-lg"
+						class="w-full text-center py-4 px-20 bg-primary font-bold tracking-wide text-lg text-primary-dark rounded-lg hover:bg-primary-contrast hover:text-white"
 					>
 						{name}
 					</a>

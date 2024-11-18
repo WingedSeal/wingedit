@@ -5,7 +5,7 @@ const colors = {
 	'primary-light': '#D1E9F6',
 	secondary: '#FFD166',
 	'secondary-contrast': '#FF8925',
-	'secondary-dark': '#EE7814',
+	'secondary-dark': '#FC8F54',
 	'secondary-light': '#ffeecf',
 	'plain-light': '#FEF9F2',
 	// 'plain-light': '#FEF9F2',
