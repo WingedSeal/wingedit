@@ -28,13 +28,9 @@
 	</a>
 	<a
 		href="/lineups"
-		class="bg-secondary border-plain-light text-primary-dark border-4 rounded-xl h-full px-20 flex mr-8 transition-all duration-300 hover:scale-110"
+		class="bg-secondary text-primary-dark rounded-xl h-full px-20 flex mr-8 transition-all duration-300 hover:scale-110"
 	>
-		<h2
-			class="my-auto text-3xl font-bold border-l-4 border-r-4 border-primary-dark px-4 rounded-lg tracking-widest"
-		>
-			Lineups
-		</h2>
+		<h2 class="my-auto text-3xl font-bold px-4 rounded-lg tracking-widest">Lineups</h2>
 	</a>
 	{#if user && user.privilege >= Privilege.Member}
 		<div class="relative dropdown h-5/6 my-auto mr-4 flex">

@@ -194,7 +194,7 @@
 	>
 		{#each { length: $abilityCount } as _, i}
 			<div
-				class="bg-gradient-to-tr from-primary to-secondary px-12 pt-6 pb-4 flex flex-col rounded-3xl gap-1 justify-center border-black border-l-2 border-r-2 border-t-2 border-b-2 shadow-md"
+				class="bg-gradient-to-tr from-primary-light to-secondary-light px-12 pt-6 pb-4 flex flex-col rounded-3xl gap-1 justify-center border-black border-l-2 border-r-2 border-t-2 border-b-2 shadow-md"
 			>
 				<div class="aspect-square mx-auto relative max-h-full max-w-full w-1/3 bg-plain-dark mb-2">
 					{@render uploadAbilityFile(i, `Ability Icon ${i}`)}
