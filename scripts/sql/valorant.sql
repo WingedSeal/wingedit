@@ -44,10 +44,10 @@ INSERT INTO
         "Color"
     )
 VALUES
-    (1, 'S', 'DESC-S', 'DESC-S', '#FFAA00'),
-    (2, 'A', 'DESC-A', 'DESC-A', '#AA00AA'),
-    (3, 'B', 'DESC-B', 'DESC-C', '#5555FF'),
-    (4, 'C', 'DESC-C', 'DESC-D', '#55FF55');
+    (1, 'S', 'DESC-S', 'DESC-S', '#FFD300'),
+    (2, 'A', 'DESC-A', 'DESC-A', '#FF2A22'),
+    (3, 'B', 'DESC-B', 'DESC-C', '#00CFFF'),
+    (4, 'C', 'DESC-C', 'DESC-D', '#00D300');
 
 INSERT INTO
     "ThrowTypes" ("ID", "Name", "Description")

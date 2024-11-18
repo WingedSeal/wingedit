@@ -70,7 +70,7 @@
 				<Grades grades={Object.values(data.gameInfo.grades)} bind:filterdOutGradeIDs />
 			</div>
 		</div>
-		<div class="bg-plain-light h-full p-1 relative">
+		<div class="bg-primary h-full p-1 relative">
 			<div class="absolute w-[calc(100%-0.5rem)] h-[calc(100%-0.5rem)] top-0 left-0 p-[inherit]">
 				{#each lineupList as { lineup, index }}
 					<RenderLine {lineup} grades={data.gameInfo.grades} {index} bind:lineupIndex />

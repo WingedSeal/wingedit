@@ -13,8 +13,8 @@
 	{#each sides as side (side.ID)}
 		<button
 			class="flex flex-row p-4 aspect-square {!$filterdOutSideIDs.has(side.ID)
-				? 'bg-blue-800'
-				: 'bg-blue-500'}"
+				? 'bg-secondary rounded-xl'
+				: 'bg-secondary-dark rounded-xl'}"
 			onclick={() => {
 				if ($filterdOutSideIDs.has(side.ID)) {
 					filterdOutSideIDs.update((filterdOutSideIDs) => {
@@ -29,7 +29,7 @@
 				}
 			}}
 		>
-			<span class="text-4xl font-bold self-end text-slate-100 m-auto text-center">{side.Name}</span>
+			<span class="text-4xl font-bold self-end text-plain-dark m-auto text-center">{side.Name}</span>
 		</button>
 	{/each}
 </div>

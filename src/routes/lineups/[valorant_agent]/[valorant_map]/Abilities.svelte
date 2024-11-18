@@ -11,7 +11,7 @@
 <div class="flex flex-col gap-4 max-h-full overflow-y-auto overflow-x-clip pr-10">
 	{#each abilities as ability (ability.AbilityID)}
 		<button
-			class="flex flex-row bg-gradient-to-r from-primary-contrast to-primary rounded-xl p-4 transition-transform duration-75 {selectedAbilityID ===
+			class="flex flex-row bg-gradient-to-r from-primary-contrast from-30% to-primary-light rounded-xl p-4 transition-transform duration-75 {selectedAbilityID ===
 			ability.AbilityID
 				? 'translate-x-12'
 				: ''}"
@@ -20,7 +20,7 @@
 			}}
 		>
 			<img
-				class="w-20 h-20"
+				class="w-16 h-16"
 				src="/api/image/agents/{ability.AgentID}/abilities/{ability.AbilityID}.webp"
 				alt={ability.Name}
 			/>
