@@ -2,7 +2,7 @@ import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/enco
 import { db } from './db';
 import { sha256 } from '@oslojs/crypto/sha2';
 import type { Session, UserInfo } from './db/types';
-import { addSession, deleteSession, resetSession } from './db/auth/post';
+import { addSession, deleteSession, resetSession } from './db/auth';
 import { getSession } from './db/auth/get';
 import type { Cookies } from '@sveltejs/kit';
 import { dev } from '$app/environment';

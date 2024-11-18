@@ -1,2 +1,2 @@
-export { getPrimaryKeys, getTable, getTables } from './get';
-export { executeQuery } from './post';
+export * from './get';
+export * from './post';

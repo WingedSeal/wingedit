@@ -4,7 +4,7 @@ import {
 	getGameInfo,
 	getLineups,
 	getMaps
-} from '$lib/server/db/valorant/get';
+} from '$lib/server/db/valorant';
 import { error } from '@sveltejs/kit';
 import { type Agent, type ValorantMap } from '$lib/server/db/types';
 

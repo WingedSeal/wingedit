@@ -15,8 +15,14 @@ import { mapPositionDeleteSchema } from '$lib/hidden-schema';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
 import Privilege from '$lib/privilege';
-import { getMapPosition, getMaps, isMapPositionExist, isMapPositionUsed } from '../db/valorant/get';
-import { addMapPosition, deleteMapPosition } from '../db/valorant/post';
+import {
+	getMapPosition,
+	getMaps,
+	isMapPositionExist,
+	isMapPositionUsed,
+	addMapPosition,
+	deleteMapPosition
+} from '../db/valorant';
 
 export const lineupSchema =
 	VALIDATE_IMAGE_SIZE === 'true'
