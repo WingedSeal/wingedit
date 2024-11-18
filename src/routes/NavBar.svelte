@@ -13,31 +13,21 @@
 
 <nav class="w-full h-nav bg-plain-dark sticky flex flex-row p-2 z-30">
 	<a href="/" class="mr-4 ml-12 aspect-square rounded-lg">
-		<img
-			src={icon}
-			alt="wingedit icon"
-			class="h-full aspect-square rounded-lg bg-plain-light rounded-3xl transition-all duration-300 hover:scale-110"
-		/>
+		<img src={icon} alt="wingedit icon" class="h-full aspect-square rounded-lg bg-plain-light" />
 	</a>
 	<a
 		href="/"
-		class="font-bold text-4xl text-plain-light mr-auto h-full flex border-t-1 border-b-1 rounded-md transition-all duration-300 hover:scale-110"
+		class="font-bold text-4xl text-plain-light mr-auto h-full flex border-t-2 border-b-2 rounded-md"
 		tabindex="-1"
 	>
 		<h1 class="my-auto block tracking-[0.2em] font-bold">WingedIT</h1>
 	</a>
-	<a
-		href="/lineups"
-		class="bg-secondary text-primary-dark rounded-xl h-full px-20 flex mr-8 transition-all duration-300 hover:scale-110"
-	>
+	<a href="/lineups" class="bg-secondary text-primary-dark rounded-xl h-full px-20 flex mr-8">
 		<h2 class="my-auto text-3xl font-bold px-4 rounded-lg tracking-widest">Lineups</h2>
 	</a>
 	{#if user && user.privilege >= Privilege.Member}
 		<div class="relative dropdown h-5/6 my-auto mr-4 flex">
-			<a
-				href="/new"
-				class="bg-secondary relative px-4 flex rounded-xl z-30 transition-all duration-300 hover:scale-110"
-			>
+			<a href="/new" class="bg-secondary relative px-4 flex rounded-xl z-30">
 				<h2 class="text-2xl text-primary-dark tracking-wide my-auto font-bold">New</h2>
 			</a>
 			<div
@@ -51,14 +41,12 @@
 				{#snippet newButton(href: string, name: string)}
 					<a
 						{href}
-						class="w-full text-center py-4 px-20 bg-primary font-bold tracking-wide text-lg text-primary-dark rounded-lg transition-all duration-300 hover:scale-110"
+						class="w-full text-center py-4 px-20 bg-primary font-bold tracking-wide text-lg text-primary-dark rounded-lg"
 					>
 						{name}
 					</a>
 				{/snippet}
-				<div
-					class="bg-plain-dark rounded-md flex flex-col p-6 gap-4 transition-all duration-300 hover:scale-110"
-				>
+				<div class="bg-plain-dark rounded-md flex flex-col p-6 gap-4">
 					{@render newButton('/new/lineup', 'Lineup')}
 					{#if user.privilege >= Privilege.Moderator}
 						{@render newButton('/new/agent', 'Agent')}
