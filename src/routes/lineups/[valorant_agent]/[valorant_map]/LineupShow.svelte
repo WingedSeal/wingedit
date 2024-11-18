@@ -1,12 +1,28 @@
 <script lang="ts">
 	import type { GameInfo, Lineup } from '$lib/server/db/types';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
+	import { afterNavigate, replaceState } from '$app/navigation';
 	interface Props {
 		lineup: Lineup;
 		gameInfo: GameInfo;
 	}
 
 	let { lineup, gameInfo }: Props = $props();
+
+	afterNavigate(() => {
+		if (window.location.hash === '#refresh') {
+			const images = document.getElementsByClassName(
+				'refresh-img'
+			) as HTMLCollectionOf<HTMLImageElement>;
+			console.log([...images]);
+			[...images].forEach((img) => {
+				const currentSrc = img.src;
+				img.src = '';
+				img.src = currentSrc;
+			});
+			replaceState('', '');
+		}
+	});
 </script>
 
 <div class="flex w-full h-full">
@@ -25,7 +41,7 @@
 				/>
 				<img
 					src={`/api/image/lineups/${lineup.ID}/throw-lineup.webp`}
-					class="bg-black aspect-video w-full h-full"
+					class="bg-black aspect-video w-full h-full refresh-img"
 					alt="throw-lineup.webp - How to line yourself up for the throw."
 				/>
 			</div>
@@ -39,14 +55,14 @@
 		<div>
 			<img
 				src={`/api/image/lineups/${lineup.ID}/throw.webp`}
-				class="bg-black aspect-video w-full h-full"
+				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw.webp - GIF of thowing the lineup."
 			/>
 		</div>
 		<div>
 			<img
 				src={`/api/image/lineups/${lineup.ID}/land-spot.webp`}
-				class="bg-black aspect-video w-full h-full"
+				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="land-spot.webp - Where the lineup lands."
 			/>
 		</div>
@@ -64,14 +80,14 @@
 		<div>
 			<img
 				src={`/api/image/lineups/${lineup.ID}/throw-spot-third-person.webp`}
-				class="bg-black aspect-video w-full h-full"
+				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw-spot-third-person.webp - Third person view of the throw spot of the lineup."
 			/>
 		</div>
 		<div>
 			<img
 				src={`/api/image/lineups/${lineup.ID}/throw-spot-first-person.webp`}
-				class="bg-black aspect-video w-full h-full"
+				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw-spot-first-person.webp - First person view of the throw spot of the lineup."
 			/>
 		</div>

@@ -50,11 +50,15 @@
 		errors: lineupErrors,
 		enhance: lineupEnhance,
 		message: lineupMessage,
-		tainted: lineupFormTainted
+		tainted: lineupFormTainted,
+		delayed: lineupDelayed,
+		timeout: lineupTimeout
 	} = superForm(_data.lineupForm, {
 		validators: zodClient(lineupSchema),
 		taintedMessage: true,
-		scrollToError: { behavior: 'smooth', block: 'center', inline: 'nearest' }
+		scrollToError: { behavior: 'smooth', block: 'center', inline: 'nearest' },
+		delayMs: 0,
+		timeoutMs: 5000
 	});
 
 	const {
@@ -788,12 +792,24 @@
 				{@render input('toY', 'To (Y-axis)')}
 
 				<div class="mt-auto mb-8 h-20 flex flex-col">
-					<button
-						type="submit"
-						name="confirm"
-						class="m-auto px-16 py-6 rounded-xl bg-green-800 text-white font-bold text-4xl hover:bg-green-950 transition-all"
-						>Confirm</button
-					>
+					{#if $lineupDelayed}
+						<button
+							type="submit"
+							name="confirm"
+							disabled
+							class="m-auto w-56 h-28 rounded-xl bg-green-950 text-white font-bold text-2xl"
+						>
+							Submitting... <!-- TODO: loading indicator?  -->
+						</button>
+					{:else}
+						<button
+							type="submit"
+							name="confirm"
+							class="m-auto w-56 h-28 rounded-xl bg-green-800 text-white font-bold text-4xl hover:bg-green-950 transition-all"
+						>
+							Confirm
+						</button>
+					{/if}
 					<label
 						for="confirm"
 						class:error={!isEmpty($lineupErrors)}

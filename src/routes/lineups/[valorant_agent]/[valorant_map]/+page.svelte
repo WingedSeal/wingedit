@@ -11,6 +11,7 @@
 	import Sides from './Sides.svelte';
 	import { page } from '$app/stores';
 	import Privilege from '$lib/privilege';
+	import { afterNavigate } from '$app/navigation';
 	interface Props {
 		data: PageData;
 	}
