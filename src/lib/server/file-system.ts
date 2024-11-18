@@ -6,7 +6,7 @@ export const writeWebp = async (file: File | null, fileName: string, size: [numb
 	if (file === null) return;
 	const buffer = await file.arrayBuffer();
 	sharp(buffer)
-		.resize(...size)
+		.resize(...size, { fit: 'fill' })
 		.webp({ minSize: true, effort: 6 })
 		.toFile(path.join(IMAGES_PATH, fileName));
 };
@@ -25,7 +25,7 @@ export const writeWebpAnimated = async (
 	if (file === null) return;
 	const buffer = await file.arrayBuffer();
 	sharp(buffer, { animated: true })
-		.resize(...size)
+		.resize(...size, { fit: 'fill' })
 		.webp({ minSize: true, effort: 6 })
 		.toFile(path.join(IMAGES_PATH, fileName));
 };
