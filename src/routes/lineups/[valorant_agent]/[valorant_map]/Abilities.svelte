@@ -25,7 +25,7 @@
 				alt={ability.Name}
 			/>
 
-			<span class="text-4xl ml-2 font-bold self-end text-slate-100">{ability.Name}</span>
+			<span class="text-4xl ml-2 font-bold self-end text-slate-100 text-center">{ability.Name}</span>
 		</button>
 	{/each}
 </div>
