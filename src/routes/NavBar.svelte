@@ -13,18 +13,22 @@
 
 <nav class="w-full h-nav bg-plain-dark sticky flex flex-row p-2 z-30">
 	<a href="/" class="mr-4 ml-12 aspect-square rounded-lg">
-		<img src={icon} alt="wingedit icon" class="h-full aspect-square rounded-lg bg-plain-light" />
+		<img
+			src={icon}
+			alt="wingedit icon"
+			class="h-full aspect-square rounded-lg bg-plain-light rounded-3xl transition-all duration-300 hover:scale-110"
+		/>
 	</a>
 	<a
 		href="/"
-		class="font-bold text-4xl text-plain-light mr-auto h-full flex border-t-2 border-b-2 rounded-md"
+		class="font-bold text-4xl text-plain-light mr-auto h-full flex border-t-1 border-b-1 rounded-md transition-all duration-300 hover:scale-110"
 		tabindex="-1"
 	>
-		<h1 class="my-auto block tracking-[0.2em]">WingedIT</h1>
+		<h1 class="my-auto block tracking-[0.2em] font-bold">WingedIT</h1>
 	</a>
 	<a
 		href="/lineups"
-		class="bg-secondary border-plain-light text-primary-dark border-4 rounded-xl h-full px-20 flex mr-8"
+		class="bg-secondary border-plain-light text-primary-dark border-4 rounded-xl h-full px-20 flex mr-8 transition-all duration-300 hover:scale-110"
 	>
 		<h2
 			class="my-auto text-3xl font-bold border-l-4 border-r-4 border-primary-dark px-4 rounded-lg tracking-widest"
@@ -34,7 +38,10 @@
 	</a>
 	{#if user && user.privilege >= Privilege.Member}
 		<div class="relative dropdown h-5/6 my-auto mr-4 flex">
-			<a href="/new" class="bg-secondary relative px-4 flex rounded-xl z-30">
+			<a
+				href="/new"
+				class="bg-secondary relative px-4 flex rounded-xl z-30 transition-all duration-300 hover:scale-110"
+			>
 				<h2 class="text-2xl text-primary-dark tracking-wide my-auto font-bold">New</h2>
 			</a>
 			<div
