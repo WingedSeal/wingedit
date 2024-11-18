@@ -4,8 +4,8 @@
 
 <script lang="ts">
 	import { writable } from 'svelte/store';
-	import { type Snippet } from 'svelte';
-	import { beforeNavigate } from '$app/navigation';
+	import { onMount, type Snippet } from 'svelte';
+	import { browser } from '$app/environment';
 	interface Props {
 		title: string;
 		sizeX?: number;
@@ -14,13 +14,9 @@
 		children?: Snippet;
 	}
 	let { title, sizeX = 80, sizeY = 80, children, titleRight }: Props = $props();
-	$isPopupShow = false;
-	beforeNavigate(() => {
-		$isPopupShow = false;
-	});
 </script>
 
-{#if $isPopupShow}
+{#if $isPopupShow && browser}
 	<button
 		class="fixed w-screen h-screen bg-slate-950 top-0 left-0 opacity-80 z-[39] appear-animation-80"
 		onclick={() => {
