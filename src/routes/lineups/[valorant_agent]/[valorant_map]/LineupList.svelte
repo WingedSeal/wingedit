@@ -92,8 +92,8 @@
 	</th>
 {/snippet}
 
-<table>
-	<thead>
+<table class="min-w-full divide-y divide-primary-dark bg-primary-light">
+	<thead class="bg-primary">
 		<tr>
 			{@render tableHead('ID')}
 			{@render tableHead('Ability')}
@@ -106,13 +106,13 @@
 			<th></th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody class="bg-white font-semibold">
 		{#each sortedDetails as detail (detail.lineup.ID)}
-			<tr>
-				<td>
+			<tr class="hover:bg-primary-light duration-300">
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					{detail.lineup.ID}
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					<img
 						class="inline h-4 -translate-y-1 bg-slate-800 rounded-md"
 						src="/api/image/agents/{lineups[detail.index].AgentID}/abilities/{lineups[detail.index]
@@ -121,33 +121,34 @@
 					/>
 					{detail.ability}
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					{detail.grade}
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					{detail.side}
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					{detail.from}
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					{detail.to}
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					{detail.lineup.TimeToLand}s
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-sm text-plain-dark">
 					{detail.difficulty}
 				</td>
-				<td>
+				<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 					<button
-						class="w-6 h-6 rounded-md bg-purple-300"
+						class="w-14 h-8 rounded-md bg-primary text-black font-bold hover:bg-primary-contrast transition-transform transform hover:scale-105 hover:text-white min-w-full"
 						aria-label="open lineup"
 						onclick={() => {
 							lineupIndex = detail.index;
 							$isPopupShow = true;
 						}}
 					>
+						USE
 					</button>
 				</td>
 			</tr>
