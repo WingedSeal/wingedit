@@ -7,7 +7,9 @@
 </script>
 
 <div class="flex h-dvh-nav">
-	<div class="w-[30%] min-w-[22%] bg-primary p-8 flex flex-col">
+	<div
+		class="w-[30%] min-w-[22%] bg-gradient-to-tr from-primary to-primary-light p-8 flex flex-col"
+	>
 		<SelectAgent agents={data.agents} />
 	</div>
 	<div class="flex-grow flex flex-col relative">
