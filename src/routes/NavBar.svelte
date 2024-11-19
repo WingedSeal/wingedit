@@ -110,20 +110,16 @@
 					{/if}
 				{:else}
 				<div class="p-4 flex flex-col items-center bg-plain-dark shadow-md gap-3">
-					<div
-						class="bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
-					>
-						<a href="/account/signin" class="inline-block text-nowrap text-center w-full">
+					
+						<a href="/account/signin" class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold">
 							SIGN IN
 						</a>
-					</div>
-					<div
-						class="bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
-					>
-						<a href="/account/register" class="inline-block text-nowrap text-center w-full">
+					
+					
+						<a href="/account/register" class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold">
 							REGISTER
 						</a>
-					</div>
+					
 				</div>
 				{/if}
 			</div>
