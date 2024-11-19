@@ -24,7 +24,7 @@
 	</a>
 	<a
 		href="/lineups"
-		class="bg-gradient-to-tr from-secondary-contrast via-secondary-dark via-20% to-secondary hover:bg-gradient-to-r rounded-xl h-full px-20 flex mr-8 hover:via-80%"
+		class="bg-gradient-to-t from-secondary-contrast via-secondary-dark via-20% to-secondary hover:bg-gradient-to-r rounded-xl h-full px-20 flex mr-8 hover:bg-gradient-to-b"
 	>
 		<h2 class="my-auto text-3xl font-bold px-4 rounded-lg tracking-widest">Lineups</h2>
 	</a>
