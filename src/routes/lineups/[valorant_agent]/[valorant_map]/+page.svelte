@@ -35,18 +35,15 @@
 			)
 	);
 
-	let lineupParam: number | null = null;
-
-	const _lineupParam = $page.url.searchParams.get('lineup');
-	if (_lineupParam) {
-		lineupParam = parseInt(_lineupParam) || null;
-	}
+	let lineupParam = parseInt($page.url.searchParams.get('lineup') || '') || null;
 
 	let lineupIndex = $state(
 		lineupParam ? allLineupList.findIndex((lineup) => lineup.ID === lineupParam) : 0
 	);
 	if (lineupParam) {
 		$isPopupShow = true;
+		// svelte-ignore state_referenced_locally
+		selectedAbilityID = allLineupList[lineupIndex].AbilityID;
 	}
 	let selectedLineup = $derived(allLineupList[lineupIndex]);
 	$isLoaded = false;
@@ -60,7 +57,9 @@
 				class="absolute right-0 bottom-0 h-full bg-plain-light aspect-[2/3] bg-no-repeat bg-cover bg-center"
 				style="background-image: url('/api/image/agents/{data.valorant.agent.ID}/full.webp');"
 			></div>
-			<div class="bg-plain-light min-w-[15%] max-w-full max-h-[80%] mr-auto mb-auto mt-12 ml-12 z-10">
+			<div
+				class="bg-plain-light min-w-[15%] max-w-full max-h-[80%] mr-auto mb-auto mt-12 ml-12 z-10"
+			>
 				<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
 			</div>
 			<div class="bg-plain-light max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10">
