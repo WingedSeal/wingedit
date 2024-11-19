@@ -52,9 +52,11 @@
 	onMount(() => {
 		const unsubscribe = isPopupShow.subscribe((isShow) => {
 			if (isShow) {
-				replaceState(`${$page.url.pathname}?lineup=${lineupIndex}`, {});
+				history.replaceState({}, '', `${$page.url.pathname}?lineup=${selectedLineup.ID}`);
+				// replaceState(`${$page.url.pathname}?lineup=${lineupIndex}`, {});
 			} else {
-				replaceState($page.url.pathname, {});
+				history.replaceState({}, '', $page.url.pathname);
+				// replaceState($page.url.pathname, {});
 			}
 		});
 		return unsubscribe;
