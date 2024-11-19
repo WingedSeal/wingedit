@@ -12,7 +12,9 @@
 <div class="flex flex-row gap-4 max-h-full">
 	{#each grades as grade}
 		<button
-			class="flex flex-row p-4 aspect-square {!$filterdOutGradeIDs.has(grade.ID)
+			class="flex flex-row p-4 aspect-square transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-150 {!$filterdOutGradeIDs.has(
+				grade.ID
+			)
 				? 'bg-primary-dark rounded-lg'
 				: 'bg-primary-contrast rounded-lg'}"
 			onclick={() => {

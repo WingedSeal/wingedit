@@ -12,7 +12,9 @@
 <div class="flex flex-row gap-4 max-h-full">
 	{#each sides as side (side.ID)}
 		<button
-			class="flex flex-row p-4 aspect-square {!$filterdOutSideIDs.has(side.ID)
+			class="flex flex-row p-4 aspect-square transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-150 {!$filterdOutSideIDs.has(
+				side.ID
+			)
 				? 'bg-secondary rounded-xl'
 				: 'bg-secondary-dark rounded-xl'}"
 			onclick={() => {
@@ -29,7 +31,8 @@
 				}
 			}}
 		>
-			<span class="text-4xl font-bold self-end text-plain-dark m-auto text-center">{side.Name}</span>
+			<span class="text-4xl font-bold self-end text-plain-dark m-auto text-center">{side.Name}</span
+			>
 		</button>
 	{/each}
 </div>
