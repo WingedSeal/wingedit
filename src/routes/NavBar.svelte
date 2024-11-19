@@ -102,14 +102,28 @@
 					>
 					{#if user.privilege >= Privilege.Admin}
 						<ul class="flex flex-col p-2 m-auto w-full">
-							<li class="text-primary-dark"><a href="/admin/database">{'> '}Database</a></li>
+							<li class="text-primary-dark">
+								<a href="/admin/database">{'> '}Database</a>
+							</li>
 							<li class="text-primary-dark"><a href="/admin/images">{'> '}Images</a></li>
 						</ul>
 					{/if}
 				{:else}
-					<div class="p-4">
-						<a href="/account/signin" class="inline-block text-nowrap">SIGN IN</a>
-						<a href="/account/register" class="inline-block text-nowrap">Register</a>
+					<div class="p-4 flex flex-col items-center bg-plain-dark shadow-md gap-3">
+						<button
+							class="bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
+						>
+							<a href="/account/signin" class="inline-block text-nowrap text-center w-full"
+								>SIGN IN</a
+							>
+						</button>
+						<button
+							class="bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
+						>
+							<a href="/account/register" class="inline-block text-nowrap text-center w-full"
+								>REGISTER</a
+							>
+						</button>
 					</div>
 				{/if}
 			</div>
