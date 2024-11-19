@@ -11,7 +11,8 @@
 	import Sides from './Sides.svelte';
 	import { page } from '$app/stores';
 	import Privilege from '$lib/privilege';
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, replaceState } from '$app/navigation';
+	import { onMount } from 'svelte';
 	interface Props {
 		data: PageData;
 	}
@@ -47,6 +48,17 @@
 	}
 	let selectedLineup = $derived(allLineupList[lineupIndex]);
 	$isLoaded = false;
+
+	onMount(() => {
+		const unsubscribe = isPopupShow.subscribe((isShow) => {
+			if (isShow) {
+				replaceState(`${$page.url.pathname}?lineup=${lineupIndex}`, {});
+			} else {
+				replaceState($page.url.pathname, {});
+			}
+		});
+		return unsubscribe;
+	});
 </script>
 
 <LoadingScreen />
