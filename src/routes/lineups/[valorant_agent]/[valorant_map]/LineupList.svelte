@@ -148,7 +148,6 @@
 							$isPopupShow = true;
 						}}
 					>
-						USE
 					</button>
 				</td>
 			</tr>
