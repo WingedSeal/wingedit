@@ -8,7 +8,7 @@
 
 <div class="flex h-dvh-nav">
 	<div
-		class="w-[30%] min-w-[22%] bg-gradient-to-tr from-primary to-primary-light p-8 flex flex-col"
+		class="w-[30%] min-w-[22%] bg-gradient-to-tr from-primary-light to-primary p-8 flex flex-col"
 	>
 		<SelectAgent agents={data.agents} />
 	</div>
@@ -45,7 +45,9 @@
 		</button>
 	</div>
 
-	<div class="max-w-[20%] w-80 h-full bg-secondary p-8 flex flex-col">
+	<div
+		class="max-w-[20%] w-80 h-full bg-gradient-to-tr from-secondary to-secondary-light p-8 flex flex-col"
+	>
 		<SelectMap maps={data.maps} />
 	</div>
 </div>
