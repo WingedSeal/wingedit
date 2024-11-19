@@ -21,6 +21,7 @@
 			<input
 				name="username"
 				id="username"
+				placeholder="Username"
 				bind:value={$form.username}
 				class="border border-gray-300 rounded-md px-4 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 			/>
@@ -33,6 +34,7 @@
 				type="password"
 				name="password"
 				id="password"
+				placeholder="Password"
 				bind:value={$form.password}
 				class="border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
 			/>
