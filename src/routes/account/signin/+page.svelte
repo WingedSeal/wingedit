@@ -11,9 +11,9 @@
 </script>
 
 <!-- all container to make it be at the center-->
-<div class="flex items-center justify-center min-h-dvh-nav bg-slate-600">
+<div class="flex items-center justify-center min-h-dvh-nav bg-primary-light">
 	<!-- smaller container-->
-	<div class="bg-white p-8 rounded-lg max-w-md w-full text-center">
+	<div class="bg-white p-8 rounded-lg max-w-md w-full text-center shadow-lg">
 		<h1 class="text-2xl font-semibold mb-6">Sign in</h1>
 
 		<form method="post" class="flex flex-col" use:enhance>

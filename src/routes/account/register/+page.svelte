@@ -11,8 +11,8 @@
 	$form.referralCode = $page.url.searchParams.get('code') || '';
 </script>
 
-<div class="flex items-center justify-center min-h-dvh-nav bg-slate-600">
-	<div class="bg-white p-8 rounded-lg max-w-md w-full text-left">
+<div class="flex items-center justify-center min-h-dvh-nav bg-primary-light">
+	<div class="bg-white p-8 rounded-lg max-w-md w-full text-left shadow-lg">
 		<h1 class="text-2xl font-semibold text-center">Register</h1>
 		<form method="post" class="flex flex-col m-3 space-y-3" use:enhance>
 			<label class="text-left font-medium mb-1" for="username">Username</label>
