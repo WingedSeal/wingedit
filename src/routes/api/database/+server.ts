@@ -1,7 +1,7 @@
+import Privilege from '$lib/privilege';
+import { executeQuery, getTable } from '$lib/server/db/admin';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { executeQuery, getTable } from '$lib/server/db/admin';
-import Privilege from '$lib/privilege';
 
 const intoStringLiteral = (value: unknown) => {
 	if (typeof value !== 'string') {

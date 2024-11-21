@@ -1,5 +1,5 @@
-import { db } from '..';
 import { SqliteError } from 'better-sqlite3';
+import { db } from '..';
 
 const statements = {
 	getTables: db.prepare("SELECT name FROM sqlite_master WHERE type='table';")

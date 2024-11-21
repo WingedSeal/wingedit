@@ -1,5 +1,5 @@
 import { db } from '..';
-import type { ReferralCode, User, Session } from '../types';
+import type { ReferralCode, Session, User } from '../types';
 
 const statements = {
 	addReferralCode: db.prepare(

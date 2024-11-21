@@ -1,5 +1,5 @@
-import { getAgents, getMaps } from '$lib/server/db/valorant';
 import type { Agent, ValorantMap } from '$lib/server/db/types';
+import { getAgents, getMaps } from '$lib/server/db/valorant';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {

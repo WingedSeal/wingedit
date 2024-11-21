@@ -1,19 +1,18 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import LoadingScreen, { isLoaded } from '$lib/components/LoadingScreen.svelte';
 	import Popup, { isPopupShow } from '$lib/components/Popup.svelte';
+	import Privilege from '$lib/privilege';
+	import { timeAgoString } from '$lib/utils';
+	import { onMount } from 'svelte';
+	import { writable, type Writable } from 'svelte/store';
 	import type { PageData } from './$types';
 	import Abilities from './Abilities.svelte';
+	import Grades from './Grades.svelte';
+	import RenderLine from './LineupLineOverlay.svelte';
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
-	import LoadingScreen, { isLoaded } from '$lib/components/LoadingScreen.svelte';
-	import RenderLine from './LineupLineOverlay.svelte';
-	import Grades from './Grades.svelte';
-	import { writable, type Writable } from 'svelte/store';
 	import Sides from './Sides.svelte';
-	import { page } from '$app/stores';
-	import Privilege from '$lib/privilege';
-	import { afterNavigate, replaceState } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { timeAgoString } from '$lib/utils';
 	interface Props {
 		data: PageData;
 	}

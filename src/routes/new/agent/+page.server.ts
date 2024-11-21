@@ -1,21 +1,21 @@
-import { addAgentAndAbilities, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
-import type { PageServerLoad } from './$types';
-import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { error, redirect, type Actions } from '@sveltejs/kit';
-import type { Ability, Agent } from '$lib/server/db/types';
-import Privilege from '$lib/privilege';
-import { DEFAULT_ABILITY_COUNT, getAgentSchema } from '$lib/schema';
 import { IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
-import sharp from 'sharp';
-import fs from 'fs';
-import path from 'path';
+import Privilege from '$lib/privilege';
+import { getAgentSchema } from '$lib/schema';
+import type { Ability, Agent } from '$lib/server/db/types';
+import { addAgentAndAbilities, getAgentRoles, getLastAgentID } from '$lib/server/db/valorant';
 import {
 	ABILITY_ICON_SIZE,
 	AGENT_ICON_SIZE,
 	writeWebp,
 	writeWebpNoResize
 } from '$lib/server/file-system';
+import { error, redirect, type Actions } from '@sveltejs/kit';
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
+import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import type { PageServerLoad } from './$types';
 
 const AGENT_DIRECTORY = 'agents';
 const ABILITY_DIRECTORY = 'abilities';

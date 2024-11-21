@@ -1,11 +1,5 @@
 import { hash } from 'argon2';
 
-import { addUser, deleteReferralCode, getReferralCode, isUsernameExist } from '$lib/server/db/auth';
-import type { Actions, PageServerLoad } from './$types';
-import type { User } from '$lib/server/db/types';
-import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { redirect } from '@sveltejs/kit';
 import { registerSchema as schema } from '$lib/schema';
 import {
 	createSession,
@@ -13,6 +7,12 @@ import {
 	generateSessionToken,
 	setSessionTokenCookie
 } from '$lib/server/auth';
+import { addUser, deleteReferralCode, getReferralCode, isUsernameExist } from '$lib/server/db/auth';
+import type { User } from '$lib/server/db/types';
+import { redirect } from '@sveltejs/kit';
+import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {

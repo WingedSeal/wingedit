@@ -1,5 +1,5 @@
-import { db } from '..';
 import { SqliteError } from 'better-sqlite3';
+import { db } from '..';
 
 type ColumnName = string;
 type RowValue = string[];

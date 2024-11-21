@@ -1,5 +1,8 @@
 import { VALIDATE_IMAGE_SIZE } from '$env/static/private';
+import { mapPositionDeleteSchema } from '$lib/hidden-schema';
+import Privilege from '$lib/privilege';
 import { getLineupSchema, mapPositionSchema } from '$lib/schema';
+import { error, type RequestEvent } from '@sveltejs/kit';
 import sharp from 'sharp';
 import {
 	fail,
@@ -9,19 +12,16 @@ import {
 	type Infer,
 	type SuperValidated
 } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import type { GameInfo, MapPosition } from '../db/types';
 import type { getAbilities } from '../db/valorant';
-import { mapPositionDeleteSchema } from '$lib/hidden-schema';
-import { error, type RequestEvent } from '@sveltejs/kit';
-import { zod } from 'sveltekit-superforms/adapters';
-import Privilege from '$lib/privilege';
 import {
+	addMapPosition,
+	deleteMapPosition,
 	getMapPosition,
 	getMaps,
 	isMapPositionExist,
-	isMapPositionUsed,
-	addMapPosition,
-	deleteMapPosition
+	isMapPositionUsed
 } from '../db/valorant';
 
 export const lineupSchema =

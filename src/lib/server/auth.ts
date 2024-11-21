@@ -1,11 +1,10 @@
-import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
-import { db } from './db';
+import { dev } from '$app/environment';
 import { sha256 } from '@oslojs/crypto/sha2';
-import type { Session, UserInfo } from './db/types';
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
+import type { Cookies } from '@sveltejs/kit';
 import { addSession, deleteSession, resetSession } from './db/auth';
 import { getSession } from './db/auth/get';
-import type { Cookies } from '@sveltejs/kit';
-import { dev } from '$app/environment';
+import type { Session, UserInfo } from './db/types';
 
 export const generateSessionToken = (): string => {
 	const bytes = new Uint8Array(20);

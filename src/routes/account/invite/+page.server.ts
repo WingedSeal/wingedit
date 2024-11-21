@@ -1,5 +1,6 @@
-import { error, redirect, type Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import Privilege from '$lib/privilege';
+import { inviteSchema as schema } from '$lib/schema';
+import { generateIdFromEntropySize } from '$lib/server/auth';
 import {
 	addReferralCode,
 	deleteReferralCode,
@@ -8,11 +9,10 @@ import {
 	getReferralCodes
 } from '$lib/server/db/auth';
 import type { ReferralCode } from '$lib/server/db/types';
+import { error, redirect, type Actions } from '@sveltejs/kit';
 import { fail, message, superValidate, type Infer } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import Privilege from '$lib/privilege';
-import { inviteSchema as schema } from '$lib/schema';
-import { generateIdFromEntropySize } from '$lib/server/auth';
+import type { PageServerLoad } from './$types';
 
 const MAX_CODE_COUNT = 4;
 

@@ -1,5 +1,5 @@
-import { redirect } from '@sveltejs/kit';
 import Privilege from '$lib/privilege';
+import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {

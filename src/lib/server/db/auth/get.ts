@@ -1,5 +1,5 @@
 import { db } from '..';
-import type { User, ReferralCode, PrivilegeRole, Session } from '../types';
+import type { PrivilegeRole, ReferralCode, Session, User } from '../types';
 
 const statements = {
 	isUsernameExist: db.prepare(

@@ -1,22 +1,22 @@
 import { IMAGES_PATH } from '$env/static/private';
-import { addLineup, getAbilities, getGameInfo } from '$lib/server/db/valorant';
-import fs from 'fs';
-import path from 'path';
-import type { PageServerLoad } from './$types';
-import { superValidate, fail, message, type Infer } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import type { Lineup, MapPosition } from '$lib/server/db/types';
-import { error, redirect } from '@sveltejs/kit';
+import { mapPositionDeleteSchema } from '$lib/hidden-schema';
 import Privilege from '$lib/privilege';
 import { mapPositionSchema } from '$lib/schema';
-import { mapPositionDeleteSchema } from '$lib/hidden-schema';
-import { FULL_HD, writeWebpNoResize, writeWebp, writeWebpAnimated } from '$lib/server/file-system';
+import type { Lineup, MapPosition } from '$lib/server/db/types';
+import { addLineup, getAbilities, getGameInfo } from '$lib/server/db/valorant';
+import { FULL_HD, writeWebp, writeWebpAnimated, writeWebpNoResize } from '$lib/server/file-system';
 import {
 	LINEUP_DIRECTORY,
 	lineupActions,
 	lineupSchema,
 	type DataType
 } from '$lib/server/forms/lineup';
+import { error, redirect } from '@sveltejs/kit';
+import fs from 'fs';
+import path from 'path';
+import { fail, message, superValidate, type Infer } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.user) throw redirect(303, `/account/signin?redirect=${url.pathname.slice(1)}`);

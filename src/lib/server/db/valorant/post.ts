@@ -1,5 +1,5 @@
-import { db } from '..';
 import { SqliteError } from 'better-sqlite3';
+import { db } from '..';
 import { lineupKeys, type Ability, type Agent, type Lineup } from '../types';
 
 const statements = {

@@ -1,5 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
-import { IMAGES_PATH, DB_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
+import { DB_PATH, IMAGES_PATH, VALIDATE_IMAGE_SIZE } from '$env/static/private';
 import { PUBLIC_REQUIRE_ALL_IMAGES } from '$env/static/public';
 import {
 	deleteSessionTokenCookie,
@@ -7,6 +6,7 @@ import {
 	setSessionTokenCookie,
 	validateSessionToken
 } from '$lib/server/auth';
+import type { Handle } from '@sveltejs/kit';
 
 if (!IMAGES_PATH || !DB_PATH || !PUBLIC_REQUIRE_ALL_IMAGES || !VALIDATE_IMAGE_SIZE) {
 	throw Error('Missing .env');

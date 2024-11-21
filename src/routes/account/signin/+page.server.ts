@@ -1,11 +1,11 @@
-import { verify } from 'argon2';
-import type { Actions, PageServerLoad } from './$types';
-import { getUser } from '$lib/server/db/auth';
-import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { redirect } from '@sveltejs/kit';
 import { signinSchema as schema } from '$lib/schema';
 import { createSession, generateSessionToken, setSessionTokenCookie } from '$lib/server/auth';
+import { getUser } from '$lib/server/db/auth';
+import { redirect } from '@sveltejs/kit';
+import { verify } from 'argon2';
+import { fail, setError, superValidate, type Infer } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	if (event.locals.user) {

@@ -1,3 +1,4 @@
+import { type Agent, type ValorantMap } from '$lib/server/db/types';
 import {
 	getAgentAbilities,
 	getAgents,
@@ -6,7 +7,6 @@ import {
 	getMaps
 } from '$lib/server/db/valorant';
 import { error } from '@sveltejs/kit';
-import { type Agent, type ValorantMap } from '$lib/server/db/types';
 
 export const load = ({ params }) => {
 	params.valorant_agent = params.valorant_agent.toLowerCase();

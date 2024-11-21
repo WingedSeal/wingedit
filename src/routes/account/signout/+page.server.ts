@@ -1,6 +1,6 @@
+import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth';
 import { fail, redirect, type Cookies } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth';
 
 const signOut = async (locals: App.Locals, cookies: Cookies) => {
 	if (!locals.session) {
