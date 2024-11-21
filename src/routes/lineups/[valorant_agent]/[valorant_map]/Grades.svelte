@@ -9,14 +9,15 @@
 	let { grades, filterdOutGradeIDs = $bindable() }: Props = $props();
 </script>
 
-<div class="flex flex-row gap-4 max-h-full">
+<div class="flex flex-row gap-4 max-h-full w-full">
 	{#each grades as grade}
 		<button
-			class="flex flex-row p-4 aspect-square transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-150 {!$filterdOutGradeIDs.has(
+			class="flex flex-row w-20 h-20 relative border-4 border-transparent rounded-xl transition ease-in-out hover:-translate-y-1 active:translate-y-1 duration-150 {$filterdOutGradeIDs.has(
 				grade.ID
 			)
-				? 'bg-primary-dark rounded-lg'
-				: 'bg-primary-contrast rounded-lg'}"
+				? 'bg-primary-contrast'
+				: 'bg-primary-dark border-corner'}"
+			style="--c: {grade.Color}"
 			onclick={() => {
 				if ($filterdOutGradeIDs.has(grade.ID)) {
 					filterdOutGradeIDs.update((filterdOutGradeIDs) => {

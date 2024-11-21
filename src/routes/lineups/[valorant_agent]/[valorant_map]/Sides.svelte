@@ -1,4 +1,5 @@
 <script lang="ts">
+	import colors from '$lib/colors';
 	import type { Side } from '$lib/server/db/types';
 	import type { Writable } from 'svelte/store';
 
@@ -12,11 +13,11 @@
 <div class="flex flex-row gap-4 max-h-full">
 	{#each sides as side (side.ID)}
 		<button
-			class="flex flex-row p-4 aspect-square transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-150 {!$filterdOutSideIDs.has(
-				side.ID
-			)
-				? 'bg-secondary rounded-xl'
-				: 'bg-secondary-dark rounded-xl'}"
+			class="flex flex-row p-4 transition border-transparent border-4 ease-in-out hover:-translate-y-1
+				active:translate-y-1 duration-150 rounded-xl {$filterdOutSideIDs.has(side.ID)
+				? 'bg-secondary'
+				: 'bg-secondary-dark border-corner'}"
+			style="--c: {colors['plain-dark']};"
 			onclick={() => {
 				if ($filterdOutSideIDs.has(side.ID)) {
 					filterdOutSideIDs.update((filterdOutSideIDs) => {

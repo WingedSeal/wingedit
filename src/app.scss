@@ -46,6 +46,31 @@
 	overflow: hidden;
 }
 
+.border-corner {
+	--b: 4px; /* thickness of the border */
+	--c: red; /* color of the border */
+	--w: 20px; /* width of border */
+	position: relative;
+
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: var(--c, red);
+		padding: var(--b);
+		border-radius: inherit;
+		-webkit-mask:
+			linear-gradient(0deg, #000 calc(2 * var(--b)), #0000 0) 50% var(--b) /
+				calc(100% - 2 * var(--w)) 100% repeat-y,
+			linear-gradient(-90deg, #000 calc(2 * var(--b)), #0000 0) var(--b) 50%/100%
+				calc(100% - 2 * var(--w)) repeat-x,
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		-webkit-mask-composite: destination-out;
+		mask-composite: exclude;
+	}
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

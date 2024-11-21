@@ -66,20 +66,18 @@
 <LoadingScreen />
 <main class="snap-mandatory snap-y h-dvh-nav overflow-y-auto">
 	<section class="h-full bg-plain-light flex snap-center">
-		<div class="bg-plain-light flex-grow flex flex-col relative h-full">
+		<div class=" flex-grow flex flex-col relative h-full">
 			<div
-				class="absolute right-0 bottom-0 h-full bg-plain-light aspect-[2/3] bg-no-repeat bg-cover bg-center"
+				class="absolute right-0 bottom-0 h-full aspect-[2/3] bg-no-repeat bg-cover bg-center"
 				style="background-image: url('/api/image/agents/{data.valorant.agent.ID}/full.webp');"
 			></div>
-			<div
-				class="bg-plain-light min-w-[15%] max-w-full max-h-[80%] mr-auto mb-auto mt-12 ml-12 z-10"
-			>
+			<div class="w-full max-h-[60%] mr-auto mb-auto mt-12 ml-12 z-10">
 				<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
 			</div>
-			<div class="bg-plain-light max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10">
+			<div class=" max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10">
 				<Sides sides={Object.values(data.gameInfo.sides)} bind:filterdOutSideIDs />
 			</div>
-			<div class="bg-plain-light max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10 mb-6">
+			<div class="w-full ml-12 mt-4 mr-auto z-10 mb-6">
 				<Grades grades={Object.values(data.gameInfo.grades)} bind:filterdOutGradeIDs />
 			</div>
 		</div>

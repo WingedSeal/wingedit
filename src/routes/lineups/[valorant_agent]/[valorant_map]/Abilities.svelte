@@ -8,10 +8,10 @@
 	let { abilities, selectedAbilityID = $bindable() }: Props = $props();
 </script>
 
-<div class="flex flex-col gap-4 max-h-full overflow-y-auto overflow-x-clip pr-10">
+<div class="flex flex-col gap-4 max-h-full overflow-y-auto overflow-x-clip pr-10 w-max">
 	{#each abilities as ability (ability.AbilityID)}
 		<button
-			class="flex flex-row bg-gradient-to-r from-primary-contrast from-30% to-primary-light rounded-xl p-4 transition-transform duration-75 {selectedAbilityID ===
+			class="mr-4 flex flex-row bg-gradient-to-r from-primary-contrast from-30% to-primary rounded-xl p-4 pr-10 transition-transform duration-75 {selectedAbilityID ===
 			ability.AbilityID
 				? 'translate-x-12'
 				: ''}"
@@ -25,7 +25,8 @@
 				alt={ability.Name}
 			/>
 
-			<span class="text-4xl ml-2 font-bold self-end text-slate-100 text-center">{ability.Name}</span>
+			<span class="text-4xl ml-2 font-bold self-end text-slate-100 text-center">{ability.Name}</span
+			>
 		</button>
 	{/each}
 </div>
