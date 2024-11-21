@@ -69,6 +69,7 @@ export type Lineup = {
 	DrawOverSub2X: number | null;
 	DrawOverSub2Y: number | null;
 	Description: string;
+	CreationTimestamp: number;
 };
 
 export const lineupKeys: (keyof Lineup)[] = [
@@ -94,7 +95,8 @@ export const lineupKeys: (keyof Lineup)[] = [
 	'DrawOverSub1Y',
 	'DrawOverSub2X',
 	'DrawOverSub2Y',
-	'Description'
+	'Description',
+	'CreationTimestamp'
 ] as const;
 
 export type ThrowType = {

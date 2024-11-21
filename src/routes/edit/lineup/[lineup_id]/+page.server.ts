@@ -178,7 +178,8 @@ export const actions = {
 			DrawOverSub1Y: form.data.sub1Y,
 			DrawOverSub2X: form.data.sub2X,
 			DrawOverSub2Y: form.data.sub2Y,
-			Description: form.data.description
+			Description: form.data.description,
+			CreationTimestamp: Date.now()
 		};
 
 		const success = editLineup(lineup);

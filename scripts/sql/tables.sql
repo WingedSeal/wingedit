@@ -131,6 +131,7 @@ CREATE TABLE
         "DrawOverSub2X" DECIMAL(5, 2),
         "DrawOverSub2Y" DECIMAL(5, 2),
         "Description" TEXT NOT NULL,
+        "CreationTimestamp" INTEGER NOT NULL,
         PRIMARY KEY ("ID"),
         CONSTRAINT "FK_Abilities" FOREIGN KEY ("AgentID", "AbilityID") REFERENCES "Abilities" ("AgentID", "AbilityID") ON DELETE RESTRICT ON UPDATE CASCADE,
         CONSTRAINT "FK_Agents_ID" FOREIGN KEY ("AgentID") REFERENCES "Agents" ("ID") ON DELETE RESTRICT ON UPDATE CASCADE,
