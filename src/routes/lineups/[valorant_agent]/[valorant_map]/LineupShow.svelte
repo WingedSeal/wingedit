@@ -24,9 +24,9 @@
 	});
 </script>
 
-<div class="flex w-full h-full">
+<div class="flex flex-col w-full h-full overflow-y-auto">
 	<div
-		class="grid grid-cols-3 grid-rows-3 aspect-video gap-6 -translate-x-[3.3333%] m-auto max-h-full max-w-full"
+		class="grid grid-cols-3 grid-rows-3 aspect-video gap-6 -translate-x-[3.3333%] m-auto h-full max-w-full"
 	>
 		<div class="col-span-2 row-span-2 relative">
 			<div class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute">

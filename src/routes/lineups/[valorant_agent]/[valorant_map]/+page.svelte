@@ -13,6 +13,7 @@
 	import Privilege from '$lib/privilege';
 	import { afterNavigate, replaceState } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { timeAgoString } from '$lib/utils';
 	interface Props {
 		data: PageData;
 	}
@@ -124,7 +125,8 @@
 	<Popup
 		title="({selectedLineup.ID}) {data.gameInfo.sides[selectedLineup.SideID].Name}: {data.gameInfo
 			.mapPositions[selectedLineup.MapID][selectedLineup.FromMapPositionID].Callout} to {data
-			.gameInfo.mapPositions[selectedLineup.MapID][selectedLineup.ToMapPositionID].Callout}"
+			.gameInfo.mapPositions[selectedLineup.MapID][selectedLineup.ToMapPositionID]
+			.Callout} ({timeAgoString(selectedLineup.CreationTimestamp)})"
 		{titleRight}
 	>
 		<LineupShow lineup={selectedLineup} gameInfo={data.gameInfo} />
