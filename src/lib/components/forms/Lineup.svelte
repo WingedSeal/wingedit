@@ -57,6 +57,7 @@
 		validators: zodClient(lineupSchema),
 		taintedMessage: true,
 		scrollToError: { behavior: 'smooth', block: 'center', inline: 'nearest' },
+		invalidateAll: true,
 		delayMs: 0,
 		timeoutMs: 5000
 	});
