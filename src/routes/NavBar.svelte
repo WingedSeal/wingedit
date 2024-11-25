@@ -24,7 +24,7 @@
 	</a>
 	<a
 		href="/lineups"
-		class="bg-gradient-to-t from-secondary-contrast via-secondary-dark via-20% to-secondary hover:bg-gradient-to-r rounded-xl h-full px-20 flex mr-8 hover:bg-gradient-to-b"
+		class="bg-gradient-to-t from-secondary-contrast via-secondary-dark via-20% to-secondary rounded-xl h-full px-20 flex mr-8 hover:bg-gradient-to-b"
 	>
 		<h2 class="my-auto text-3xl font-bold px-4 rounded-lg tracking-widest">Lineups</h2>
 	</a>
@@ -113,14 +113,14 @@
 					<div class="p-4 flex flex-col items-center bg-plain-dark shadow-md gap-3">
 						<a
 							href="/account/signin"
-							class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
+							class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 font-bold"
 						>
 							SIGN IN
 						</a>
 
 						<a
 							href="/account/register"
-							class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
+							class="inline-block text-nowrap text-center bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
 						>
 							REGISTER
 						</a>
