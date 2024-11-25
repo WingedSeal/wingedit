@@ -92,6 +92,7 @@
 							<a
 								href="/account/signout"
 								class="inline-block text-primary-contrast"
+								data-sveltekit-preload-data="tap"
 								data-sveltekit-reload>Log out</a
 							>
 						</div>
@@ -109,18 +110,21 @@
 						</ul>
 					{/if}
 				{:else}
-				<div class="p-4 flex flex-col items-center bg-plain-dark shadow-md gap-3">
-					
-						<a href="/account/signin" class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold">
+					<div class="p-4 flex flex-col items-center bg-plain-dark shadow-md gap-3">
+						<a
+							href="/account/signin"
+							class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
+						>
 							SIGN IN
 						</a>
-					
-					
-						<a href="/account/register" class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold">
+
+						<a
+							href="/account/register"
+							class="inline-block text-nowrap text-center w-full bg-primary hover:bg-primary-contrast rounded-lg px-6 py-3 text-primary-dark shadow-lg transition-all duration-150 w-full font-bold"
+						>
 							REGISTER
 						</a>
-					
-				</div>
+					</div>
 				{/if}
 			</div>
 		</div>
