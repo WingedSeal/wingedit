@@ -24,7 +24,7 @@ export const getPrimaryKeys = (tableName: string) => {
 export const getTable = (tableName: string) => {
 	if (!tableName.match(/^[a-zA-Z0-9]+$/i)) return null;
 	try {
-		return db.prepare(`SELECT * FROM ${tableName} LIMIT 100;`).all() as Record<string, unknown>[];
+		return db.prepare(`SELECT * FROM ${tableName} LIMIT 10000;`).all() as Record<string, unknown>[];
 	} catch (error) {
 		if (!(error instanceof SqliteError)) {
 			throw error;
