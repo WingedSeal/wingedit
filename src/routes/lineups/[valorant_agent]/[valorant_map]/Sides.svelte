@@ -5,9 +5,9 @@
 
 	type Props = {
 		sides: Side[];
-		filterdOutSideIDs: Writable<Set<number>>;
+		filteredOutSideIDs: Writable<Set<number>>;
 	};
-	let { sides, filterdOutSideIDs = $bindable() }: Props = $props();
+	let { sides, filteredOutSideIDs: filterdOutSideIDs = $bindable() }: Props = $props();
 </script>
 
 <div class="flex flex-row gap-4 max-h-full">
