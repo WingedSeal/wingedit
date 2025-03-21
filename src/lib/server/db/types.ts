@@ -7,8 +7,8 @@ export type Agent = {
 export type Grade = {
 	ID: number;
 	Name: string;
-	GradeDescription: number;
-	DifficultyDescription: number;
+	GradeDescription: string;
+	DifficultyDescription: string;
 	Color: string;
 };
 
