@@ -4,11 +4,6 @@ export type Agent = {
 	RoleID: number;
 };
 
-export type AgentRoles = {
-	RoleID: number;
-	Name: string;
-};
-
 export type Grade = {
 	ID: number;
 	Name: string;
