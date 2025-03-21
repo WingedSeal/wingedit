@@ -4,30 +4,30 @@
 
 	type Props = {
 		grades: Grade[];
-		filterdOutGradeIDs: Writable<Set<number>>;
+		filteredOutGradeIDs: Writable<Set<number>>;
 	};
-	let { grades, filterdOutGradeIDs = $bindable() }: Props = $props();
+	let { grades, filteredOutGradeIDs = $bindable() }: Props = $props();
 </script>
 
 <div class="flex flex-row gap-4 max-h-full w-full">
 	{#each grades as grade}
 		<button
-			class="flex flex-row w-20 h-20 relative border-4 border-transparent rounded-xl transition ease-in-out hover:-translate-y-1 active:translate-y-1 duration-150 {$filterdOutGradeIDs.has(
+			class="flex flex-row w-20 h-20 relative border-4 border-transparent rounded-xl transition ease-in-out hover:-translate-y-1 active:translate-y-1 duration-150 {$filteredOutGradeIDs.has(
 				grade.ID
 			)
 				? 'bg-primary-contrast'
 				: 'bg-primary-dark border-corner'}"
 			style="--c: {grade.Color}"
 			onclick={() => {
-				if ($filterdOutGradeIDs.has(grade.ID)) {
-					filterdOutGradeIDs.update((filterdOutGradeIDs) => {
-						filterdOutGradeIDs.delete(grade.ID);
-						return filterdOutGradeIDs;
+				if ($filteredOutGradeIDs.has(grade.ID)) {
+					filteredOutGradeIDs.update((filteredOutGradeIDs) => {
+						filteredOutGradeIDs.delete(grade.ID);
+						return filteredOutGradeIDs;
 					});
 				} else {
-					filterdOutGradeIDs.update((filterdOutGradeIDs) => {
-						filterdOutGradeIDs.add(grade.ID);
-						return filterdOutGradeIDs;
+					filteredOutGradeIDs.update((filteredOutGradeIDs) => {
+						filteredOutGradeIDs.add(grade.ID);
+						return filteredOutGradeIDs;
 					});
 				}
 			}}

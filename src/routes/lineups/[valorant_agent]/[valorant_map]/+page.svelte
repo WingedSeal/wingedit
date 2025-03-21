@@ -75,10 +75,10 @@
 				<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
 			</div>
 			<div class=" max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10">
-				<Sides sides={Object.values(data.gameInfo.sides)} bind:filterdOutSideIDs={filteredOutSideIDs} />
+				<Sides sides={Object.values(data.gameInfo.sides)} bind:filteredOutSideIDs />
 			</div>
 			<div class="w-full ml-12 mt-4 mr-auto z-10 mb-6">
-				<Grades grades={Object.values(data.gameInfo.grades)} bind:filterdOutGradeIDs={filteredOutGradeIDs} />
+				<Grades grades={Object.values(data.gameInfo.grades)} bind:filteredOutGradeIDs />
 			</div>
 		</div>
 		<div class="bg-primary h-full p-1 relative">
