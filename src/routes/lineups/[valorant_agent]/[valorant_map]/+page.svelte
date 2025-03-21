@@ -21,8 +21,8 @@
 	const allLineupList = Object.values(data.lineups).flat();
 
 	let selectedAbilityID = $state<number | null>(null);
-	let filterdOutGradeIDs: Writable<Set<number>> = $state(writable(new Set()));
-	let filterdOutSideIDs: Writable<Set<number>> = $state(writable(new Set()));
+	let filteredOutGradeIDs: Writable<Set<number>> = $state(writable(new Set()));
+	let filteredOutSideIDs: Writable<Set<number>> = $state(writable(new Set()));
 	const lineupList = $derived(
 		allLineupList
 			.map((v, i) => {
@@ -31,8 +31,8 @@
 			.filter(
 				({ lineup }) =>
 					selectedAbilityID === lineup.AbilityID &&
-					!$filterdOutGradeIDs.has(lineup.GradeID) &&
-					!$filterdOutSideIDs.has(lineup.SideID)
+					!$filteredOutGradeIDs.has(lineup.GradeID) &&
+					!$filteredOutSideIDs.has(lineup.SideID)
 			)
 	);
 
@@ -75,10 +75,10 @@
 				<Abilities abilities={Object.values(data.abilities)} bind:selectedAbilityID />
 			</div>
 			<div class=" max-h-[10%] max-w-[80%] ml-12 mt-4 mr-auto z-10">
-				<Sides sides={Object.values(data.gameInfo.sides)} bind:filterdOutSideIDs />
+				<Sides sides={Object.values(data.gameInfo.sides)} bind:filterdOutSideIDs={filteredOutSideIDs} />
 			</div>
 			<div class="w-full ml-12 mt-4 mr-auto z-10 mb-6">
-				<Grades grades={Object.values(data.gameInfo.grades)} bind:filterdOutGradeIDs />
+				<Grades grades={Object.values(data.gameInfo.grades)} bind:filterdOutGradeIDs={filteredOutGradeIDs} />
 			</div>
 		</div>
 		<div class="bg-primary h-full p-1 relative">
