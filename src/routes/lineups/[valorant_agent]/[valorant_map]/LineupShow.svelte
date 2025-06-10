@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { GameInfo, Lineup } from '$lib/server/db/types';
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
+	import MagnifyingImage from '$lib/components/MagnifyingImage.svelte';
 	import { afterNavigate, replaceState } from '$app/navigation';
+
 	interface Props {
 		lineup: Lineup;
 		gameInfo: GameInfo;
@@ -30,19 +32,21 @@
 	>
 		<div class="col-span-2 row-span-2 relative">
 			<div class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute">
-				<LineupShowOverlay
-					DrawOverMainX={lineup.DrawOverMainX}
-					DrawOverMainY={lineup.DrawOverMainY}
-					DrawOverSub1X={lineup.DrawOverSub1X}
-					DrawOverSub1Y={lineup.DrawOverSub1Y}
-					DrawOverSub2X={lineup.DrawOverSub2X}
-					DrawOverSub2Y={lineup.DrawOverSub2Y}
-				/>
-				<img
-					src={`/api/image/lineups/${lineup.ID}/throw-lineup.webp`}
-					class="bg-black aspect-video w-full h-full refresh-img"
-					alt="throw-lineup.webp - How to line yourself up for the throw."
-				/>
+				<div class="relative">
+					<LineupShowOverlay
+						DrawOverMainX={lineup.DrawOverMainX}
+						DrawOverMainY={lineup.DrawOverMainY}
+						DrawOverSub1X={lineup.DrawOverSub1X}
+						DrawOverSub1Y={lineup.DrawOverSub1Y}
+						DrawOverSub2X={lineup.DrawOverSub2X}
+						DrawOverSub2Y={lineup.DrawOverSub2Y}
+					/>
+					<MagnifyingImage
+						src={`/api/image/lineups/${lineup.ID}/throw-lineup.webp`}
+						class="bg-black aspect-video w-full h-full refresh-img"
+						alt="throw-lineup.webp - How to line yourself up for the throw."
+					></MagnifyingImage>
+				</div>
 			</div>
 			<h2
 				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase"
@@ -51,15 +55,15 @@
 				{gameInfo.agents[lineup.AgentID].Name}
 			</h2>
 		</div>
-		<div>
-			<img
+		<div class="relative">
+			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/throw.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw.webp - GIF of thowing the lineup."
 			/>
 		</div>
-		<div>
-			<img
+		<div class="relative">
+			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/land-spot.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="land-spot.webp - Where the lineup lands."
@@ -76,15 +80,15 @@
 				<h2>time: {lineup.TimeToLand}s</h2>
 			</div>
 		</div>
-		<div>
-			<img
+		<div class="relative">
+			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/throw-spot-third-person.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw-spot-third-person.webp - Third person view of the throw spot of the lineup."
 			/>
 		</div>
-		<div>
-			<img
+		<div class="relative">
+			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/throw-spot-first-person.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw-spot-first-person.webp - First person view of the throw spot of the lineup."
@@ -92,3 +96,7 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	/* Remove magnifier styles since they're now in the component */
+</style>
