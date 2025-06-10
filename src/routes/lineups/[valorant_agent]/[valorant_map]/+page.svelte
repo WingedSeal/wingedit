@@ -13,6 +13,9 @@
 	import LineupList from './LineupList.svelte';
 	import LineupShow from './LineupShow.svelte';
 	import Sides from './Sides.svelte';
+	import { isFullScreenImage } from './stores';
+	import FullscreenImage from './FullscreenImage.svelte';
+	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	interface Props {
 		data: PageData;
 	}
@@ -130,6 +133,20 @@
 	>
 		<LineupShow lineup={selectedLineup} gameInfo={data.gameInfo} />
 	</Popup>
+{/if}
+
+{#snippet overlay()}
+	<LineupShowOverlay
+		DrawOverMainX={selectedLineup.DrawOverMainX}
+		DrawOverMainY={selectedLineup.DrawOverMainY}
+		DrawOverSub1X={selectedLineup.DrawOverSub1X}
+		DrawOverSub1Y={selectedLineup.DrawOverSub1Y}
+		DrawOverSub2X={selectedLineup.DrawOverSub2X}
+		DrawOverSub2Y={selectedLineup.DrawOverSub2Y}
+	/>
+{/snippet}
+{#if $isFullScreenImage}
+	<FullscreenImage lineup={selectedLineup} {overlay} />
 {/if}
 
 <svelte:head>

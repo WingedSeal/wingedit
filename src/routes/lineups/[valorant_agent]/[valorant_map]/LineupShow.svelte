@@ -3,6 +3,7 @@
 	import LineupShowOverlay from '$lib/components/LineupShowOverlay.svelte';
 	import MagnifyingImage from '$lib/components/MagnifyingImage.svelte';
 	import { afterNavigate, replaceState } from '$app/navigation';
+	import { isFullScreenImage, selectedFullScreenImage } from './stores';
 
 	interface Props {
 		lineup: Lineup;
@@ -32,7 +33,13 @@
 	>
 		<div class="col-span-2 row-span-2 relative">
 			<div class="bg-black aspect-video w-[90%] h-[90%] bottom-0 right-0 absolute">
-				<div class="relative">
+				<button
+					class="relative"
+					onclick={() => {
+						$isFullScreenImage = true;
+						$selectedFullScreenImage = 0;
+					}}
+				>
 					<LineupShowOverlay
 						DrawOverMainX={lineup.DrawOverMainX}
 						DrawOverMainY={lineup.DrawOverMainY}
@@ -46,29 +53,41 @@
 						class="bg-black aspect-video w-full h-full refresh-img"
 						alt="throw-lineup.webp - How to line yourself up for the throw."
 					></MagnifyingImage>
-				</div>
+				</button>
 			</div>
 			<h2
-				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase pointer-events-none"
+				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase"
 			>
 				{gameInfo.maps[lineup.MapID].Name}
 				{gameInfo.agents[lineup.AgentID].Name}
 			</h2>
 		</div>
-		<div class="relative">
+		<button
+			class="relative"
+			onclick={() => {
+				$isFullScreenImage = true;
+				$selectedFullScreenImage = 1;
+			}}
+		>
 			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/throw.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw.webp - GIF of thowing the lineup."
 			/>
-		</div>
-		<div class="relative">
+		</button>
+		<button
+			class="relative"
+			onclick={() => {
+				$isFullScreenImage = true;
+				$selectedFullScreenImage = 2;
+			}}
+		>
 			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/land-spot.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="land-spot.webp - Where the lineup lands."
 			/>
-		</div>
+		</button>
 		<div class="relative">
 			<div
 				class="grid grid-cols-1 grid-rows-4 w-[80%] absolute right-0 h-full justify-center
@@ -80,20 +99,32 @@
 				<h2>time: {lineup.TimeToLand}s</h2>
 			</div>
 		</div>
-		<div class="relative">
+		<button
+			class="relative"
+			onclick={() => {
+				$isFullScreenImage = true;
+				$selectedFullScreenImage = 3;
+			}}
+		>
 			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/throw-spot-third-person.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw-spot-third-person.webp - Third person view of the throw spot of the lineup."
 			/>
-		</div>
-		<div class="relative">
+		</button>
+		<button
+			class="relative"
+			onclick={() => {
+				$isFullScreenImage = true;
+				$selectedFullScreenImage = 4;
+			}}
+		>
 			<MagnifyingImage
 				src={`/api/image/lineups/${lineup.ID}/throw-spot-first-person.webp`}
 				class="bg-black aspect-video w-full h-full refresh-img"
 				alt="throw-spot-first-person.webp - First person view of the throw spot of the lineup."
 			/>
-		</div>
+		</button>
 	</div>
 </div>
 

@@ -6,7 +6,7 @@
 		style?: string;
 	}
 
-	let { src, alt, class: className = '', style = '', ...restProps }: Props = $props();
+	let { src, alt, class: className = '', style = '' }: Props = $props();
 
 	const MAX_ZOOM = 5;
 	const ZOOM_RATE = 0.002;
@@ -47,7 +47,6 @@
 	{alt}
 	class={`magnifiable-image ${className}`}
 	{style}
-	{...restProps}
 	onmouseenter={handleMouseEnter}
 	onmouseleave={handleMouseLeave}
 	onmousemove={handleMouseMove}
@@ -57,7 +56,6 @@
 {#if showMagnifier && currentImage}
 	<div
 		class="absolute rounded-[50%] z-50 border-white border-8 bg-no-repeat -translate-x-1/2 -translate-y-1/2 pointer-events-none bg-black"
-		id="wtf"
 		style="
             width: {SIZE}px;
             height: {SIZE}px;
