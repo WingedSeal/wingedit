@@ -37,7 +37,7 @@
 <div
 	class="fixed w-screen h-screen z-50 left-0 top-0 pointer-events-none flex items-center justify-center"
 >
-	<div class="aspect-video relative w-full h-full">
+	<div class="aspect-video relative m-auto">
 		{#if $selectedFullScreenImage == 0}
 			{@render overlay()}
 		{/if}
