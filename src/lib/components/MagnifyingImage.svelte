@@ -58,6 +58,7 @@
 {#if showMagnifier && currentImage}
 	<div
 		class="absolute rounded-[50%] z-50 border-white border-8 bg-no-repeat -translate-x-1/2 -translate-y-1/2 pointer-events-none bg-black"
+		id="wtf"
 		style="
             width: {SIZE}px;
             height: {SIZE}px;
@@ -65,8 +66,7 @@
             left: {magnifierX + OFFSET_X}px;
             top: {magnifierY + OFFSET_Y}px;
 			background-size: {currentImage.width * zoom}px {currentImage.height * zoom}px;
-			background-position: -{magnifierX * zoom - SIZE / 2}px -{magnifierY * zoom - SIZE / 2}px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+			background-position: {-magnifierX * zoom + SIZE / 2}px {-magnifierY * zoom + SIZE / 2}px;
 		"
 	></div>
 {/if}
