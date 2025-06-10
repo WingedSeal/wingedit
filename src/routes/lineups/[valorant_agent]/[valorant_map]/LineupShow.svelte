@@ -49,7 +49,7 @@
 				</div>
 			</div>
 			<h2
-				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase"
+				class="text-7xl font-bold text-primary absolute right-[90.5%] bottom-[87%] translate-x-full w-full uppercase pointer-events-none"
 			>
 				{gameInfo.maps[lineup.MapID].Name}
 				{gameInfo.agents[lineup.AgentID].Name}

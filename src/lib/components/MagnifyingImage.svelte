@@ -39,7 +39,6 @@
 	const handleWheel = (event: WheelEvent) => {
 		event.preventDefault();
 		zoom = Math.min(MAX_ZOOM, Math.max(1, zoom - event.deltaY * ZOOM_RATE));
-		console.log(event.deltaY);
 	};
 </script>
 
