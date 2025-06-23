@@ -5,7 +5,7 @@ import path from 'path';
 
 export const GET = async ({ params }) => {
 	const image_path = path.resolve(IMAGES_PATH, params.file);
-	if (!IMAGES_PATH.startsWith(image_path)) {
+	if (!image_path.startsWith(path.resolve(IMAGES_PATH))) {
 		error(404, 'Invalid path');
 	}
 	if (fs.existsSync(image_path)) {
